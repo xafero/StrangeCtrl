@@ -32,3 +32,8 @@ License
 =======
 
 See License.md
+
+CI
+==
+
+[![Build Status](https://travis-ci.org/xafero/StrangeCtrl.png?branch=master)](https://travis-ci.org/xafero/StrangeCtrl)
