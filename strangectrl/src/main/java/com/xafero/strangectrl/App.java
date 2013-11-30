@@ -43,7 +43,7 @@ public class App {
 		final Map<String, ICommand> cmds = ConfigUtils.loadCommands(CFG_FILE);
 
 		SystemTray tray = SystemTray.getSystemTray();
-		Image img = ResourceUtils.loadImage("res/console-controller2.png");
+		Image img = ResourceUtils.loadImage("console-controller2.png");
 		String tip = "Strange Control";
 
 		PopupMenu menu = new PopupMenu("test2!");
