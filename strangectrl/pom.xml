@@ -29,9 +29,9 @@
 		<dependency>
 			<groupId>com.xafero</groupId>
 			<artifactId>superloader</artifactId>
-			<version>0.1</version>
+			<version>0.2</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib_extra/superloader-0.1.jar</systemPath>
+			<systemPath>${basedir}/lib_extra/superloader-0.2.jar</systemPath>
 		</dependency>
 	</dependencies>
 
@@ -55,7 +55,7 @@
 							<mainClass>com.xafero.strangectrl.App</mainClass>
 						</manifest>
 						<manifestEntries>
-							<Class-Path>superloader-0.1.jar</Class-Path>
+							<Class-Path>superloader-0.2.jar</Class-Path>
 						</manifestEntries>
 					</archive>
 				</configuration>
