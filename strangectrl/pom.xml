@@ -30,6 +30,8 @@
 			<groupId>com.xafero</groupId>
 			<artifactId>superloader</artifactId>
 			<version>0.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib_extra/superloader-0.1.jar</systemPath>
 		</dependency>
 	</dependencies>
 
