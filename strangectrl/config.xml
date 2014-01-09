@@ -8,14 +8,33 @@
 	<entry key="Y Axis">mouseMove 10 y</entry>
 	<entry key="X Rotation">mouseMove 15 x</entry>
 	<entry key="Y Rotation">mouseMove 15 y</entry>
+	
+	<entry key="X Axis">mouseMove 10 x</entry>
+	<entry key="Y Axis">mouseMove 10 y</entry>
+	<entry key="Obrót X">mouseMove 15 x</entry>
+	<entry key="Obrót Y">mouseMove 15 y</entry>
 
-	<!-- Left mouse click -->
+	<!-- Left mouse click  A -->
 	<entry key="Button 0">mouseClick 1</entry>
+	<entry key="Przycisk 0">mouseClick 1</entry>
 
-	<!-- Right mouse click -->
+	<!-- Right mouse click Y -->
 	<entry key="Button 3">mouseClick 3</entry>
+	<entry key="Przycisk 3">mouseClick 3</entry>
 
 	<!-- Keyboard: open and close tab -->
+	<!-- B -->
 	<entry key="Button 1">keyCombo CONTROL T</entry>
+	<entry key="Przycisk 1">keyCombo CONTROL T</entry>
+	<!-- X -->
 	<entry key="Button 2">keyCombo CONTROL W</entry>
+	<entry key="Przycisk 2">keyCombo CONTROL W</entry>
+	
+	<!-- 
+	Start = Button 7
+	Back = Button 6 
+	RB = Button 5
+	LB = Button 4
+	
+	-->
 </properties>
