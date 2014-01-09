@@ -1,36 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <button value="A">
-        <key>ENTER</key>
-    </button>
-    <button value="B">
-        <key>BACKSPACE</key>
-    </button>
-    <button value="X">
-        <key>ESC</key>
-    </button>
-    <button value="Y">
-        <key>ALT</key>
-        <key>TAB</key>
-    </button>
-    <button value="RB">
-        <mouse button="left" />
-    </button>
-    <button value="LB">
-        <mouse button="right" />
-    </button>
-    <button value="START">
-        
-    </button>
-    <button value="BACK">
-        
-    </button>
-    <button value="RS">
-        <mouse button="center" />
-    </button>
-    <button value="LS">
-        <key>CTRL</key>
-        <key>SHIFT</key>
-        <key>T</key>
-    </button>
+	<button value="A">
+		<key>ENTER</key>
+	</button>
+	<button value="B">
+		<key>BACKSPACE</key>
+	</button>
+	<button value="X">
+		<key>ESC</key>
+	</button>
+	<button value="Y">
+		<state id="1" next="2">
+			<key>ALT</key>
+			<key>TAB</key>
+		</state>
+		<state id="2">
+			<key>TAB</key>
+		</state>
+	</button>
+	<button value="RB">
+		<mouse button="left" />
+	</button>
+	<button value="LB">
+		<mouse button="right" />
+	</button>
+	<button value="START">
+
+	</button>
+	<button value="BACK">
+
+	</button>
+	<button value="RS">
+		<mouse button="center" />
+	</button>
+	<button value="LS">
+		<key>CTRL</key>
+		<key>SHIFT</key>
+		<key>T</key>
+	</button>
+	<pov>
+		<N>
+			<key>UP_ARROW</key>
+		</N>
+		<S>
+			<key>DOWN_ARROW</key>
+		</S>
+		<E>
+			<key>RIGHT_ARROW</key>
+		</E>
+		<W>
+			<key>LEFT_ARROW</key>
+		</W>
+		<NE>
+			<key>UP_ARROW</key>
+			<key>RIGHT_ARROW</key>
+		</NE>
+		<NW>
+			<key>UP_ARROW</key>
+			<key>LEFT_ARROW</key>
+		</NW>
+		<SE>
+			<key>DOWN_ARROW</key>
+			<key>RIGHT_ARROW</key>
+		</SE>
+		<SW>
+			<key>DOWN_ARROW</key>
+			<key>LEFT_ARROW</key>
+		</SW>
+	</pov>
 </configuration>
