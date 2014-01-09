@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <button value="A">
+        <key>ENTER</key>
+    </button>
+    <button value="B">
+        <key>BACKSPACE</key>
+    </button>
+    <button value="X">
+        <key>ESC</key>
+    </button>
+    <button value="Y">
+        <key>ALT</key>
+        <key>TAB</key>
+    </button>
+    <button value="RB">
+        <mouse button="left" />
+    </button>
+    <button value="LB">
+        <mouse button="right" />
+    </button>
+    <button value="START">
+        
+    </button>
+    <button value="BACK">
+        
+    </button>
+    <button value="RS">
+        <mouse button="center" />
+    </button>
+    <button value="LS">
+        <key>CTRL</key>
+        <key>SHIFT</key>
+        <key>T</key>
+    </button>
+</configuration>
