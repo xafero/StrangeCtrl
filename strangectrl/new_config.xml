@@ -19,10 +19,10 @@
 		</state>
 	</button>
 	<button value="RB">
-		<mouse button="left" />
+		<key>LEFT MOUSE</key>
 	</button>
 	<button value="LB">
-		<mouse button="right" />
+		<key>RIGHT MOUSE</key>
 	</button>
 	<button value="START">
 
@@ -31,7 +31,7 @@
 
 	</button>
 	<button value="RS">
-		<mouse button="center" />
+		<key>CENTER MOUSE</key>
 	</button>
 	<button value="LS">
 		<key>CTRL</key>
