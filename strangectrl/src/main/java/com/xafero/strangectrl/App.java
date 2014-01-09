@@ -64,7 +64,7 @@ public class App {
 			@Override
 			public void onNewEvent(ControllerPoller poller,
 					Controller controller, Event event) {
-				String name = event.getComponent().getName();
+				String name = event.getComponent().getIdentifier().getName();
 
 				for (String mapping : cmds.keySet()) {
 					if (!mapping.equalsIgnoreCase(name))

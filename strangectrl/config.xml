@@ -4,18 +4,18 @@
 	<comment>Configuration file for Strange Control</comment>
 
 	<!-- Mouse move: left stick slow, right stick fast -->
-	<entry key="X Axis">mouseMove 10 x</entry>
-	<entry key="Y Axis">mouseMove 10 y</entry>
-	<entry key="X Rotation">mouseMove 15 x</entry>
-	<entry key="Y Rotation">mouseMove 15 y</entry>
+	<entry key="x">mouseMove 10 x</entry>
+	<entry key="y">mouseMove 10 y</entry>
+	<entry key="rx">mouseMove 15 x</entry>
+	<entry key="ry">mouseMove 15 y</entry>
 
 	<!-- Left mouse click -->
-	<entry key="Button 0">mouseClick 1</entry>
+	<entry key="0">mouseClick 1</entry>
 
 	<!-- Right mouse click -->
-	<entry key="Button 3">mouseClick 3</entry>
+	<entry key="3">mouseClick 3</entry>
 
 	<!-- Keyboard: open and close tab -->
-	<entry key="Button 1">keyCombo CONTROL T</entry>
-	<entry key="Button 2">keyCombo CONTROL W</entry>
+	<entry key="1">keyCombo CONTROL T</entry>
+	<entry key="2">keyCombo CONTROL W</entry>
 </properties>
