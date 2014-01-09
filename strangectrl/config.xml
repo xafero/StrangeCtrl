@@ -35,6 +35,7 @@
 	Back = Button 6 
 	RB = Button 5
 	LB = Button 4
-	
+	Left stick = Button 8
+	Right stick = Button 9
 	-->
 </properties>
