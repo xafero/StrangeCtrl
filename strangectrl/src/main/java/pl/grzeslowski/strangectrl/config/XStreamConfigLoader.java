@@ -9,7 +9,7 @@ public class XStreamConfigLoader {
     public XStreamConfigLoader() {
 
         // creating aliases
-        xstream.alias("configurartion", Configuration.class);
+        xstream.alias("configuration", Configuration.class);
         xstream.alias("button", Button.class);
         xstream.alias("state", State.class);
         xstream.alias("key", Key.class);
