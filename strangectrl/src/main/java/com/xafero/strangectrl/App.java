@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import net.java.games.input.Controller;
 import net.java.games.input.Controller.Type;
-import net.java.games.input.Event;
 
 import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.awt.ResourceUtils;
@@ -24,6 +23,7 @@ import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.ControllerPoller;
 import com.xafero.strangectrl.input.ControllerPoller.IControllerCallback;
 import com.xafero.strangectrl.input.InputUtils;
+import com.xafero.strangectrl.input.SimpleCallback;
 
 /**
  * The main entry point
@@ -33,7 +33,7 @@ public class App {
 	private static final String EXIT_STR = "Exit";
 	private static final String CFG_FILE = "config.xml";
 
-	public static void main(String[] args) throws IOException, AWTException {
+	public static void main(final String[] args) throws IOException, AWTException {
 
 		AtomicReference<GraphicsDevice> devRef;
 		final Robot rbt = DesktopUtils
@@ -42,40 +42,27 @@ public class App {
 
 		final Map<String, ICommand> cmds = ConfigUtils.loadCommands(CFG_FILE);
 
-		SystemTray tray = SystemTray.getSystemTray();
-		Image img = ResourceUtils.loadImage("console-controller2.png");
-		String tip = "Strange Control";
+		final SystemTray tray = SystemTray.getSystemTray();
+		final Image img = ResourceUtils.loadImage("console-controller2.png");
+		final String tip = "Strange Control";
 
-		PopupMenu menu = new PopupMenu("test2!");
+		final PopupMenu menu = new PopupMenu("test2!");
 		menu.add(EXIT_STR);
 		menu.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				if (e.getActionCommand() == EXIT_STR)
-					System.exit(0);
+			@Override
+            public void actionPerformed(final ActionEvent e) {
+				if (e.getActionCommand() == EXIT_STR) {
+                    System.exit(0);
+                }
 			}
 		});
 
 		tray.add(DesktopUtils.createTrayIcon(img, tip, menu));
 
-		List<Controller> pads = InputUtils.getControllers(Type.GAMEPAD);
-		IControllerCallback callback = new IControllerCallback() {
-
-			@Override
-			public void onNewEvent(ControllerPoller poller,
-					Controller controller, Event event) {
-				String name = event.getComponent().getName();
-
-				for (String mapping : cmds.keySet()) {
-					if (!mapping.equalsIgnoreCase(name))
-						continue;
-					ICommand cmd = cmds.get(mapping);
-					cmd.execute(rbt, dev, event.getValue());
-					return;
-				}
-			}
-		};
-		ControllerPoller poller = new ControllerPoller(pads, 100, callback);
+		final List<Controller> pads = InputUtils.getControllers(Type.GAMEPAD);
+		final IControllerCallback callback = new SimpleCallback(cmds, rbt, dev);
+		final ControllerPoller poller = new ControllerPoller(pads, 100, callback);
 		poller.start();
 	}
 }
