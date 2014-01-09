@@ -33,6 +33,13 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/lib_extra/superloader-0.2.jar</systemPath>
 		</dependency>
+
+		<dependency>
+			<groupId>xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
