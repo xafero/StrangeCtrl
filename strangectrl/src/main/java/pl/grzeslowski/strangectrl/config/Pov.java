@@ -9,6 +9,7 @@ public class Pov {
     private NorthWestPov northWestPov;
     private SouthEastPov southEastPov;
     private SouthWestPov southWestPov;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -29,6 +30,7 @@ public class Pov {
         result = prime * result + (westPov == null ? 0 : westPov.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -99,6 +101,5 @@ public class Pov {
         }
         return true;
     }
-    
-    
+
 }

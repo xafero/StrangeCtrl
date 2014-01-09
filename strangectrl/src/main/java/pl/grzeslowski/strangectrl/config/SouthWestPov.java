@@ -5,6 +5,7 @@ import java.util.List;
 public class SouthWestPov {
     private List<Key> keys;
     private List<State> states;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -13,6 +14,7 @@ public class SouthWestPov {
         result = prime * result + (states == null ? 0 : states.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -41,6 +43,5 @@ public class SouthWestPov {
         }
         return true;
     }
-    
-    
+
 }

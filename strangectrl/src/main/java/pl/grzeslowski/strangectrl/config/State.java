@@ -6,6 +6,7 @@ public class State {
     private String id;
     private String next;
     private List<Key> keys;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -15,6 +16,7 @@ public class State {
         result = prime * result + (next == null ? 0 : next.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -50,6 +52,5 @@ public class State {
         }
         return true;
     }
-    
-    
+
 }

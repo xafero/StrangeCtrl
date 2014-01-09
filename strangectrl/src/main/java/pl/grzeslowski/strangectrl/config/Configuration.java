@@ -5,6 +5,7 @@ import java.util.List;
 public class Configuration {
     private List<Button> buttons;
     private Pov pov;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -13,6 +14,7 @@ public class Configuration {
         result = prime * result + (pov == null ? 0 : pov.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -41,6 +43,5 @@ public class Configuration {
         }
         return true;
     }
-    
-    
+
 }

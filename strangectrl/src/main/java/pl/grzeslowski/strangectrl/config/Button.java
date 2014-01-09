@@ -6,6 +6,7 @@ public class Button {
     private String value;
     private List<Key> keys;
     private List<State> states;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -15,6 +16,7 @@ public class Button {
         result = prime * result + (value == null ? 0 : value.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -50,6 +52,5 @@ public class Button {
         }
         return true;
     }
-    
-    
+
 }
