@@ -10,29 +10,31 @@ import java.util.Map;
 import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.input.InputUtils;
 
+
 public class Commands {
 
 	public static class MouseMoveCmd extends AbstractCmd implements ICommand {
 		private final double factor;
 		private final char mode;
 
-		public MouseMoveCmd(String rawArgs) {
+		public MouseMoveCmd(final String rawArgs) {
 			super(rawArgs);
 			factor = Double.parseDouble(args[0]);
 			mode = args[1].toUpperCase().charAt(0);
 		}
 
-		@Override
-		public void execute(Robot rbt, GraphicsDevice dev, float value) {
+		public void execute(final Robot rbt, final GraphicsDevice dev, final float value) {
 			double newValue = value * factor;
 			newValue = Math.ceil(newValue);
-			Point pos = DesktopUtils.getMousePos(dev);
+			final Point pos = DesktopUtils.getMousePos(dev);
 			int newX = pos.x;
 			int newY = pos.y;
-			if (mode == 'X')
-				newX = (int) (pos.x + newValue);
-			if (mode == 'Y')
-				newY = (int) (pos.y + newValue);
+			if (mode == 'X') {
+                newX = (int) (pos.x + newValue);
+            }
+			if (mode == 'Y') {
+                newY = (int) (pos.y + newValue);
+            }
 			rbt.mouseMove(newX, newY);
 		}
 
@@ -40,21 +42,27 @@ public class Commands {
 		public String toString() {
 			return "MouseMoveCmd [factor=" + factor + ", mode=" + mode + "]";
 		}
+
+        @Override
+        public void execute(final GraphicsDevice graphicsDevice, final double value) {
+            // TODO Auto-generated method stub
+            
+        }
 	}
 
 	public static class MouseClickCmd extends AbstractCmd implements ICommand {
 		private final int button;
 
-		public MouseClickCmd(String rawArgs) {
+		public MouseClickCmd(final String rawArgs) {
 			super(rawArgs);
 			button = Integer.parseInt(args[0]);
 		}
 
-		@Override
-		public void execute(Robot rbt, GraphicsDevice dev, float value) {
-			if (value != 1)
-				return;
-			int btnMask = InputEvent.getMaskForButton(button);
+		public void execute(final Robot rbt, final GraphicsDevice dev, final float value) {
+			if (value != 1) {
+                return;
+            }
+			final int btnMask = InputEvent.getMaskForButton(button);
 			rbt.mousePress(btnMask);
 			rbt.mouseRelease(btnMask);
 		}
@@ -63,6 +71,12 @@ public class Commands {
 		public String toString() {
 			return "MouseClickCmd [button=" + button + "]";
 		}
+
+        @Override
+        public void execute(final GraphicsDevice graphicsDevice, final double value) {
+            // TODO Auto-generated method stub
+            
+        }
 	}
 
 	public static class KeyComboCmd extends AbstractCmd implements ICommand {
@@ -70,21 +84,21 @@ public class Commands {
 		private static final Map<String, Integer> keyMap = ConfigUtils
 				.buildKeyMap(PREFIX);
 
-		private int[] keys;
+		private final int[] keys;
 
-		public KeyComboCmd(String rawArgs) {
+		public KeyComboCmd(final String rawArgs) {
 			super(rawArgs);
 			keys = new int[args.length];
 			for (int i = 0; i < keys.length; i++) {
-				String arg = args[i].toLowerCase();
+				final String arg = args[i].toLowerCase();
 				keys[i] = keyMap.get(arg);
 			}
 		}
 
-		@Override
-		public void execute(Robot rbt, GraphicsDevice dev, float value) {
-			if (value != 1)
-				return;
+		public void execute(final Robot rbt, final GraphicsDevice dev, final float value) {
+			if (value != 1) {
+                return;
+            }
 			InputUtils.pressKeyCombo(rbt, keys);
 		}
 
@@ -93,5 +107,11 @@ public class Commands {
 			return "KeyComboCmd [keys=" + Arrays.toString(keys) + ", args="
 					+ Arrays.toString(args) + "]";
 		}
+
+        @Override
+        public void execute(final GraphicsDevice graphicsDevice, final double value) {
+            // TODO Auto-generated method stub
+            
+        }
 	}
 }

@@ -40,7 +40,7 @@ public class SimpleCallback implements IControllerCallback {
                 continue;
             }
             final ICommand cmd = cmds.get(mapping);
-            cmd.execute(rbt, dev, event.getValue());
+//            cmd.execute(rbt, dev, event.getValue());
             return;
         }
 
