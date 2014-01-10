@@ -11,11 +11,13 @@ public class Configuration {
     private final List<Button> buttons = new ArrayList<>();
     private Pov pov;
 
-    public Configuration(final Button button) {
-        buttons.add(button);
+    public Configuration() {
     }
 
-    public Configuration() {
+    public Configuration(final Button... buttons) {
+        for (final Button button : buttons) {
+            this.buttons.add(button);
+        }
     }
 
     @Override
