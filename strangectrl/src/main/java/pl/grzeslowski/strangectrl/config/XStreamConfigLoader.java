@@ -1,5 +1,7 @@
 package pl.grzeslowski.strangectrl.config;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.thoughtworks.xstream.XStream;
 
 public class XStreamConfigLoader {
@@ -65,6 +67,7 @@ public class XStreamConfigLoader {
     }
 
     public Configuration loadXml(final String xml) {
-        throw new UnsupportedOperationException("Not yet impl!");
+        checkNotNull(xml);
+        return (Configuration) xstream.fromXML(xml);
     }
 }
