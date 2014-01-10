@@ -73,8 +73,23 @@ public class InputUtils {
             robot.keyRelease(getCode(key));
         }
     }
-    
+
     public void releaseKey(final Key... keys) {
         releaseKey(Arrays.asList(keys));
+    }
+
+    public void pressKeyCombo(final List<Key> keys) {
+        final Deque<Key> keyCodes = new ArrayDeque<>();
+        for (final Key key : keys) {
+            robot.keyPress(getCode(key));
+            keyCodes.push(key);
+        }
+        for (final Key key : keyCodes) {
+            robot.keyRelease(getCode(key));
+        }
+    }
+
+    public void pressKeyCombo(final Key... keys) {
+        pressKeyCombo(Arrays.asList(keys));
     }
 }
