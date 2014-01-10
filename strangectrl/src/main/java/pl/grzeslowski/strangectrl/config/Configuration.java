@@ -1,10 +1,22 @@
 package pl.grzeslowski.strangectrl.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+
 public class Configuration {
-    private List<Button> buttons;
+    private final List<Button> buttons = new ArrayList<>();
     private Pov pov;
+
+    public Configuration(final Button button) {
+        buttons.add(button);
+    }
+
+    public Configuration() {
+    }
 
     @Override
     public int hashCode() {
@@ -17,31 +29,21 @@ public class Configuration {
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
+        return obj instanceof Configuration && equals((Configuration) obj);
+    }
+
+    private boolean equals(final Configuration obj) {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Configuration other = (Configuration) obj;
-        if (buttons == null) {
-            if (other.buttons != null) {
-                return false;
-            }
-        } else if (!buttons.equals(other.buttons)) {
-            return false;
-        }
-        if (pov == null) {
-            if (other.pov != null) {
-                return false;
-            }
-        } else if (!pov.equals(other.pov)) {
-            return false;
-        }
-        return true;
+
+        return Objects.equal(pov, obj.pov)
+                && Iterables.elementsEqual(buttons, obj.buttons);
     }
 
+    @Override
+    public String toString() {
+        return "Configuration[" + Joiner.on(", ").join(buttons) + " | " + pov
+                + "]";
+    }
 }

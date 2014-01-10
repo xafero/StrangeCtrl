@@ -3,6 +3,7 @@ package pl.grzeslowski.strangectrl.config;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
+
 public class XStreamConfigLoaderTest {
     @Test
     public void empty_configuration() throws Exception {
@@ -21,7 +22,7 @@ public class XStreamConfigLoaderTest {
         // then
         assertThat(loadXml).isEqualTo(expected);
     }
-    
+
     @Test(expected = NullPointerException.class)
     public void null_in_parameter() throws Exception {
 
@@ -30,5 +31,31 @@ public class XStreamConfigLoaderTest {
 
         // when
         loader.loadXml(null);
+    }
+
+    @Test
+    public void configuration_with_button_with_key() throws Exception {
+
+        // given
+        final XStreamConfigLoader loader = new XStreamConfigLoader();
+
+        final String xml = "<configuration>"
+                + "<button value=\"A\">"
+                + "<key>"
+                + "<value>Q</value>"
+                + "</key>"
+                + "</button>"
+                + "</configuration>";
+
+        // expected
+        final Key key = new Key("Q");
+        final Button button = new Button("A", key);
+        final Configuration expected = new Configuration(button);
+
+        // when
+        final Configuration loadXml = loader.loadXml(xml);
+
+        // then
+        assertThat(loadXml).isEqualTo(expected);
     }
 }

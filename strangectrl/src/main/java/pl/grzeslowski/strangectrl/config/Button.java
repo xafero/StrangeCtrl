@@ -1,11 +1,24 @@
 package pl.grzeslowski.strangectrl.config;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 
 public class Button {
     private String value;
-    private List<Key> keys;
-    private List<State> states;
+    private final List<Key> keys = new ArrayList<>();
+    private final List<State> states = new ArrayList<>();
+
+    public Button() {
+    }
+
+    public Button(final String value, final Key key) {
+        this.value = value;
+        keys.add(key);
+    }
 
     @Override
     public int hashCode() {
@@ -19,38 +32,27 @@ public class Button {
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
+        return obj instanceof Button && equals((Button) obj);
+    }
+
+    private boolean equals(final Button obj) {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Button other = (Button) obj;
-        if (keys == null) {
-            if (other.keys != null) {
-                return false;
-            }
-        } else if (!keys.equals(other.keys)) {
-            return false;
-        }
-        if (states == null) {
-            if (other.states != null) {
-                return false;
-            }
-        } else if (!states.equals(other.states)) {
-            return false;
-        }
-        if (value == null) {
-            if (other.value != null) {
-                return false;
-            }
-        } else if (!value.equals(other.value)) {
-            return false;
-        }
-        return true;
+
+        return Objects.equal(value, obj.value)
+                && Iterables.elementsEqual(keys, obj.keys)
+                && Iterables.elementsEqual(states, obj.states);
     }
 
+    @Override
+    public String toString() {
+        String join;
+        if (keys != null && !keys.isEmpty()) {
+            join = "K " + Joiner.on(", ").join(keys);
+        } else {
+            join = "S " + Joiner.on(", ").join(states);
+        }
+        return "Button[" + value + " | " + join + "]";
+    }
 }
