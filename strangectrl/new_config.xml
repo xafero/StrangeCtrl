@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<button value="A">
-		<key>ENTER</key>
+		<key>
+			<value>ENTER</value>
+		</key>
 	</button>
 	<button value="B">
-		<key>BACKSPACE</key>
+		<key>
+			<value>BACKSPACE</value>
+		</key>
 	</button>
 	<button value="X">
-		<key>ESC</key>
+		<key>
+			<value>ESC</value>
+		</key>
 	</button>
 	<button value="Y">
 		<state id="1" next="2">
-			<key>ALT</key>
-			<key>TAB</key>
+			<key>
+				<value>ALT</value>
+			</key>
+			<key>
+				<value>TAB</value>
+			</key>
 		</state>
 		<state id="2">
-			<key>TAB</key>
+			<key>
+				<value>TAB</value>
+			</key>
 		</state>
 	</button>
 	<button value="RB">
-		<key>LEFT MOUSE</key>
+		<key>
+			<value>LEFT MOUSE</value>
+		</key>
 	</button>
 	<button value="LB">
-		<key>RIGHT MOUSE</key>
+		<key>
+			<value>RIGHT MOUSE</value>
+		</key>
 	</button>
 	<button value="START">
 
@@ -31,41 +47,73 @@
 
 	</button>
 	<button value="RS">
-		<key>CENTER MOUSE</key>
+		<key>
+			<value>CENTER MOUSE</value>
+		</key>
 	</button>
 	<button value="LS">
-		<key>CTRL</key>
-		<key>SHIFT</key>
-		<key>T</key>
+		<key>
+			<value>CTRL</value>
+		</key>
+		<key>
+			<value>SHIFT</value>
+		</key>
+		<key>
+			<value>T</value>
+		</key>
 	</button>
 	<pov>
 		<N>
-			<key>UP_ARROW</key>
+			<key>
+				<value>UP_ARROW</value>
+			</key>
 		</N>
 		<S>
-			<key>DOWN_ARROW</key>
+			<key>
+				<value>DOWN_ARROW</value>
+			</key>
 		</S>
 		<E>
-			<key>RIGHT_ARROW</key>
+			<key>
+				<value>RIGHT_ARROW</value>
+			</key>
 		</E>
 		<W>
-			<key>LEFT_ARROW</key>
+			<key>
+				<value>LEFT_ARROW</value>
+			</key>
 		</W>
 		<NE>
-			<key>UP_ARROW</key>
-			<key>RIGHT_ARROW</key>
+			<key>
+				<value>UP_ARROW</value>
+			</key>
+			<key>
+				<value>RIGHT_ARROW</value>
+			</key>
 		</NE>
 		<NW>
-			<key>UP_ARROW</key>
-			<key>LEFT_ARROW</key>
+			<key>
+				<value>UP_ARROW</value>
+			</key>
+			<key>
+				<value>LEFT_ARROW</value>
+			</key>
 		</NW>
 		<SE>
-			<key>DOWN_ARROW</key>
-			<key>RIGHT_ARROW</key>
+			<key>
+				<value>DOWN_ARROW</value>
+			</key>
+			<key>
+				<value>RIGHT_ARROW</value>
+			</key>
 		</SE>
 		<SW>
-			<key>DOWN_ARROW</key>
-			<key>LEFT_ARROW</key>
+			<key>
+				<value>DOWN_ARROW</value>
+			</key>
+			<key>
+				<value>LEFT_ARROW</value>
+			</key>
 		</SW>
 	</pov>
 </configuration>
