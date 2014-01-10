@@ -1,5 +1,6 @@
 package com.xafero.strangectrl.input;
 
+import java.awt.Point;
 import java.awt.Robot;
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -22,6 +23,21 @@ public class InputUtils {
     private static final String prefix = "VK_";
     private final Robot robot;
     private final Map<String, Integer> keyMap;
+
+    public static enum MouseButton {
+        LEFT(1), RIGHT(2), CENTER(3);
+
+        private final int buttonMask;
+
+        private MouseButton(final int buttonMask) {
+            this.buttonMask = buttonMask;
+        }
+
+        public int getButtonMask() {
+            return buttonMask;
+        }
+
+    }
 
     public InputUtils(final Robot robot) {
         this.robot = robot;
@@ -92,4 +108,25 @@ public class InputUtils {
     public void pressKeyCombo(final Key... keys) {
         pressKeyCombo(Arrays.asList(keys));
     }
+
+    public void moveMouse(final Point point) {
+        robot.mouseMove(point.x, point.y);
+    }
+
+    public void mousePress(final MouseButton button) {
+        robot.mousePress(button.buttonMask);
+    }
+
+    public void mousePressLeft() {
+        mousePress(MouseButton.LEFT);
+    }
+
+    public void mousePressRight() {
+        mousePress(MouseButton.RIGHT);
+    }
+
+    public void mousePressCenter() {
+        mousePress(MouseButton.CENTER);
+    }
+
 }
