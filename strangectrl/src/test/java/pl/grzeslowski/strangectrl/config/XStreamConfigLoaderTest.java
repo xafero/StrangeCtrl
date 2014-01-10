@@ -58,4 +58,34 @@ public class XStreamConfigLoaderTest {
         // then
         assertThat(loadXml).isEqualTo(expected);
     }
+
+    @Test
+    public void configuration_with_button_with_2_keys() throws Exception {
+
+        // given
+        final XStreamConfigLoader loader = new XStreamConfigLoader();
+
+        final String xml = "<configuration>"
+                + "<button value=\"A\">"
+                + "<key>"
+                + "<value>Q</value>"
+                + "</key>"
+                + "<key>"
+                + "<value>W</value>"
+                + "</key>"
+                + "</button>"
+                + "</configuration>";
+
+        // expected
+        final Key keyQ = new Key("Q");
+        final Key keyW = new Key("W");
+        final Button button = new Button("A", keyQ, keyW);
+        final Configuration expected = new Configuration(button);
+
+        // when
+        final Configuration loadXml = loader.loadXml(xml);
+
+        // then
+        assertThat(loadXml).isEqualTo(expected);
+    }
 }

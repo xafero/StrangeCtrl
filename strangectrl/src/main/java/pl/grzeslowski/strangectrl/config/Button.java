@@ -15,9 +15,12 @@ public class Button {
     public Button() {
     }
 
-    public Button(final String value, final Key key) {
+    public Button(final String value, final Key... keys) {
         this.value = value;
-        keys.add(key);
+        
+        for (final Key key : keys) {
+            this.keys.add(key);
+        }
     }
 
     @Override
