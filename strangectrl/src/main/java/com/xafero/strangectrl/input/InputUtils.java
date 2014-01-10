@@ -129,4 +129,20 @@ public class InputUtils {
         mousePress(MouseButton.CENTER);
     }
 
+    public void mouseRelease(final MouseButton button) {
+        robot.mouseRelease(button.buttonMask);
+    }
+
+    public void mouseReleaseLeft() {
+        mouseRelease(MouseButton.LEFT);
+    }
+
+    public void mouseReleaseRight() {
+        mouseRelease(MouseButton.RIGHT);
+    }
+
+    public void mouseReleaseCenter() {
+        mouseRelease(MouseButton.CENTER);
+    }
+
 }

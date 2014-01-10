@@ -162,5 +162,45 @@ public class InputUtilsTest {
 
         // then
         verify(robot).mousePress(InputUtils.MouseButton.CENTER.getButtonMask());
+    } @Test
+    public void mouse_release_left() throws Exception {
+
+        // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+
+        // when
+        inputUtils.mouseReleaseLeft();
+
+        // then
+        verify(robot).mouseRelease(InputUtils.MouseButton.LEFT.getButtonMask());
+    }
+
+    @Test
+    public void mouse_release_right() throws Exception {
+
+        // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+
+        // when
+        inputUtils.mouseReleaseRight();
+
+        // then
+        verify(robot).mouseRelease(InputUtils.MouseButton.RIGHT.getButtonMask());
+    }
+
+    @Test
+    public void mouse_release_center() throws Exception {
+
+        // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+
+        // when
+        inputUtils.mouseReleaseCenter();
+
+        // then
+        verify(robot).mouseRelease(InputUtils.MouseButton.CENTER.getButtonMask());
     }
 }
