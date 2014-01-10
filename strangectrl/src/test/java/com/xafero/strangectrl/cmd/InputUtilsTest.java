@@ -1,12 +1,12 @@
 package com.xafero.strangectrl.cmd;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import pl.grzeslowski.strangectrl.config.Key;
 
@@ -26,7 +26,7 @@ public class InputUtilsTest {
         inputUtils.pressKey(keyQ);
 
         // then
-        Mockito.verify(robot).keyPress(KeyEvent.VK_Q);
+        verify(robot).keyPress(KeyEvent.VK_Q);
     }  
     
     @Test
@@ -41,6 +41,6 @@ public class InputUtilsTest {
         inputUtils.releaseKey(keyQ);
 
         // then
-        Mockito.verify(robot).keyRelease(KeyEvent.VK_Q);
+        verify(robot).keyRelease(KeyEvent.VK_Q);
     }
 }

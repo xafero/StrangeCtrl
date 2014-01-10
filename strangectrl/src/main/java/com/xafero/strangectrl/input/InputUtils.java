@@ -1,26 +1,31 @@
 package com.xafero.strangectrl.input;
 
 import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import net.java.games.input.Controller;
 import net.java.games.input.Controller.Type;
 import net.java.games.input.ControllerEnvironment;
 import pl.grzeslowski.strangectrl.config.Key;
 
+import com.xafero.strangectrl.cmd.ConfigUtils;
 import com.xafero.superloader.NativeLoader;
 
 public class InputUtils {
 
+    private static final String prefix = "VK_";
     private final Robot robot;
+    private final Map<String, Integer> keyMap;
 
     public InputUtils(final Robot robot) {
         this.robot = robot;
+        keyMap = ConfigUtils.buildKeyMap(prefix);
     }
 
     public static List<Controller> getControllers(final Type... types) {
@@ -60,7 +65,7 @@ public class InputUtils {
     }
 
     private int getCode(final Key key) {
-        return KeyEvent.VK_Q;
+        return keyMap.get(key.getKey().toLowerCase(Locale.US));
     }
 
     public void releaseKey(final List<Key> keys) {

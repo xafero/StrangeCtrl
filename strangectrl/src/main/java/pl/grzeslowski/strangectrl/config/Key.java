@@ -37,4 +37,8 @@ public class Key {
     public String toString() {
         return "Key[" + key + "]";
     }
+
+    public String getKey() {
+        return key;
+    }
 }
