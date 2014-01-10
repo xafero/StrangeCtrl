@@ -1,6 +1,5 @@
 package pl.grzeslowski.strangectrl.config;
 
-
 public class Pov {
     private NorthPov northPov;
     private SouthPov southPov;
@@ -21,6 +20,18 @@ public class Pov {
         this.southPov = southPov;
         this.eastPov = eastPov;
         this.westPov = westPov;
+    }
+
+    public Pov(final NorthPov northPov, final SouthPov southPov,
+            final EastPov eastPov,
+            final WestPov westPov, final NorthEastPov northEastPov,
+            final NorthWestPov northWestPov, final SouthEastPov southEastPov,
+            final SouthWestPov southWestPov) {
+        this(northPov, southPov, eastPov, westPov);
+        this.northEastPov = northEastPov;
+        this.northWestPov = northWestPov;
+        this.southEastPov = southEastPov;
+        this.southWestPov = southWestPov;
     }
 
     @Override
