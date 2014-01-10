@@ -28,6 +28,7 @@ public class XStreamConfigLoader {
         xstream.alias("SE", SouthEastPov.class);
         xstream.alias("SW", SouthWestPov.class);
 
+        
         // creating implicit collections
         xstream.addImplicitCollection(Configuration.class, "buttons");
         xstream.addImplicitCollection(Button.class, "keys", "key", Key.class);
@@ -56,14 +57,20 @@ public class XStreamConfigLoader {
                 Key.class);
         xstream.addImplicitCollection(SouthWestPov.class, "states");
 
-        // creating field aliases
+        // attributes
         xstream.useAttributeFor(Button.class, "value");
         xstream.useAttributeFor(State.class, "id");
         xstream.useAttributeFor(State.class, "next");
 
-        // xstream.aliasField("value", Button.class, "value");
-        // xstream.aliasField("id", State.class, "id");
-        // xstream.aliasField("next", State.class, "next");
+        // creating field aliases
+        xstream.aliasField("N", Pov.class, "northPov");
+        xstream.aliasField("S", Pov.class, "southPov");
+        xstream.aliasField("E", Pov.class, "eastPov");
+        xstream.aliasField("W", Pov.class, "westPov");
+        xstream.aliasField("NE", Pov.class, "northEastPov");
+        xstream.aliasField("NW", Pov.class, "northWestPov");
+        xstream.aliasField("SE", Pov.class, "southEastPov");
+        xstream.aliasField("SW", Pov.class, "southWestPov");
     }
 
     public String createXml(final Configuration configuration) {

@@ -20,6 +20,10 @@ public class Configuration {
         }
     }
 
+    public Configuration(final Pov pov) {
+        this.pov = pov;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

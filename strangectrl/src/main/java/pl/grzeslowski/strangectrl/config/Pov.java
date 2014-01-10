@@ -1,5 +1,6 @@
 package pl.grzeslowski.strangectrl.config;
 
+
 public class Pov {
     private NorthPov northPov;
     private SouthPov southPov;
@@ -9,6 +10,18 @@ public class Pov {
     private NorthWestPov northWestPov;
     private SouthEastPov southEastPov;
     private SouthWestPov southWestPov;
+
+    public Pov() {
+    }
+
+    public Pov(final NorthPov northPov, final SouthPov southPov,
+            final EastPov eastPov,
+            final WestPov westPov) {
+        this.northPov = northPov;
+        this.southPov = southPov;
+        this.eastPov = eastPov;
+        this.westPov = westPov;
+    }
 
     @Override
     public int hashCode() {
@@ -102,4 +115,10 @@ public class Pov {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return String.format("POV[%s | %s | %s | %s | %s | %s | %s | %s]",
+                northPov, southPov, eastPov, westPov, northEastPov,
+                northWestPov, southEastPov, northEastPov);
+    }
 }

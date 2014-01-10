@@ -127,4 +127,41 @@ public class XStreamConfigLoaderTest {
         // then
         assertThat(loadXml).isEqualTo(expected);
     }
+
+    @Test
+    public void configuration_with_pov_4_directions() throws Exception {
+
+        // given
+        final XStreamConfigLoader loader = new XStreamConfigLoader();
+
+        final String xml = "<configuration>"
+                + "<pov>"
+                + "<N><key><value>Q</value></key></N>"
+                + "<S><key><value>W</value></key></S>"
+                + "<E><key><value>E</value></key></E>"
+                + "<W><key><value>R</value></key></W>"
+                + "</pov>"
+                + "</configuration>";
+
+        // expected
+        final Key keyQ = new Key("Q");
+        final Key keyW = new Key("W");
+        final Key keyE = new Key("E");
+        final Key keyR = new Key("R");
+
+        final NorthPov northPov = new NorthPov(keyQ);
+        final SouthPov southPov = new SouthPov(keyW);
+        final EastPov eastPov = new EastPov(keyE);
+        final WestPov westPov = new WestPov(keyR);
+
+        final Pov pov = new Pov(northPov, southPov, eastPov, westPov);
+
+        final Configuration expected = new Configuration(pov);
+
+        // when
+        final Configuration loadXml = loader.loadXml(xml);
+
+        // then
+        assertThat(loadXml).isEqualTo(expected);
+    }
 }

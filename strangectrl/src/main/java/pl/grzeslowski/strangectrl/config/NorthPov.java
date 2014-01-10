@@ -1,10 +1,20 @@
 package pl.grzeslowski.strangectrl.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NorthPov {
-    private List<Key> keys;
-    private List<State> states;
+    private final List<Key> keys = new ArrayList<>();
+    private final List<State> states = new ArrayList<>();
+
+    public NorthPov() {
+    }
+
+    public NorthPov(final Key... keys) {
+        for (final Key key : keys) {
+            this.keys.add(key);
+        }
+    }
 
     @Override
     public int hashCode() {
