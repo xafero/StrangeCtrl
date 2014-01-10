@@ -3,20 +3,20 @@ package pl.grzeslowski.strangectrl.config;
 import com.google.common.base.Objects;
 
 public class Key {
-    private String value;
+    private String key;
 
     public Key() {
     }
 
     public Key(final String key) {
-        value = key;
+        this.key = key;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (value == null ? 0 : value.hashCode());
+        result = prime * result + (key == null ? 0 : key.hashCode());
         return result;
     }
 
@@ -30,11 +30,11 @@ public class Key {
             return false;
         }
 
-        return Objects.equal(value, obj.value);
+        return Objects.equal(key, obj.key);
     }
 
     @Override
     public String toString() {
-        return "Key[" + value + "]";
+        return "Key[" + key + "]";
     }
 }

@@ -61,6 +61,7 @@ public class XStreamConfigLoader {
         xstream.useAttributeFor(Button.class, "value");
         xstream.useAttributeFor(State.class, "id");
         xstream.useAttributeFor(State.class, "next");
+        xstream.useAttributeFor(Key.class, "key");
 
         // creating field aliases
         xstream.aliasField("N", Pov.class, "northPov");
