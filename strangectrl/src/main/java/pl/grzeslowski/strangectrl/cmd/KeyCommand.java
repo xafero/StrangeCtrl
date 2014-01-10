@@ -23,7 +23,10 @@ public class KeyCommand implements ICommand {
         if (value >= 0.5f && !pushed) {
             inputUtils.pressKey(key);
             pushed = true;
-        } 
+        } else {
+            inputUtils.releaseKey(key);
+            pushed = false;
+        }
     }
 
 }

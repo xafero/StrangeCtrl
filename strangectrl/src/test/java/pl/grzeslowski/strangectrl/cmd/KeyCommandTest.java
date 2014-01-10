@@ -66,4 +66,23 @@ public class KeyCommandTest {
         // then
         verify(inputUtils, times(1)).pressKey(key);
     }
+    
+    @Test
+    public void push_button_release_push() throws Exception {
+
+        // given
+        final Key key = new Key("D");
+        final InputUtils inputUtils = mock(InputUtils.class);
+        final KeyCommand command = new KeyCommand(key, inputUtils);
+        final GraphicsDevice dev = mock(GraphicsDevice.class);
+
+        // when
+        command.execute(dev, 1.0f);
+        command.execute(dev, 0.0f);
+        command.execute(dev, 1.0f);
+
+        // then
+        verify(inputUtils, times(2)).pressKey(key);
+        verify(inputUtils, times(1)).releaseKey(key);
+    }
 }
