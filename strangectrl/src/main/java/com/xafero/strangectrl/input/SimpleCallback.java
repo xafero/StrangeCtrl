@@ -40,9 +40,6 @@ public class SimpleCallback implements IControllerCallback {
         final Component component = event.getComponent();
         final String identifier = component.getIdentifier().getName();
 
-        logger.info(String.format("name %s value %s", identifier,
-                event.getValue()));
-
         final String configName = transformIdentifier(
                 identifier, event.getValue());
         final ICommand command = commandFactory.getCommand(configName);
