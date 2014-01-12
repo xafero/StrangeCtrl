@@ -19,7 +19,11 @@ public class MouseCommand implements ICommand {
 
     @Override
     public void execute(final GraphicsDevice graphicsDevice, final double value) {
-        inputUtils.mousePress(mouseButton);
+        if (value >= 0.5f) {
+            inputUtils.mousePress(mouseButton);
+        } else {
+            inputUtils.mouseRelease(mouseButton);
+        }
     }
 
 }

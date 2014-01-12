@@ -24,4 +24,20 @@ public class MouseCommandTest {
         // then
         verify(inputUtils).mousePress(button);
     }
+
+    @Test
+    public void release_once_mouse() throws Exception {
+
+        // given
+        final InputUtils inputUtils = mock(InputUtils.class);
+        final MouseButton button = MouseButton.LEFT;
+        final MouseCommand mouseCommand = new MouseCommand(button,
+                inputUtils);
+
+        // when
+        mouseCommand.execute(null, 0.0f);
+
+        // then
+        verify(inputUtils).mouseRelease(button);
+    }
 }
