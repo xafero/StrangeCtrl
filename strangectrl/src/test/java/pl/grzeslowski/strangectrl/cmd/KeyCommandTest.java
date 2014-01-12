@@ -5,11 +5,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.awt.GraphicsDevice;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
 import pl.grzeslowski.strangectrl.config.Key;
 
+import com.google.common.collect.Lists;
 import com.xafero.strangectrl.input.InputUtils;
 
 public class KeyCommandTest {
@@ -28,7 +30,7 @@ public class KeyCommandTest {
         command.execute(dev, value);
 
         // then
-        verify(inputUtils).pressKey(key);
+        verify(inputUtils).pressKey(Lists.newArrayList(key));
     }
 
     
@@ -47,7 +49,25 @@ public class KeyCommandTest {
         command.execute(dev, 1.0f);
 
         // then
-        verify(inputUtils, times(2)).pressKey(key);
-        verify(inputUtils, times(1)).releaseKey(key);
+        verify(inputUtils, times(2)).pressKey(Lists.newArrayList(key));
+        verify(inputUtils, times(1)).releaseKey(Lists.newArrayList(key));
+    }
+    
+    @Test
+    public void pushing_multiple_keys() throws Exception {
+
+        // given
+        final Key keyD = new Key("D");
+        final Key keyE = new Key("e");
+        final ArrayList<Key> keys = Lists.newArrayList(keyD,keyE);
+        final InputUtils inputUtils = mock(InputUtils.class);
+        final KeyCommand command = new KeyCommand(keys, inputUtils);
+        final GraphicsDevice dev = mock(GraphicsDevice.class);
+
+        // when
+        command.execute(dev, 1.0f);
+
+        // then
+        verify(inputUtils).pressKey(keys);
     }
 }
