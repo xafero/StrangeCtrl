@@ -16,6 +16,10 @@ public class SouthWestPov {
         }
     }
 
+    public List<Key> getKeys() {
+        return keys;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

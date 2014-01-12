@@ -5,13 +5,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
 
 import pl.grzeslowski.strangectrl.config.Button;
 import pl.grzeslowski.strangectrl.config.Configuration;
+import pl.grzeslowski.strangectrl.config.EastPov;
 import pl.grzeslowski.strangectrl.config.Key;
+import pl.grzeslowski.strangectrl.config.NorthPov;
+import pl.grzeslowski.strangectrl.config.Pov;
+import pl.grzeslowski.strangectrl.config.SouthPov;
+import pl.grzeslowski.strangectrl.config.WestPov;
 
 import com.google.common.collect.Lists;
 import com.xafero.strangectrl.cmd.ICommand;
@@ -99,7 +105,7 @@ public class CommandFactoryTest {
 
         // then
         assertThat(commands).hasSize(size);
-        
+
         final Iterator<ICommand> it = commands.iterator();
         final ICommand iCommand1 = it.next();
         final ICommand iCommand2 = it.next();
@@ -115,5 +121,51 @@ public class CommandFactoryTest {
 
         verify(inputUtils).pressKey(Lists.newArrayList(key1));
         verify(inputUtils).pressKey(Lists.newArrayList(key1, key2));
+    }
+
+    @Test
+    public void pov_in_conf_4() throws Exception {
+
+        final List<Key> nKeys = Lists.newArrayList(new Key("w"), new Key("d"),
+                new Key("r"));
+        final List<Key> sKeys = Lists.newArrayList(new Key("h"), new Key("a"),
+                new Key("d"));
+        final List<Key> eKeys = Lists.newArrayList(new Key("p"), new Key("c"),
+                new Key("g"));
+        final List<Key> wKeys = Lists.newArrayList(new Key("z"), new Key("j"),
+                new Key("h"));
+
+        final NorthPov n = new NorthPov(nKeys);
+        final SouthPov s = new SouthPov(sKeys);
+        final EastPov e = new EastPov(eKeys);
+        final WestPov w = new WestPov(wKeys);
+        // given
+        final Pov pov = new Pov(n, s, e, w);
+        final Configuration configuration = new Configuration(pov);
+
+        final InputUtils inputUtils = mock(InputUtils.class);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils);
+
+        // expected
+        final int size = 4;
+
+        // when
+        final Set<ICommand> commands = commandFactory
+                .getCommands(configuration);
+
+        // then
+        assertThat(commands).hasSize(size);
+        for (final ICommand iCommand : commands) {
+            assertThat(iCommand.getClass()).isEqualTo(KeyCommand.class);
+        }
+
+        for (final ICommand iCommand : commands) {
+            iCommand.execute(null, 1.0f);
+        }
+
+        verify(inputUtils).pressKey(nKeys);
+        verify(inputUtils).pressKey(sKeys);
+        verify(inputUtils).pressKey(eKeys);
+        verify(inputUtils).pressKey(wKeys);
     }
 }

@@ -3,6 +3,8 @@ package pl.grzeslowski.strangectrl.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 public class WestPov {
     private final List<Key> keys = new ArrayList<>();
     private final List<State> states = new ArrayList<>();
@@ -11,9 +13,17 @@ public class WestPov {
     }
 
     public WestPov(final Key... keys) {
+        this(Lists.newArrayList(keys));
+    }
+
+    public WestPov(final List<Key> keys) {
         for (final Key key : keys) {
             this.keys.add(key);
         }
+    }
+
+    public List<Key> getKeys() {
+        return keys;
     }
 
     @Override
