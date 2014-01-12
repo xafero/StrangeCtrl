@@ -30,11 +30,8 @@ public class CommandFactoryTest {
     public void null_conf() throws Exception {
 
         // given
-        final CommandFactory commandFactory = new CommandFactory(
-                mock(InputUtils.class));
+        final CommandFactory commandFactory = new CommandFactory(mock(InputUtils.class), null);
 
-        // when
-        commandFactory.loadCommands(null);
     }
 
     @Test
@@ -45,13 +42,12 @@ public class CommandFactoryTest {
         final Button button = new Button("A", key);
         final Configuration configuration = new Configuration(button);
         final InputUtils inputUtils = mock(InputUtils.class);
-        final CommandFactory commandFactory = new CommandFactory(inputUtils);
 
         // expected
         final KeyCommand expected = new KeyCommand(key, inputUtils);
 
         // when
-        commandFactory.loadCommands(configuration);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils, configuration);
 
         // then
         final ICommand keyCommand = commandFactory.getCommand("A");
@@ -72,7 +68,6 @@ public class CommandFactoryTest {
         final Configuration configuration = new Configuration(button1, button2);
 
         final InputUtils inputUtils = mock(InputUtils.class);
-        final CommandFactory commandFactory = new CommandFactory(inputUtils);
 
         // expected
         final KeyCommand expected1 = new KeyCommand(key1, inputUtils);
@@ -81,7 +76,7 @@ public class CommandFactoryTest {
                 inputUtils);
 
         // when
-        commandFactory.loadCommands(configuration);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils, configuration);
 
         // then
         final ICommand keyCommand1 = commandFactory.getCommand("A");
@@ -112,7 +107,6 @@ public class CommandFactoryTest {
         final Configuration configuration = new Configuration(pov);
 
         final InputUtils inputUtils = mock(InputUtils.class);
-        final CommandFactory commandFactory = new CommandFactory(inputUtils);
 
         // expected
         final KeyCommand nExpected = new KeyCommand(nKeys, inputUtils);
@@ -121,7 +115,7 @@ public class CommandFactoryTest {
         final KeyCommand wExpected = new KeyCommand(wKeys, inputUtils);
 
         // when
-        commandFactory.loadCommands(configuration);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils, configuration);
 
         // then
         final ICommand keyCommandN = commandFactory.getCommand(n.getIdentifier());
@@ -170,7 +164,6 @@ public class CommandFactoryTest {
         final Configuration configuration = new Configuration(pov);
 
         final InputUtils inputUtils = mock(InputUtils.class);
-        final CommandFactory commandFactory = new CommandFactory(inputUtils);
 
         // expected
         final KeyCommand nExpected = new KeyCommand(nKeys, inputUtils);
@@ -184,7 +177,7 @@ public class CommandFactoryTest {
         
         
         // when
-      commandFactory.loadCommands(configuration);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils, configuration);
 
         // then
 

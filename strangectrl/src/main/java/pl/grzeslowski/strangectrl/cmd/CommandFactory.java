@@ -27,11 +27,12 @@ public class CommandFactory {
     private final InputUtils inputUtils;
     private final Map<String, ICommand> commands = new HashMap<>();
 
-    public CommandFactory(final InputUtils inputUtils) {
+    public CommandFactory(final InputUtils inputUtils,final Configuration configuration) {
         this.inputUtils = checkNotNull(inputUtils);
+        loadCommands( checkNotNull(configuration));
     }
 
-    public void loadCommands(final Configuration configuration) {
+    private void loadCommands(final Configuration configuration) {
 
         // buttons
         final List<Button> buttons = configuration.getButtons();
