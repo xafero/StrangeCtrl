@@ -36,6 +36,17 @@ public class CommandFactoryTest {
         assertThat(commands).hasSize(size);
     }
 
+    @Test(expected=NullPointerException.class)
+    public void null_conf() throws Exception {
+
+        // given
+        final CommandFactory commandFactory = new CommandFactory(
+                mock(InputUtils.class));
+
+        // when
+        commandFactory.getCommands(null);
+    }
+
     @Test
     public void get_commands_one_button() throws Exception {
 
