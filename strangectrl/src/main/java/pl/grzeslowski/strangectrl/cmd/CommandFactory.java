@@ -73,11 +73,13 @@ public class CommandFactory {
 
     private void loadAnalogCommands() {
 
-        // movng mouse
-        final MouseMoveCommand mouseMoveCommand = new MouseMoveCommand(
+        // moving mouse
+        final MouseMoveCommand mouseMoveXCommand = new MouseMoveXCommand(
                 inputUtils, maxMouseMove, 0.1f);
-        commands.put("y", mouseMoveCommand);
-        commands.put("x", mouseMoveCommand);
+        final MouseMoveCommand mouseMoveYCommand = new MouseMoveYCommand(
+                inputUtils, maxMouseMove, 0.1f);
+        commands.put("x", mouseMoveXCommand);
+        commands.put("y", mouseMoveYCommand);
     }
 
     private ICommand createCommand(final List<Key> keys) {

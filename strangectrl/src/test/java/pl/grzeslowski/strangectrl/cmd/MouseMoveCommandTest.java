@@ -18,12 +18,41 @@ import com.xafero.strangectrl.input.InputUtils;
 
 public class MouseMoveCommandTest {
     @Test
-    public void move_mouse() throws Exception {
+    public void move_mouse_y() throws Exception {
 
         // given
         final InputUtils inputUtils = mock(InputUtils.class);
         final int maxMove = 10;
-        final MouseMoveCommand command = new MouseMoveCommand(inputUtils,
+        final MouseMoveCommand command = new MouseMoveYCommand(inputUtils,
+                maxMove);
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final GraphicsConfiguration graphicsConfiguration = mock(GraphicsConfiguration.class);
+
+        when(graphicsDevice.getDefaultConfiguration()).thenReturn(
+                graphicsConfiguration);
+        when(graphicsConfiguration.getBounds()).thenReturn(
+                new Rectangle(0, 0, 100, 200));
+
+        final Point mousePosition = DesktopUtils.getMousePos(graphicsDevice);
+
+        // expected
+        final Point expected = new Point(mousePosition.x,
+                mousePosition.y + 10);
+
+        // when
+        command.execute(graphicsDevice, 1.0f);
+
+        // then
+        verify(inputUtils).moveMouse(expected);
+    }
+
+    @Test
+    public void move_mouse_x() throws Exception {
+
+        // given
+        final InputUtils inputUtils = mock(InputUtils.class);
+        final int maxMove = 10;
+        final MouseMoveCommand command = new MouseMoveXCommand(inputUtils,
                 maxMove);
         final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
         final GraphicsConfiguration graphicsConfiguration = mock(GraphicsConfiguration.class);
@@ -37,7 +66,7 @@ public class MouseMoveCommandTest {
 
         // expected
         final Point expected = new Point(mousePosition.x + 10,
-                mousePosition.y + 10);
+                mousePosition.y);
 
         // when
         command.execute(graphicsDevice, 1.0f);
@@ -53,7 +82,7 @@ public class MouseMoveCommandTest {
         final InputUtils inputUtils = mock(InputUtils.class);
         final int maxMove = 10;
         final double delta = 0.7f;
-        final MouseMoveCommand command = new MouseMoveCommand(inputUtils,
+        final MouseMoveCommand command = new MouseMoveYCommand(inputUtils,
                 maxMove, delta);
         final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
         final GraphicsConfiguration graphicsConfiguration = mock(GraphicsConfiguration.class);

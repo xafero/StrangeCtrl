@@ -34,13 +34,12 @@ public class SimpleCallback implements IControllerCallback {
         final String identifier = component.getIdentifier().getName();
 
         logger.info("Got event with identifier : " + identifier + " ("
-                + event.getValue() + ")");
+                + event.getValue() + ") " + transformIdentifier(
+                        identifier, event.getValue()));
 
         final ICommand command = commandFactory.getCommand(transformIdentifier(
                 identifier, event.getValue()));
         if (command != null) {
-            logger.info("Got command : "
-                    + transformIdentifier(identifier, event.getValue()));
             command.execute(graphicsDevice, event.getValue());
         }
     }

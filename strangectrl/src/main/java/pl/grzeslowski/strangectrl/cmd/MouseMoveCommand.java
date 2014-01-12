@@ -7,7 +7,7 @@ import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
 
-public class MouseMoveCommand implements ICommand {
+public abstract class MouseMoveCommand implements ICommand {
 
     private final InputUtils inputUtils;
     private final int maxMove;
@@ -29,15 +29,23 @@ public class MouseMoveCommand implements ICommand {
         if (delta < Math.abs(value)) {
             final Point mousePoint = mousePosition(graphicsDevice);
 
-            final int newX = (int) Math.round(mousePoint.x + maxMove * value);
-            final int newY = (int) Math.round(mousePoint.y + maxMove * value);
-            
+            final int newX = moveX(mousePoint.x, value);
+            final int newY = moveY(mousePoint.y, value);
+
             inputUtils.moveMouse(new Point(newX, newY));
         }
     }
 
+    protected abstract int moveX(final int x, final double value);
+
+    protected abstract int moveY(final int y, final double value);
+
     private Point mousePosition(final GraphicsDevice graphicsDevice) {
         return DesktopUtils.getMousePos(graphicsDevice);
+    }
+
+    protected int getMaxMove() {
+        return maxMove;
     }
 
 }
