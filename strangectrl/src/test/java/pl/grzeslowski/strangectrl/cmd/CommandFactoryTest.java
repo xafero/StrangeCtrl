@@ -2,11 +2,8 @@ package pl.grzeslowski.strangectrl.cmd;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 
@@ -28,24 +25,6 @@ import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
 
 public class CommandFactoryTest {
-    @Test
-    public void get_commands_from_empty_conf() throws Exception {
-
-        // given
-        final Configuration configuration = new Configuration();
-        final CommandFactory commandFactory = new CommandFactory(
-                mock(InputUtils.class));
-
-        // expected
-        final int size = 0;
-
-        // when
-        final Set<ICommand> commands = commandFactory
-                .getCommands(configuration);
-
-        // then
-        assertThat(commands).hasSize(size);
-    }
 
     @Test(expected = NullPointerException.class)
     public void null_conf() throws Exception {
@@ -55,7 +34,7 @@ public class CommandFactoryTest {
                 mock(InputUtils.class));
 
         // when
-        commandFactory.getCommands(null);
+        commandFactory.loadCommands(null);
     }
 
     @Test
@@ -70,19 +49,14 @@ public class CommandFactoryTest {
 
         // expected
         final KeyCommand expected = new KeyCommand(key, inputUtils);
-        final int size = 1;
 
         // when
-        final Set<ICommand> commands = commandFactory
-                .getCommands(configuration);
+        commandFactory.loadCommands(configuration);
 
         // then
-        assertThat(commands).hasSize(size);
-        final ICommand iCommand = commands.iterator().next();
-        assertThat(iCommand.getClass()).isEqualTo(expected.getClass());
-        final KeyCommand keyCommand = (KeyCommand) iCommand;
-        keyCommand.execute(null, 1.0f);
-        verify(inputUtils).pressKey(Lists.newArrayList(key));
+        final ICommand keyCommand = commandFactory.getCommand("A");
+
+        assertThat(keyCommand).isEqualTo(expected);
     }
 
     @Test
@@ -101,30 +75,20 @@ public class CommandFactoryTest {
         final CommandFactory commandFactory = new CommandFactory(inputUtils);
 
         // expected
-        final int size = 2;
+        final KeyCommand expected1 = new KeyCommand(key1, inputUtils);
+        final KeyCommand expected2 = new KeyCommand(Lists.newArrayList(key1,
+                key2),
+                inputUtils);
 
         // when
-        final Set<ICommand> commands = commandFactory
-                .getCommands(configuration);
+        commandFactory.loadCommands(configuration);
 
         // then
-        assertThat(commands).hasSize(size);
+        final ICommand keyCommand1 = commandFactory.getCommand("A");
+        final ICommand keyCommand2 = commandFactory.getCommand("C");
 
-        final Iterator<ICommand> it = commands.iterator();
-        final ICommand iCommand1 = it.next();
-        final ICommand iCommand2 = it.next();
-
-        assertThat(iCommand1.getClass()).isEqualTo(KeyCommand.class);
-        assertThat(iCommand2.getClass()).isEqualTo(KeyCommand.class);
-
-        final KeyCommand keyCommand1 = (KeyCommand) iCommand1;
-        final KeyCommand keyCommand2 = (KeyCommand) iCommand2;
-
-        keyCommand1.execute(null, 1.0f);
-        keyCommand2.execute(null, 1.0f);
-
-        verify(inputUtils).pressKey(Lists.newArrayList(key1));
-        verify(inputUtils).pressKey(Lists.newArrayList(key1, key2));
+        assertThat(keyCommand1).isEqualTo(expected1);
+        assertThat(keyCommand2).isEqualTo(expected2);
     }
 
     @Test
@@ -151,26 +115,24 @@ public class CommandFactoryTest {
         final CommandFactory commandFactory = new CommandFactory(inputUtils);
 
         // expected
-        final int size = 4;
+        final KeyCommand nExpected = new KeyCommand(nKeys, inputUtils);
+        final KeyCommand sExpected = new KeyCommand(sKeys, inputUtils);
+        final KeyCommand eExpected = new KeyCommand(eKeys, inputUtils);
+        final KeyCommand wExpected = new KeyCommand(wKeys, inputUtils);
 
         // when
-        final Set<ICommand> commands = commandFactory
-                .getCommands(configuration);
+        commandFactory.loadCommands(configuration);
 
         // then
-        assertThat(commands).hasSize(size);
-        for (final ICommand iCommand : commands) {
-            assertThat(iCommand.getClass()).isEqualTo(KeyCommand.class);
-        }
+        final ICommand keyCommandN = commandFactory.getCommand(n.getIdentifier());
+        final ICommand keyCommandS = commandFactory.getCommand(s.getIdentifier());
+        final ICommand keyCommandE = commandFactory.getCommand(e.getIdentifier());
+        final ICommand keyCommandW = commandFactory.getCommand(w.getIdentifier());
 
-        for (final ICommand iCommand : commands) {
-            iCommand.execute(null, 1.0f);
-        }
-
-        verify(inputUtils).pressKey(nKeys);
-        verify(inputUtils).pressKey(sKeys);
-        verify(inputUtils).pressKey(eKeys);
-        verify(inputUtils).pressKey(wKeys);
+        assertThat(keyCommandN).isEqualTo(nExpected);
+        assertThat(keyCommandS).isEqualTo(sExpected);
+        assertThat(keyCommandE).isEqualTo(eExpected);
+        assertThat(keyCommandW).isEqualTo(wExpected);
     }
 
     @Test
@@ -211,30 +173,38 @@ public class CommandFactoryTest {
         final CommandFactory commandFactory = new CommandFactory(inputUtils);
 
         // expected
-        final int size = 8;
-
+        final KeyCommand nExpected = new KeyCommand(nKeys, inputUtils);
+        final KeyCommand sExpected = new KeyCommand(sKeys, inputUtils);
+        final KeyCommand eExpected = new KeyCommand(eKeys, inputUtils);
+        final KeyCommand wExpected = new KeyCommand(wKeys, inputUtils);
+        final KeyCommand neExpected = new KeyCommand(neKeys, inputUtils);
+        final KeyCommand nwExpected = new KeyCommand(nwKeys, inputUtils);
+        final KeyCommand seExpected = new KeyCommand(seKeys, inputUtils);
+        final KeyCommand swExpected = new KeyCommand(swKeys, inputUtils);
+        
+        
         // when
-        final Set<ICommand> commands = commandFactory
-                .getCommands(configuration);
+      commandFactory.loadCommands(configuration);
 
         // then
-        assertThat(commands).hasSize(size);
-        for (final ICommand iCommand : commands) {
-            assertThat(iCommand.getClass()).isEqualTo(KeyCommand.class);
-        }
 
-        for (final ICommand iCommand : commands) {
-            iCommand.execute(null, 1.0f);
-        }
+        final ICommand keyCommandN = commandFactory.getCommand(n.getIdentifier());
+        final ICommand keyCommandS = commandFactory.getCommand(s.getIdentifier());
+        final ICommand keyCommandE = commandFactory.getCommand(e.getIdentifier());
+        final ICommand keyCommandW = commandFactory.getCommand(w.getIdentifier());
+        final ICommand keyCommandNE = commandFactory.getCommand(ne.getIdentifier());
+        final ICommand keyCommandNW = commandFactory.getCommand(nw.getIdentifier());
+        final ICommand keyCommandSE = commandFactory.getCommand(se.getIdentifier());
+        final ICommand keyCommandSW = commandFactory.getCommand(sw.getIdentifier());
 
-        verify(inputUtils).pressKey(nKeys);
-        verify(inputUtils).pressKey(sKeys);
-        verify(inputUtils).pressKey(eKeys);
-        verify(inputUtils).pressKey(wKeys);
-        verify(inputUtils).pressKey(neKeys);
-        verify(inputUtils).pressKey(nwKeys);
-        verify(inputUtils).pressKey(seKeys);
-        verify(inputUtils).pressKey(swKeys);
+        assertThat(keyCommandN).isEqualTo(nExpected);
+        assertThat(keyCommandS).isEqualTo(sExpected);
+        assertThat(keyCommandE).isEqualTo(eExpected);
+        assertThat(keyCommandW).isEqualTo(wExpected);
+        assertThat(keyCommandNE).isEqualTo(neExpected);
+        assertThat(keyCommandNW).isEqualTo(nwExpected);
+        assertThat(keyCommandSE).isEqualTo(seExpected);
+        assertThat(keyCommandSW).isEqualTo(swExpected);
     }
 
 }

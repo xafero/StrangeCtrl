@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public class EastPov {
-    private final List<Key> keys=new ArrayList<>();
-    private final List<State> states=new ArrayList<>();
+public class EastPov extends PovDirection {
+    private final List<Key> keys = new ArrayList<>();
+    private final List<State> states = new ArrayList<>();
 
     public EastPov() {
     }
@@ -22,8 +22,14 @@ public class EastPov {
         }
     }
 
+    @Override
     public List<Key> getKeys() {
         return keys;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "EP";
     }
 
     @Override

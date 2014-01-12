@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public class NorthPov {
+public class NorthPov extends PovDirection {
     private final List<Key> keys = new ArrayList<>();
     private final List<State> states = new ArrayList<>();
 
@@ -22,10 +22,14 @@ public class NorthPov {
         }
     }
 
+    @Override
     public List<Key> getKeys() {
         return keys;
     }
-
+    @Override
+    public String getIdentifier() {
+        return "NP";
+    }
     @Override
     public int hashCode() {
         final int prime = 31;

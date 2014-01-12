@@ -2,9 +2,9 @@ package pl.grzeslowski.strangectrl.cmd;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import pl.grzeslowski.strangectrl.config.Button;
 import pl.grzeslowski.strangectrl.config.Configuration;
@@ -13,6 +13,7 @@ import pl.grzeslowski.strangectrl.config.NorthEastPov;
 import pl.grzeslowski.strangectrl.config.NorthPov;
 import pl.grzeslowski.strangectrl.config.NorthWestPov;
 import pl.grzeslowski.strangectrl.config.Pov;
+import pl.grzeslowski.strangectrl.config.PovDirection;
 import pl.grzeslowski.strangectrl.config.SouthEastPov;
 import pl.grzeslowski.strangectrl.config.SouthPov;
 import pl.grzeslowski.strangectrl.config.SouthWestPov;
@@ -24,13 +25,13 @@ import com.xafero.strangectrl.input.InputUtils;
 public class CommandFactory {
 
     private final InputUtils inputUtils;
+    private final Map<String, ICommand> commands = new HashMap<>();
 
     public CommandFactory(final InputUtils inputUtils) {
         this.inputUtils = checkNotNull(inputUtils);
     }
 
-    public Set<ICommand> getCommands(final Configuration configuration) {
-        final Set<ICommand> hashSet = new HashSet<>();
+    public void loadCommands(final Configuration configuration) {
 
         // buttons
         final List<Button> buttons = configuration.getButtons();
@@ -38,7 +39,7 @@ public class CommandFactory {
             final KeyCommand keyCommand = new KeyCommand(button.getKeys(),
                     inputUtils);
 
-            hashSet.add(keyCommand);
+            commands.put(button.getValue(), keyCommand);
         }
 
         // pov
@@ -53,39 +54,25 @@ public class CommandFactory {
             final SouthEastPov southEastPov = pov.getSouthEastPov();
             final SouthWestPov southWestPov = pov.getSouthWestPov();
 
-            if (northPov != null) {
-                hashSet.add(new KeyCommand(northPov.getKeys(), inputUtils));
-            }
-
-            if (southPov != null) {
-                hashSet.add(new KeyCommand(southPov.getKeys(), inputUtils));
-            }
-
-            if (eastPov != null) {
-                hashSet.add(new KeyCommand(eastPov.getKeys(), inputUtils));
-            }
-
-            if (westPov != null) {
-                hashSet.add(new KeyCommand(westPov.getKeys(), inputUtils));
-            }
-
-            if (northEastPov != null) {
-                hashSet.add(new KeyCommand(northEastPov.getKeys(), inputUtils));
-            }
-
-            if (northWestPov != null) {
-                hashSet.add(new KeyCommand(northWestPov.getKeys(), inputUtils));
-            }
-
-            if (southEastPov != null) {
-                hashSet.add(new KeyCommand(southEastPov.getKeys(), inputUtils));
-            }
-
-            if (southWestPov != null) {
-                hashSet.add(new KeyCommand(southWestPov.getKeys(), inputUtils));
-            }
+            putPovDirection(northPov);
+            putPovDirection(southPov);
+            putPovDirection(eastPov);
+            putPovDirection(westPov);
+            putPovDirection(northEastPov);
+            putPovDirection(northWestPov);
+            putPovDirection(southEastPov);
+            putPovDirection(southWestPov);
         }
+    }
 
-        return hashSet;
+    private void putPovDirection(final PovDirection povDirection) {
+        if (povDirection != null) {
+            commands.put(povDirection.getIdentifier(), new KeyCommand(
+                    povDirection.getKeys(), inputUtils));
+        }
+    }
+
+    public ICommand getCommand(final String identifier) {
+        return commands.get(identifier);
     }
 }

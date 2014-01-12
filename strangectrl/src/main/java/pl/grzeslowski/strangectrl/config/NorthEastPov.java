@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public class NorthEastPov {
+public class NorthEastPov extends PovDirection {
     private final List<Key> keys = new ArrayList<>();
     private final List<State> states = new ArrayList<>();
 
@@ -22,8 +22,14 @@ public class NorthEastPov {
         }
     }
 
+    @Override
     public List<Key> getKeys() {
         return keys;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "NEP";
     }
 
     @Override
