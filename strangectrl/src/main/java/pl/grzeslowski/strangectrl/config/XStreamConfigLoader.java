@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.thoughtworks.xstream.XStream;
 
-public class XStreamConfigLoader {
+public class XStreamConfigLoader implements ConfigLoader {
 
     private final XStream xstream = new XStream();
 
@@ -28,7 +28,6 @@ public class XStreamConfigLoader {
         xstream.alias("SE", SouthEastPov.class);
         xstream.alias("SW", SouthWestPov.class);
 
-        
         // creating implicit collections
         xstream.addImplicitCollection(Configuration.class, "buttons");
         xstream.addImplicitCollection(Button.class, "keys", "key", Key.class);
@@ -74,10 +73,12 @@ public class XStreamConfigLoader {
         xstream.aliasField("SW", Pov.class, "southWestPov");
     }
 
+    @Override
     public String createXml(final Configuration configuration) {
         throw new UnsupportedOperationException("Not yet impl!");
     }
 
+    @Override
     public Configuration loadXml(final String xml) {
         checkNotNull(xml);
         return (Configuration) xstream.fromXML(xml);
