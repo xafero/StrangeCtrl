@@ -1,5 +1,7 @@
 package pl.grzeslowski.strangectrl.cmd;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.awt.GraphicsDevice;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class KeyCommand implements ICommand {
 
     public KeyCommand(final List<Key> keys, final InputUtils inputUtils) {
         this.keys = new ArrayList<>(keys);
-        this.inputUtils = inputUtils;
+        this.inputUtils = checkNotNull(inputUtils);
     }
 
     @Override

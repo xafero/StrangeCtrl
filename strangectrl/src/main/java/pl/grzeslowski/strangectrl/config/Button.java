@@ -23,6 +23,22 @@ public class Button {
         }
     }
 
+    public synchronized String getValue() {
+        return value;
+    }
+
+    public synchronized void setValue(final String value) {
+        this.value = value;
+    }
+
+    public synchronized List<Key> getKeys() {
+        return keys;
+    }
+
+    public synchronized List<State> getStates() {
+        return states;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

@@ -24,6 +24,18 @@ public class Configuration {
         this.pov = pov;
     }
 
+    public synchronized Pov getPov() {
+        return pov;
+    }
+
+    public synchronized void setPov(final Pov pov) {
+        this.pov = pov;
+    }
+
+    public synchronized List<Button> getButtons() {
+        return buttons;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
