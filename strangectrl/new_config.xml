@@ -4,19 +4,14 @@
 		<key key="ENTER" />
 	</button>
 	<button value="B">
-		<key key="BACKSPACE" />
+		<key key="BACK_SPACE" />
 	</button>
 	<button value="X">
-		<key key="ESC" />
+		<key key="ESCAPE" />
 	</button>
 	<button value="Y">
-		<state id="1" next="2">
-			<key key="ALT" />
-			<key key="TAB" />
-		</state>
-		<state id="2">
-			<key key="TAB" />
-		</state>
+		<key key="ALT" />
+		<key key="TAB" />
 	</button>
 	<button value="RB">
 		<key key="LEFT_MOUSE" />
@@ -28,14 +23,13 @@
 
 	</button>
 	<button value="BACK">
-
+		<key key="F5" />
 	</button>
 	<button value="RS">
 		<key key="CENTER_MOUSE" />
 	</button>
 	<button value="LS">
-		<key key="CTRL" />
-		<key key="SHIFT" />
+		<key key="CONTROL" />
 		<key key="T" />
 	</button>
 	<pov>
