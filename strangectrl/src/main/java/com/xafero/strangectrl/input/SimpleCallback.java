@@ -3,6 +3,7 @@ package com.xafero.strangectrl.input;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.awt.GraphicsDevice;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +24,8 @@ public class SimpleCallback implements IControllerCallback {
             .getLogger(SimpleCallback.class);
     private final CommandFactory commandFactory;
     private final GraphicsDevice graphicsDevice;
-    private final Set<CommandLastValue> periodExecutionCommands = new HashSet<>();
+    private final Set<CommandLastValue> periodExecutionCommands = Collections
+            .synchronizedSet(new HashSet<CommandLastValue>());
     private ICommand lastPovCommand;
 
     public SimpleCallback(final CommandFactory commandFactory,
@@ -45,17 +47,20 @@ public class SimpleCallback implements IControllerCallback {
                 identifier, event.getValue());
         final ICommand command = commandFactory.getCommand(configName);
         if (command != null) {
+            double value = event.getValue();
+
             if ("pov".equalsIgnoreCase(identifier)) {
+                value = value == 0.0 ? 0.0 : 1.0;
+
                 lastPovCommand = command;
-                command.execute(graphicsDevice, event.getValue() == 0.0 ? 0.0
-                        : 1.0);
+                command.execute(graphicsDevice, value);
             } else {
-                command.execute(graphicsDevice, event.getValue());
+                command.execute(graphicsDevice, value);
             }
 
             if (command.isPeriodCommand()) {
                 final CommandLastValue commandLastValue = new CommandLastValue(
-                        event.getValue(), command);
+                        value, command);
 
                 if (periodExecutionCommands.contains(commandLastValue)) {
                     periodExecutionCommands.remove(commandLastValue);

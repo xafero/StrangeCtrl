@@ -18,7 +18,7 @@ import com.xafero.strangectrl.input.InputUtils;
 public class KeyCommand implements ICommand {
 
     private static final org.slf4j.Logger logger = LoggerFactory
-        .getLogger(KeyCommand.class);
+            .getLogger(KeyCommand.class);
     private final List<Key> keys;
     private final InputUtils inputUtils;
 
@@ -35,16 +35,35 @@ public class KeyCommand implements ICommand {
     public void execute(final GraphicsDevice dev, final double value) {
         if (value >= 0.5f) {
             inputUtils.pressKey(keys);
-            logger.info(String.format("Pressed key: %s", Joiner.on(", ").join(keys)));
+            logger.info(String.format("Pressed key: %s",
+                    Joiner.on(", ").join(keys)));
         } else {
             inputUtils.releaseKey(keys);
-            logger.info(String.format("Released key: %s", Joiner.on(", ").join(keys)));
+            logger.info(String.format("Released key: %s",
+                    Joiner.on(", ").join(keys)));
         }
     }
 
     @Override
     public boolean isPeriodCommand() {
         return false;
+    }
+
+    public boolean hasOnlyArrowKeys() {
+        for (final Key key : keys) {
+            if (!isArrow(key)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isArrow(final Key key) {
+        final String keyName = key.getKey();
+        return "UP".equalsIgnoreCase(keyName)
+                || "DOWN".equalsIgnoreCase(keyName)
+                || "LEFT".equalsIgnoreCase(keyName)
+                || "RIGHT".equalsIgnoreCase(keyName);
     }
 
     @Override
