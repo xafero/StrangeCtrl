@@ -14,9 +14,13 @@ import pl.grzeslowski.strangectrl.config.Button;
 import pl.grzeslowski.strangectrl.config.Configuration;
 import pl.grzeslowski.strangectrl.config.EastPov;
 import pl.grzeslowski.strangectrl.config.Key;
+import pl.grzeslowski.strangectrl.config.NorthEastPov;
 import pl.grzeslowski.strangectrl.config.NorthPov;
+import pl.grzeslowski.strangectrl.config.NorthWestPov;
 import pl.grzeslowski.strangectrl.config.Pov;
+import pl.grzeslowski.strangectrl.config.SouthEastPov;
 import pl.grzeslowski.strangectrl.config.SouthPov;
+import pl.grzeslowski.strangectrl.config.SouthWestPov;
 import pl.grzeslowski.strangectrl.config.WestPov;
 
 import com.google.common.collect.Lists;
@@ -168,4 +172,69 @@ public class CommandFactoryTest {
         verify(inputUtils).pressKey(eKeys);
         verify(inputUtils).pressKey(wKeys);
     }
+
+    @Test
+    public void pov_in_conf_8() throws Exception {
+
+        final List<Key> nKeys = Lists.newArrayList(new Key("w"), new Key("d"),
+                new Key("r"));
+        final List<Key> sKeys = Lists.newArrayList(new Key("h"), new Key("a"),
+                new Key("d"));
+        final List<Key> eKeys = Lists.newArrayList(new Key("p"), new Key("c"),
+                new Key("g"));
+        final List<Key> wKeys = Lists.newArrayList(new Key("z"), new Key("j"),
+                new Key("h"));
+
+        final List<Key> neKeys = Lists.newArrayList(new Key("a"), new Key("t"),
+                new Key("e"));
+        final List<Key> nwKeys = Lists.newArrayList(new Key("d"), new Key("s"),
+                new Key("s"));
+        final List<Key> seKeys = Lists.newArrayList(new Key("f"), new Key("d"),
+                new Key("d"));
+        final List<Key> swKeys = Lists.newArrayList(new Key("g"), new Key("t"),
+                new Key("a"));
+
+        final NorthPov n = new NorthPov(nKeys);
+        final SouthPov s = new SouthPov(sKeys);
+        final EastPov e = new EastPov(eKeys);
+        final WestPov w = new WestPov(wKeys);
+
+        final NorthEastPov ne = new NorthEastPov(neKeys);
+        final NorthWestPov nw = new NorthWestPov(nwKeys);
+        final SouthEastPov se = new SouthEastPov(seKeys);
+        final SouthWestPov sw = new SouthWestPov(swKeys);
+        // given
+        final Pov pov = new Pov(n, s, e, w, ne, nw, se, sw);
+        final Configuration configuration = new Configuration(pov);
+
+        final InputUtils inputUtils = mock(InputUtils.class);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils);
+
+        // expected
+        final int size = 8;
+
+        // when
+        final Set<ICommand> commands = commandFactory
+                .getCommands(configuration);
+
+        // then
+        assertThat(commands).hasSize(size);
+        for (final ICommand iCommand : commands) {
+            assertThat(iCommand.getClass()).isEqualTo(KeyCommand.class);
+        }
+
+        for (final ICommand iCommand : commands) {
+            iCommand.execute(null, 1.0f);
+        }
+
+        verify(inputUtils).pressKey(nKeys);
+        verify(inputUtils).pressKey(sKeys);
+        verify(inputUtils).pressKey(eKeys);
+        verify(inputUtils).pressKey(wKeys);
+        verify(inputUtils).pressKey(neKeys);
+        verify(inputUtils).pressKey(nwKeys);
+        verify(inputUtils).pressKey(seKeys);
+        verify(inputUtils).pressKey(swKeys);
+    }
+
 }

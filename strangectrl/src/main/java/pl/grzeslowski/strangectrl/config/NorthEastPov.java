@@ -3,6 +3,8 @@ package pl.grzeslowski.strangectrl.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 public class NorthEastPov {
     private final List<Key> keys = new ArrayList<>();
     private final List<State> states = new ArrayList<>();
@@ -11,6 +13,10 @@ public class NorthEastPov {
     }
 
     public NorthEastPov(final Key... keys) {
+        this(Lists.newArrayList(keys));
+    }
+
+    public NorthEastPov(final List<Key> keys) {
         for (final Key key : keys) {
             this.keys.add(key);
         }
