@@ -1,15 +1,17 @@
 package pl.grzeslowski.strangectrl.config;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.google.common.base.Objects;
 
 public class Key {
     private String key;
 
-    public Key() {
+    private Key() {
     }
 
     public Key(final String key) {
-        this.key = key;
+        this.key = checkNotNull(key);
     }
 
     @Override
