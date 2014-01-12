@@ -1,73 +1,76 @@
 package com.xafero.strangectrl.input;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.awt.GraphicsDevice;
-import java.awt.Robot;
-import java.util.Map;
 
 import net.java.games.input.Component;
-import net.java.games.input.Component.Identifier.Axis;
 import net.java.games.input.Controller;
 import net.java.games.input.Event;
 
-import com.xafero.strangectrl.cmd.Commands;
-import com.xafero.strangectrl.cmd.Commands.MouseMoveCmd;
+import org.slf4j.LoggerFactory;
+
+import pl.grzeslowski.strangectrl.cmd.CommandFactory;
+
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.ControllerPoller.IControllerCallback;
 
 public class SimpleCallback implements IControllerCallback {
+    private static final org.slf4j.Logger logger = LoggerFactory
+            .getLogger(SimpleCallback.class);
+    private final CommandFactory commandFactory;
+    private final GraphicsDevice graphicsDevice;
 
-    private final Map<String, ICommand> cmds;
-    private final Robot rbt;
-    private final GraphicsDevice dev;
-
-    public SimpleCallback(final Map<String, ICommand> cmds, final Robot rbt,
-            final GraphicsDevice dev) {
-        this.cmds = cmds;
-        this.rbt = rbt;
-        this.dev = dev;
+    public SimpleCallback(final CommandFactory commandFactory,
+            final GraphicsDevice graphicsDevice) {
+        this.commandFactory = checkNotNull(commandFactory);
+        this.graphicsDevice = checkNotNull(graphicsDevice);
     }
 
     @Override
     public void onNewEvent(final ControllerPoller poller,
             final Controller controller, final Event event) {
         final Component component = event.getComponent();
-        final String name = component.getName();
+        final String identifier = component.getIdentifier().getName();
 
-        syso(component, name);
-        
-        for (final String mapping : cmds.keySet()) {
-            if (!mapping.equalsIgnoreCase(name)) {
-                continue;
-            }
-            final ICommand cmd = cmds.get(mapping);
-//            cmd.execute(rbt, dev, event.getValue());
-            return;
-        }
+        logger.info("Got event with identifier : " + identifier + " ("
+                + event.getValue() + ")");
 
-        final int maxMove =5;
-        
-        if(component.getIdentifier() instanceof Axis) {
-            final Axis identifier = (Axis) component.getIdentifier();
-            
-            if(component.isAnalog()) {
-                final MouseMoveCmd cmd = new Commands.MouseMoveCmd(maxMove+" "+identifier.getName());
-                
-                cmd.execute(rbt, dev, event.getValue());
-            }
+        final ICommand command = commandFactory.getCommand(transformIdentifier(
+                identifier, event.getValue()));
+        if (command != null) {
+            logger.info("Got command : "
+                    + transformIdentifier(identifier, event.getValue()));
+            command.execute(graphicsDevice, event.getValue());
         }
     }
 
-    private void syso(final Component component, final String name) {
-        System.out.printf("component class = %s%n\t"
-                + "name = %s%n\t"
-                + "isAnalog = %b%n\t"
-                + "isRelative = %b%n\t"
-                + "identifier name = %s%n\t"
-                + "identifierClass = %s%n\t"
-                + "pollData = %f%n\t"
-                + "deadZone = %f%n\t"
-                + "rounded = %d%n",
-                component.getClass(), name, component.isAnalog(), component.isRelative(), component.getIdentifier().getName(),component.getIdentifier().getClass(), component.getPollData(), component.getDeadZone(),(int)((2 - (1 - component.getPollData())) * 100) / 2);
+    private String transformIdentifier(final String identifier,
+            final float value) {
+        switch (identifier) {
+        case "0":
+            return "A";
+        case "1":
+            return "B";
+        case "2":
+            return "X";
+        case "3":
+            return "Y";
+        case "4":
+            return "LB";
+        case "5":
+            return "RB";
+        case "6":
+            return "BACK";
+        case "7":
+            return "START";
+        case "8":
+            return "LS";
+        case "9":
+            return "RS";
+        default:
+            return identifier;
+        }
     }
 
 }
