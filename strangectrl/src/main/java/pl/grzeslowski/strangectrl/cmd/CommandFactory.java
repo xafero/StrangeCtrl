@@ -25,10 +25,11 @@ import com.xafero.strangectrl.input.InputUtils;
 import com.xafero.strangectrl.input.InputUtils.MouseButton;
 
 public class CommandFactory {
-
+    final static double DELTA_FOR_MOUSE_MOVE = 0.2;
+    public static int MAX_MOUSE_MOVE = 5;
+    
     private final InputUtils inputUtils;
     private final Map<String, ICommand> commands = new HashMap<>();
-    private final int maxMouseMove = 10;
     private final int maxWheelMove = 1;
 
     public CommandFactory(final InputUtils inputUtils,
@@ -75,11 +76,10 @@ public class CommandFactory {
     private void loadAnalogCommands() {
 
         // moving mouse
-        final float deltaForMouseMove = 0.4f;
         final MouseMoveCommand mouseMoveXCommand = new MouseMoveXCommand(
-                inputUtils, maxMouseMove, deltaForMouseMove);
+                inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE);
         final MouseMoveCommand mouseMoveYCommand = new MouseMoveYCommand(
-                inputUtils, maxMouseMove, deltaForMouseMove);
+                inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE);
         commands.put("x", mouseMoveXCommand);
         commands.put("y", mouseMoveYCommand);
 
