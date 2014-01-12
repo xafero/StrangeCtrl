@@ -36,6 +36,11 @@ public class KeyCommand implements ICommand {
     }
 
     @Override
+    public boolean isPeriodCommand() {
+        return false;
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

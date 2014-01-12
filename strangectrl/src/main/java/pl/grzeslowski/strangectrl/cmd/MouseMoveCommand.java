@@ -36,6 +36,11 @@ public abstract class MouseMoveCommand implements ICommand {
         }
     }
 
+    @Override
+    public boolean isPeriodCommand() {
+        return true;
+    }
+    
     protected abstract int moveX(final int x, final double value);
 
     protected abstract int moveY(final int y, final double value);

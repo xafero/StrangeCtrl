@@ -38,6 +38,7 @@ public class App {
 
     private static final String EXIT_STR = "Exit";
     private static final String CFG_FILE = "new_config.xml";
+    private static final long PERIOD = 10;
     private final ConfigLoader configLoader = new XStreamConfigLoader();
     private final InputUtils inputUtils;
     private final GraphicsDevice graphicsDevice;
@@ -89,7 +90,7 @@ public class App {
         final List<Controller> pads = InputUtils.getControllers(Type.GAMEPAD);
         final IControllerCallback callback = new SimpleCallback(commandFactory,
                 graphicsDevice);
-        final ControllerPoller poller = new ControllerPoller(pads, 100,
+        final ControllerPoller poller = new ControllerPoller(pads, PERIOD,
                 callback);
         poller.start();
     }
