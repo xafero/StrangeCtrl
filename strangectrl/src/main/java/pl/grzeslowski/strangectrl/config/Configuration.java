@@ -11,7 +11,7 @@ public class Configuration {
     private final List<Button> buttons = new ArrayList<>();
     private Pov pov;
 
-    public Configuration() {
+    private Configuration() {
     }
 
     public Configuration(final Button... buttons) {

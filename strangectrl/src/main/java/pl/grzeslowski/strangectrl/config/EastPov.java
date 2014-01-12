@@ -9,7 +9,7 @@ public class EastPov extends PovDirection {
     private final List<Key> keys = new ArrayList<>();
     private final List<State> states = new ArrayList<>();
 
-    public EastPov() {
+    private EastPov() {
     }
 
     public EastPov(final Key... keys) {

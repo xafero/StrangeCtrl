@@ -9,7 +9,7 @@ public class SouthWestPov extends PovDirection {
     private final List<Key> keys = new ArrayList<>();
     private final List<State> states = new ArrayList<>();
 
-    public SouthWestPov() {
+    private SouthWestPov() {
     }
 
     public SouthWestPov(final Key... keys) {

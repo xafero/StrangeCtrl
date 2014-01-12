@@ -10,7 +10,7 @@ public class Pov {
     private SouthEastPov southEastPov;
     private SouthWestPov southWestPov;
 
-    public Pov() {
+    private Pov() {
     }
 
     public Pov(final NorthPov northPov, final SouthPov southPov,

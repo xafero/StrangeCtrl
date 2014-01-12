@@ -12,7 +12,7 @@ public class Button {
     private final List<Key> keys = new ArrayList<>();
     private final List<State> states = new ArrayList<>();
 
-    public Button() {
+    private Button() {
     }
 
     public Button(final String value, final Key... keys) {
