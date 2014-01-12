@@ -1,6 +1,7 @@
 package com.xafero.strangectrl.cmd;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.awt.Point;
@@ -162,7 +163,9 @@ public class InputUtilsTest {
 
         // then
         verify(robot).mousePress(InputUtils.MouseButton.CENTER.getButtonMask());
-    } @Test
+    }
+
+    @Test
     public void mouse_release_left() throws Exception {
 
         // given
@@ -187,7 +190,8 @@ public class InputUtilsTest {
         inputUtils.mouseReleaseRight();
 
         // then
-        verify(robot).mouseRelease(InputUtils.MouseButton.RIGHT.getButtonMask());
+        verify(robot)
+                .mouseRelease(InputUtils.MouseButton.RIGHT.getButtonMask());
     }
 
     @Test
@@ -201,6 +205,23 @@ public class InputUtilsTest {
         inputUtils.mouseReleaseCenter();
 
         // then
-        verify(robot).mouseRelease(InputUtils.MouseButton.CENTER.getButtonMask());
+        verify(robot).mouseRelease(
+                InputUtils.MouseButton.CENTER.getButtonMask());
+    }
+
+    @Test
+    public void do_not_push_button_two_times() throws Exception {
+
+        // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+        final Key key = new Key("Q");
+
+        // when
+        inputUtils.pressKey(key);
+        inputUtils.pressKey(key);
+
+        // then
+        verify(robot, times(1)).keyPress(KeyEvent.VK_Q);
     }
 }

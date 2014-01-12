@@ -5,6 +5,7 @@ import java.awt.Robot;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +24,7 @@ public class InputUtils {
     private static final String prefix = "VK_";
     private final Robot robot;
     private final Map<String, Integer> keyMap;
+    private final Map<Key, Boolean> pressedKeys = new HashMap<>();
 
     public static enum MouseButton {
         LEFT(1), RIGHT(2), CENTER(3);
@@ -72,7 +74,11 @@ public class InputUtils {
 
     public void pressKey(final List<Key> keys) {
         for (final Key key : keys) {
-            robot.keyPress(getCode(key));
+            if (!pressedKeys.containsKey(key) || !pressedKeys.get(key)) {
+                robot.keyPress(getCode(key));
+
+                pressedKeys.put(key, Boolean.TRUE);
+            }
         }
     }
 
