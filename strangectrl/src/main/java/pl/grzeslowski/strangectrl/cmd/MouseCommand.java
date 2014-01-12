@@ -11,14 +11,15 @@ public class MouseCommand implements ICommand {
     private final MouseButton mouseButton;
     private final InputUtils inputUtils;
 
-    public MouseCommand(final MouseButton mouseButton, final InputUtils inputUtils) {
+    public MouseCommand(final MouseButton mouseButton,
+            final InputUtils inputUtils) {
         this.mouseButton = mouseButton;
         this.inputUtils = inputUtils;
     }
 
     @Override
     public void execute(final GraphicsDevice graphicsDevice, final double value) {
-
+        inputUtils.mousePress(mouseButton);
     }
 
 }
