@@ -11,7 +11,6 @@ public class KeyCommand implements ICommand {
 
     private final Key key;
     private final InputUtils inputUtils;
-    private boolean pushed;
 
     public KeyCommand(final Key key, final InputUtils inputUtils) {
         this.key = key;
@@ -20,12 +19,10 @@ public class KeyCommand implements ICommand {
 
     @Override
     public void execute(final GraphicsDevice dev, final double value) {
-        if (value >= 0.5f && !pushed) {
+        if (value >= 0.5f) {
             inputUtils.pressKey(key);
-            pushed = true;
         } else {
             inputUtils.releaseKey(key);
-            pushed = false;
         }
     }
 
