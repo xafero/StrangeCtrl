@@ -23,6 +23,7 @@ import pl.grzeslowski.strangectrl.config.WestPov;
 import com.google.common.collect.Lists;
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
+import com.xafero.strangectrl.input.InputUtils.MouseButton;
 
 public class CommandFactoryTest {
 
@@ -30,7 +31,8 @@ public class CommandFactoryTest {
     public void null_conf() throws Exception {
 
         // given
-        final CommandFactory commandFactory = new CommandFactory(mock(InputUtils.class), null);
+        final CommandFactory commandFactory = new CommandFactory(
+                mock(InputUtils.class), null);
 
     }
 
@@ -47,7 +49,8 @@ public class CommandFactoryTest {
         final KeyCommand expected = new KeyCommand(key, inputUtils);
 
         // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils, configuration);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils,
+                configuration);
 
         // then
         final ICommand keyCommand = commandFactory.getCommand("A");
@@ -76,7 +79,8 @@ public class CommandFactoryTest {
                 inputUtils);
 
         // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils, configuration);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils,
+                configuration);
 
         // then
         final ICommand keyCommand1 = commandFactory.getCommand("A");
@@ -115,13 +119,18 @@ public class CommandFactoryTest {
         final KeyCommand wExpected = new KeyCommand(wKeys, inputUtils);
 
         // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils, configuration);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils,
+                configuration);
 
         // then
-        final ICommand keyCommandN = commandFactory.getCommand(n.getIdentifier());
-        final ICommand keyCommandS = commandFactory.getCommand(s.getIdentifier());
-        final ICommand keyCommandE = commandFactory.getCommand(e.getIdentifier());
-        final ICommand keyCommandW = commandFactory.getCommand(w.getIdentifier());
+        final ICommand keyCommandN = commandFactory.getCommand(n
+                .getIdentifier());
+        final ICommand keyCommandS = commandFactory.getCommand(s
+                .getIdentifier());
+        final ICommand keyCommandE = commandFactory.getCommand(e
+                .getIdentifier());
+        final ICommand keyCommandW = commandFactory.getCommand(w
+                .getIdentifier());
 
         assertThat(keyCommandN).isEqualTo(nExpected);
         assertThat(keyCommandS).isEqualTo(sExpected);
@@ -174,21 +183,29 @@ public class CommandFactoryTest {
         final KeyCommand nwExpected = new KeyCommand(nwKeys, inputUtils);
         final KeyCommand seExpected = new KeyCommand(seKeys, inputUtils);
         final KeyCommand swExpected = new KeyCommand(swKeys, inputUtils);
-        
-        
+
         // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils, configuration);
+        final CommandFactory commandFactory = new CommandFactory(inputUtils,
+                configuration);
 
         // then
 
-        final ICommand keyCommandN = commandFactory.getCommand(n.getIdentifier());
-        final ICommand keyCommandS = commandFactory.getCommand(s.getIdentifier());
-        final ICommand keyCommandE = commandFactory.getCommand(e.getIdentifier());
-        final ICommand keyCommandW = commandFactory.getCommand(w.getIdentifier());
-        final ICommand keyCommandNE = commandFactory.getCommand(ne.getIdentifier());
-        final ICommand keyCommandNW = commandFactory.getCommand(nw.getIdentifier());
-        final ICommand keyCommandSE = commandFactory.getCommand(se.getIdentifier());
-        final ICommand keyCommandSW = commandFactory.getCommand(sw.getIdentifier());
+        final ICommand keyCommandN = commandFactory.getCommand(n
+                .getIdentifier());
+        final ICommand keyCommandS = commandFactory.getCommand(s
+                .getIdentifier());
+        final ICommand keyCommandE = commandFactory.getCommand(e
+                .getIdentifier());
+        final ICommand keyCommandW = commandFactory.getCommand(w
+                .getIdentifier());
+        final ICommand keyCommandNE = commandFactory.getCommand(ne
+                .getIdentifier());
+        final ICommand keyCommandNW = commandFactory.getCommand(nw
+                .getIdentifier());
+        final ICommand keyCommandSE = commandFactory.getCommand(se
+                .getIdentifier());
+        final ICommand keyCommandSW = commandFactory.getCommand(sw
+                .getIdentifier());
 
         assertThat(keyCommandN).isEqualTo(nExpected);
         assertThat(keyCommandS).isEqualTo(sExpected);
@@ -200,4 +217,25 @@ public class CommandFactoryTest {
         assertThat(keyCommandSW).isEqualTo(swExpected);
     }
 
+    @Test
+    public void load_mouse_click() throws Exception {
+
+        // given
+        final InputUtils inputUtils = mock(InputUtils.class);
+
+        final Key key = new Key("LEFT_MOUSE");
+        final Button button = new Button("A", key);
+        final Configuration configuration = new Configuration(button);
+
+        // expected
+        final MouseCommand expected = new MouseCommand(MouseButton.LEFT, inputUtils);
+
+        // when
+        final CommandFactory commandFactory = new CommandFactory(inputUtils,
+                configuration);
+
+        // then
+        final ICommand command = commandFactory.getCommand("A");
+        assertThat(command).isEqualTo(expected);
+    }
 }

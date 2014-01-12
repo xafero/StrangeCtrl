@@ -9,6 +9,7 @@ import java.util.Map;
 import pl.grzeslowski.strangectrl.config.Button;
 import pl.grzeslowski.strangectrl.config.Configuration;
 import pl.grzeslowski.strangectrl.config.EastPov;
+import pl.grzeslowski.strangectrl.config.Key;
 import pl.grzeslowski.strangectrl.config.NorthEastPov;
 import pl.grzeslowski.strangectrl.config.NorthPov;
 import pl.grzeslowski.strangectrl.config.NorthWestPov;
@@ -21,15 +22,17 @@ import pl.grzeslowski.strangectrl.config.WestPov;
 
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
+import com.xafero.strangectrl.input.InputUtils.MouseButton;
 
 public class CommandFactory {
 
     private final InputUtils inputUtils;
     private final Map<String, ICommand> commands = new HashMap<>();
 
-    public CommandFactory(final InputUtils inputUtils,final Configuration configuration) {
+    public CommandFactory(final InputUtils inputUtils,
+            final Configuration configuration) {
         this.inputUtils = checkNotNull(inputUtils);
-        loadCommands( checkNotNull(configuration));
+        loadCommands(checkNotNull(configuration));
     }
 
     private void loadCommands(final Configuration configuration) {
@@ -37,10 +40,10 @@ public class CommandFactory {
         // buttons
         final List<Button> buttons = configuration.getButtons();
         for (final Button button : buttons) {
-            final KeyCommand keyCommand = new KeyCommand(button.getKeys(),
-                    inputUtils);
+            final List<Key> keys = button.getKeys();
+            final ICommand command = createCommand(keys);
 
-            commands.put(button.getValue(), keyCommand);
+            commands.put(button.getValue(), command);
         }
 
         // pov
@@ -66,10 +69,26 @@ public class CommandFactory {
         }
     }
 
+    private ICommand createCommand(final List<Key> keys) {
+        if (keys.size() == 1) {
+            final Key key = keys.get(0);
+
+            switch (key.getKey()) {
+            case "LEFT_MOUSE":
+                return new MouseCommand(MouseButton.LEFT, inputUtils);
+            case "RIGHT_MOUSE":
+                return new MouseCommand(MouseButton.RIGHT, inputUtils);
+            case "CENTER_MOUSE":
+                return new MouseCommand(MouseButton.CENTER, inputUtils);
+            }
+        }
+
+        return new KeyCommand(keys, inputUtils);
+    }
+
     private void putPovDirection(final PovDirection povDirection) {
         if (povDirection != null) {
-            commands.put(povDirection.getIdentifier(), new KeyCommand(
-                    povDirection.getKeys(), inputUtils));
+            commands.put(povDirection.getIdentifier(), createCommand(povDirection.getKeys()));
         }
     }
 
