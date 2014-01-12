@@ -257,5 +257,21 @@ public class InputUtilsTest {
 
         // then
         verify(robot, times(1)).mousePress(MouseButton.LEFT.getButtonMask());
+    }   
+    @Test
+    public void press_mouse_after_releasing() throws Exception {
+
+     // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+
+        // when
+        inputUtils.mousePressLeft();
+        inputUtils.mouseReleaseLeft();
+        inputUtils.mousePressLeft();
+
+        // then
+        verify(robot, times(2)).mousePress(MouseButton.LEFT.getButtonMask());
+        verify(robot, times(1)).mouseRelease(MouseButton.LEFT.getButtonMask());
     }
 }

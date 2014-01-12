@@ -145,6 +145,8 @@ public class InputUtils {
 
     public void mouseRelease(final MouseButton button) {
         robot.mouseRelease(button.buttonMask);
+
+        pressedMouseButtons.put(button, Boolean.FALSE);
     }
 
     public void mouseReleaseLeft() {
