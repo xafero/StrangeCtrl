@@ -27,9 +27,13 @@ public class MouseMoveCommand implements ICommand {
     @Override
     public void execute(final GraphicsDevice graphicsDevice, final double value) {
         if (delta < value) {
-            final Point newPoint = mousePosition(graphicsDevice);
-            newPoint.move(maxMove, maxMove);
-            inputUtils.moveMouse(newPoint);
+            final Point mousePoint = mousePosition(graphicsDevice);
+
+            final double newX = mousePoint.x + maxMove * value;
+            final double newY = mousePoint.y + maxMove * value;
+            
+            mousePoint.setLocation(newX,newY);
+            inputUtils.moveMouse(mousePoint);
         }
     }
 

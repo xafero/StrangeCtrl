@@ -36,8 +36,8 @@ public class MouseMoveCommandTest {
         final Point mousePosition = DesktopUtils.getMousePos(graphicsDevice);
 
         // expected
-        final Point expected = new Point(mousePosition);
-        expected.move(maxMove, maxMove);
+        final Point expected = new Point(mousePosition.x + 10,
+                mousePosition.y + 10);
 
         // when
         command.execute(graphicsDevice, 1.0f);
