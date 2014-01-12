@@ -62,18 +62,6 @@ public class InputUtils {
         return controllers;
     }
 
-    @Deprecated
-    public static void pressKeyCombo(final Robot robot, final int... codes) {
-        final Deque<Integer> keyCodes = new ArrayDeque<Integer>();
-        for (final int code : codes) {
-            robot.keyPress(code);
-            keyCodes.push(code);
-        }
-        for (final int key : keyCodes) {
-            robot.keyRelease(key);
-        }
-    }
-
     public void pressKey(final List<Key> keys) {
         for (final Key key : keys) {
             if (!pressedKeys.containsKey(key) || !pressedKeys.get(key)) {
@@ -162,4 +150,7 @@ public class InputUtils {
         mouseRelease(MouseButton.CENTER);
     }
 
+    public void mouseWheel(final int value) {
+        robot.mouseWheel(value);
+    }
 }

@@ -31,8 +31,7 @@ public class CommandFactoryTest {
     public void null_conf() throws Exception {
 
         // given
-        final CommandFactory commandFactory = new CommandFactory(
-                mock(InputUtils.class), null);
+        new CommandFactory(mock(InputUtils.class), null);
 
     }
 
@@ -228,7 +227,8 @@ public class CommandFactoryTest {
         final Configuration configuration = new Configuration(button);
 
         // expected
-        final MouseCommand expected = new MouseCommand(MouseButton.LEFT, inputUtils);
+        final MouseCommand expected = new MouseCommand(MouseButton.LEFT,
+                inputUtils);
 
         // when
         final CommandFactory commandFactory = new CommandFactory(inputUtils,

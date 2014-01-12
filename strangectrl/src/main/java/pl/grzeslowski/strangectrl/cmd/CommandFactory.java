@@ -29,6 +29,7 @@ public class CommandFactory {
     private final InputUtils inputUtils;
     private final Map<String, ICommand> commands = new HashMap<>();
     private final int maxMouseMove = 10;
+    private final int maxWheelMove = 1;
 
     public CommandFactory(final InputUtils inputUtils,
             final Configuration configuration) {
@@ -74,12 +75,18 @@ public class CommandFactory {
     private void loadAnalogCommands() {
 
         // moving mouse
+        final float deltaForMouseMove = 0.4f;
         final MouseMoveCommand mouseMoveXCommand = new MouseMoveXCommand(
-                inputUtils, maxMouseMove, 0.1f);
+                inputUtils, maxMouseMove, deltaForMouseMove);
         final MouseMoveCommand mouseMoveYCommand = new MouseMoveYCommand(
-                inputUtils, maxMouseMove, 0.1f);
+                inputUtils, maxMouseMove, deltaForMouseMove);
         commands.put("x", mouseMoveXCommand);
         commands.put("y", mouseMoveYCommand);
+
+        // mouse wheel
+        final MouseWheelCommand mouseWheelCommand = new MouseWheelCommand(
+                inputUtils, maxWheelMove, 0.1f);
+        commands.put("ry", mouseWheelCommand);
     }
 
     private ICommand createCommand(final List<Key> keys) {

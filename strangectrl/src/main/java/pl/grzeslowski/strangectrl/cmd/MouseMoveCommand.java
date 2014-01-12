@@ -7,32 +7,26 @@ import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
 
-public abstract class MouseMoveCommand implements ICommand {
+public abstract class MouseMoveCommand extends AnalogCommand implements ICommand {
 
-    private final InputUtils inputUtils;
-    private final int maxMove;
-    private final double delta;
 
-    public MouseMoveCommand(final InputUtils inputUtils, final int maxMove) {
-        this(inputUtils, maxMove, 0.0f);
+    public MouseMoveCommand(final InputUtils inputUtils, final int maxMove, final double delta) {
+        super(inputUtils, maxMove, delta);
     }
 
-    public MouseMoveCommand(final InputUtils inputUtils, final int maxMove,
-            final double delta) {
-        this.inputUtils = inputUtils;
-        this.maxMove = maxMove;
-        this.delta = delta;
+    public MouseMoveCommand(final InputUtils inputUtils, final int maxMove) {
+        super(inputUtils, maxMove);
     }
 
     @Override
     public void execute(final GraphicsDevice graphicsDevice, final double value) {
-        if (delta < Math.abs(value)) {
+        if (getDelta()< Math.abs(value)) {
             final Point mousePoint = mousePosition(graphicsDevice);
 
             final int newX = moveX(mousePoint.x, value);
             final int newY = moveY(mousePoint.y, value);
 
-            inputUtils.moveMouse(new Point(newX, newY));
+            getInputUtils().moveMouse(new Point(newX, newY));
         }
     }
 
@@ -48,9 +42,4 @@ public abstract class MouseMoveCommand implements ICommand {
     private Point mousePosition(final GraphicsDevice graphicsDevice) {
         return DesktopUtils.getMousePos(graphicsDevice);
     }
-
-    protected int getMaxMove() {
-        return maxMove;
-    }
-
 }

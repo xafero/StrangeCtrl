@@ -30,7 +30,7 @@ public class ControllerPoller extends TimerTask {
     @Override
     public void run() {
         callback.doPeriodCommands();
-        
+
         for (final Controller controller : controllers) {
             if (controller.poll()) {
                 final EventQueue queue = controller.getEventQueue();
