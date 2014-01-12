@@ -2,6 +2,7 @@ package com.xafero.strangectrl.input;
 
 import java.awt.Point;
 import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
@@ -28,7 +29,7 @@ public class InputUtils {
     private final Map<MouseButton, Boolean> pressedMouseButtons = new HashMap<>();
 
     public static enum MouseButton {
-        LEFT(1), RIGHT(2), CENTER(3);
+        LEFT(InputEvent.BUTTON1_MASK), RIGHT(InputEvent.BUTTON3_MASK), CENTER(InputEvent.BUTTON2_MASK);
 
         private final int buttonMask;
 
