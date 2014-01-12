@@ -93,6 +93,8 @@ public class InputUtils {
     public void releaseKey(final List<Key> keys) {
         for (final Key key : keys) {
             robot.keyRelease(getCode(key));
+            
+            pressedKeys.put(key, Boolean.FALSE);
         }
     }
 

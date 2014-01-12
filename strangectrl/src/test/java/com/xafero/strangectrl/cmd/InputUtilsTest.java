@@ -224,4 +224,22 @@ public class InputUtilsTest {
         // then
         verify(robot, times(1)).keyPress(KeyEvent.VK_Q);
     }
+
+    @Test
+    public void press_button_after_releasing() throws Exception {
+
+        // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+        final Key key = new Key("Q");
+
+        // when
+        inputUtils.pressKey(key);
+        inputUtils.releaseKey(key);
+        inputUtils.pressKey(key);
+
+        // then
+        verify(robot, times(2)).keyPress(KeyEvent.VK_Q);
+        verify(robot, times(1)).keyRelease(KeyEvent.VK_Q);
+    }
 }
