@@ -26,10 +26,12 @@ public class NorthPov extends PovDirection {
     public List<Key> getKeys() {
         return keys;
     }
+
     @Override
     public String getIdentifier() {
         return "NP";
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;

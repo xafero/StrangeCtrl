@@ -20,7 +20,8 @@
 		<key key="RIGHT_MOUSE" />
 	</button>
 	<button value="START">
-
+		<key key="CONTROL" />
+		<key key="T" />
 	</button>
 	<button value="BACK">
 		<key key="F5" />
@@ -30,36 +31,36 @@
 	</button>
 	<button value="LS">
 		<key key="CONTROL" />
-		<key key="T" />
+		<key key="W" />
 	</button>
 	<pov>
 		<N>
-			<key key="UP_ARROW" />
+			<key key="UP" />
 		</N>
 		<S>
-			<key key="DOWN_ARROW" />
+			<key key="DOWN" />
 		</S>
 		<E>
-			<key key="RIGHT_ARROW" />
+			<key key="RIGHT" />
 		</E>
 		<W>
-			<key key="LEFT_ARROW" />
+			<key key="LEFT" />
 		</W>
 		<NE>
-			<key key="UP_ARROW" />
-			<key key="RIGHT_ARROW" />
+			<key key="UP" />
+			<key key="RIGHT" />
 		</NE>
 		<NW>
-			<key key="UP_ARROW" />
-			<key key="LEFT_ARROW" />
+			<key key="UP" />
+			<key key="LEFT" />
 		</NW>
 		<SE>
-			<key key="DOWN_ARROW" />
-			<key key="RIGHT_ARROW" />
+			<key key="DOWN" />
+			<key key="RIGHT" />
 		</SE>
 		<SW>
-			<key key="DOWN_ARROW" />
-			<key key="LEFT_ARROW" />
+			<key key="DOWN" />
+			<key key="LEFT" />
 		</SW>
 	</pov>
 </configuration>

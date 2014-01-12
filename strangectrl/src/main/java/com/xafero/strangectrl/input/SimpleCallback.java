@@ -18,11 +18,13 @@ import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.ControllerPoller.IControllerCallback;
 
 public class SimpleCallback implements IControllerCallback {
+    private static final String RELEASE_POV = "RELEASE_POV";
     private static final org.slf4j.Logger logger = LoggerFactory
             .getLogger(SimpleCallback.class);
     private final CommandFactory commandFactory;
     private final GraphicsDevice graphicsDevice;
     private final Set<CommandLastValue> periodExecutionCommands = new HashSet<>();
+    private ICommand lastPovCommand;
 
     public SimpleCallback(final CommandFactory commandFactory,
             final GraphicsDevice graphicsDevice) {
@@ -36,10 +38,20 @@ public class SimpleCallback implements IControllerCallback {
         final Component component = event.getComponent();
         final String identifier = component.getIdentifier().getName();
 
-        final ICommand command = commandFactory.getCommand(transformIdentifier(
-                identifier, event.getValue()));
+        logger.info(String.format("name %s value %s", identifier,
+                event.getValue()));
+
+        final String configName = transformIdentifier(
+                identifier, event.getValue());
+        final ICommand command = commandFactory.getCommand(configName);
         if (command != null) {
-            command.execute(graphicsDevice, event.getValue());
+            if ("pov".equalsIgnoreCase(identifier)) {
+                lastPovCommand = command;
+                command.execute(graphicsDevice, event.getValue() == 0.0 ? 0.0
+                        : 1.0);
+            } else {
+                command.execute(graphicsDevice, event.getValue());
+            }
 
             if (command.isPeriodCommand()) {
                 final CommandLastValue commandLastValue = new CommandLastValue(
@@ -50,6 +62,9 @@ public class SimpleCallback implements IControllerCallback {
                 }
                 periodExecutionCommands.add(commandLastValue);
             }
+
+        } else if (RELEASE_POV.equalsIgnoreCase(configName)) {
+            lastPovCommand.execute(graphicsDevice, 0.0);
         }
     }
 
@@ -84,9 +99,35 @@ public class SimpleCallback implements IControllerCallback {
             return "LS";
         case "9":
             return "RS";
+        case "pov":
+            return findPov(value);
         default:
             return identifier;
         }
+    }
+
+    private String findPov(final double value) {
+        if (value == 0.25) {
+            return "NP";
+        } else if (value == 0.375) {
+            return "NEP";
+        } else if (value == 0.5) {
+            return "EP";
+        } else if (value == 0.625) {
+            return "SEP";
+        } else if (value == 0.75) {
+            return "SP";
+        } else if (value == 0.875) {
+            return "SWP";
+        } else if (value == 1) {
+            return "WP";
+        } else if (value == 0.125) {
+            return "NWP";
+        } else if (value == 0) {
+            return RELEASE_POV;
+        }
+
+        throw new RuntimeException("Cannot find this value in POV : " + value);
     }
 
     private class CommandLastValue {

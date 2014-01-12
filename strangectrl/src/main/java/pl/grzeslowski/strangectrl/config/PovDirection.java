@@ -7,4 +7,5 @@ public abstract class PovDirection {
     public abstract List<Key> getKeys();
 
     public abstract String getIdentifier();
+    
 }

@@ -34,68 +34,36 @@ public class Pov {
         this.southWestPov = southWestPov;
     }
 
-    public synchronized NorthPov getNorthPov() {
+    public NorthPov getNorthPov() {
         return northPov;
     }
 
-    public synchronized void setNorthPov(final NorthPov northPov) {
-        this.northPov = northPov;
-    }
-
-    public synchronized SouthPov getSouthPov() {
+    public SouthPov getSouthPov() {
         return southPov;
     }
 
-    public synchronized void setSouthPov(final SouthPov southPov) {
-        this.southPov = southPov;
-    }
-
-    public synchronized EastPov getEastPov() {
+    public EastPov getEastPov() {
         return eastPov;
     }
 
-    public synchronized void setEastPov(final EastPov eastPov) {
-        this.eastPov = eastPov;
-    }
-
-    public synchronized WestPov getWestPov() {
+    public WestPov getWestPov() {
         return westPov;
     }
 
-    public synchronized void setWestPov(final WestPov westPov) {
-        this.westPov = westPov;
-    }
-
-    public synchronized NorthEastPov getNorthEastPov() {
+    public NorthEastPov getNorthEastPov() {
         return northEastPov;
     }
 
-    public synchronized void setNorthEastPov(final NorthEastPov northEastPov) {
-        this.northEastPov = northEastPov;
-    }
-
-    public synchronized NorthWestPov getNorthWestPov() {
+    public NorthWestPov getNorthWestPov() {
         return northWestPov;
     }
 
-    public synchronized void setNorthWestPov(final NorthWestPov northWestPov) {
-        this.northWestPov = northWestPov;
-    }
-
-    public synchronized SouthEastPov getSouthEastPov() {
+    public SouthEastPov getSouthEastPov() {
         return southEastPov;
     }
 
-    public synchronized void setSouthEastPov(final SouthEastPov southEastPov) {
-        this.southEastPov = southEastPov;
-    }
-
-    public synchronized SouthWestPov getSouthWestPov() {
+    public SouthWestPov getSouthWestPov() {
         return southWestPov;
-    }
-
-    public synchronized void setSouthWestPov(final SouthWestPov southWestPov) {
-        this.southWestPov = southWestPov;
     }
 
     @Override
