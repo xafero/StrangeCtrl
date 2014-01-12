@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import pl.grzeslowski.strangectrl.config.Key;
 
 import com.xafero.strangectrl.input.InputUtils;
+import com.xafero.strangectrl.input.InputUtils.MouseButton;
 
 public class InputUtilsTest {
 
@@ -241,5 +242,20 @@ public class InputUtilsTest {
         // then
         verify(robot, times(2)).keyPress(KeyEvent.VK_Q);
         verify(robot, times(1)).keyRelease(KeyEvent.VK_Q);
+    }
+    
+    @Test
+    public void do_not_push_two_times_mouse() throws Exception {
+
+     // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+
+        // when
+        inputUtils.mousePressLeft();
+        inputUtils.mousePressLeft();
+
+        // then
+        verify(robot, times(1)).mousePress(MouseButton.LEFT.getButtonMask());
     }
 }

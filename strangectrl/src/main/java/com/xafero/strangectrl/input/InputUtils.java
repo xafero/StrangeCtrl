@@ -25,6 +25,7 @@ public class InputUtils {
     private final Robot robot;
     private final Map<String, Integer> keyMap;
     private final Map<Key, Boolean> pressedKeys = new HashMap<>();
+    private final Map<MouseButton, Boolean> pressedMouseButtons = new HashMap<>();
 
     public static enum MouseButton {
         LEFT(1), RIGHT(2), CENTER(3);
@@ -93,7 +94,7 @@ public class InputUtils {
     public void releaseKey(final List<Key> keys) {
         for (final Key key : keys) {
             robot.keyRelease(getCode(key));
-            
+
             pressedKeys.put(key, Boolean.FALSE);
         }
     }
@@ -122,7 +123,12 @@ public class InputUtils {
     }
 
     public void mousePress(final MouseButton button) {
-        robot.mousePress(button.buttonMask);
+        if (!pressedMouseButtons.containsKey(button)
+                || !pressedMouseButtons.get(button)) {
+            robot.mousePress(button.buttonMask);
+
+            pressedMouseButtons.put(button, Boolean.TRUE);
+        }
     }
 
     public void mousePressLeft() {
