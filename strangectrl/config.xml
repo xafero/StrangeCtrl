@@ -17,10 +17,12 @@
 	<!-- Left mouse click  A -->
 	<entry key="Button 0">mouseClick 1</entry>
 	<entry key="Przycisk 0">mouseClick 1</entry>
+	<entry key="Przycisk 5">mouseClick 1</entry>
 
 	<!-- Right mouse click Y -->
 	<entry key="Button 3">mouseClick 3</entry>
 	<entry key="Przycisk 3">mouseClick 3</entry>
+	<entry key="Przycisk 4">mouseClick 3</entry>
 
 	<!-- Keyboard: open and close tab -->
 	<!-- B -->
