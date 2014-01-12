@@ -28,11 +28,13 @@ public class CommandFactory {
 
     private final InputUtils inputUtils;
     private final Map<String, ICommand> commands = new HashMap<>();
+    private final int maxMouseMove = 10;
 
     public CommandFactory(final InputUtils inputUtils,
             final Configuration configuration) {
         this.inputUtils = checkNotNull(inputUtils);
         loadCommands(checkNotNull(configuration));
+        loadAnalogCommands();
     }
 
     private void loadCommands(final Configuration configuration) {
@@ -69,6 +71,15 @@ public class CommandFactory {
         }
     }
 
+    private void loadAnalogCommands() {
+
+        // movng mouse
+        final MouseMoveCommand mouseMoveCommand = new MouseMoveCommand(
+                inputUtils, maxMouseMove, 0.1f);
+        commands.put("y", mouseMoveCommand);
+        commands.put("x", mouseMoveCommand);
+    }
+
     private ICommand createCommand(final List<Key> keys) {
         if (keys.size() == 1) {
             final Key key = keys.get(0);
@@ -88,7 +99,8 @@ public class CommandFactory {
 
     private void putPovDirection(final PovDirection povDirection) {
         if (povDirection != null) {
-            commands.put(povDirection.getIdentifier(), createCommand(povDirection.getKeys()));
+            commands.put(povDirection.getIdentifier(),
+                    createCommand(povDirection.getKeys()));
         }
     }
 
