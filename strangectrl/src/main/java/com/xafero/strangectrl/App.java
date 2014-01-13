@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import net.java.games.input.Controller;
@@ -88,7 +88,7 @@ public class App {
         final CommandFactory commandFactory = new CommandFactory(inputUtils,
                 configuration);
 
-        final List<Controller> pads = InputUtils.getControllers(Type.GAMEPAD);
+        final Set<Controller> pads = InputUtils.getControllers(Type.GAMEPAD);
         final IControllerCallback callback = new SimpleCallback(commandFactory,
                 graphicsDevice);
         final ControllerPoller poller = new ControllerPoller(pads, PERIOD,

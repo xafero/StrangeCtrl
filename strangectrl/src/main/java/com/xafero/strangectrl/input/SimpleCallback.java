@@ -78,6 +78,12 @@ public class SimpleCallback implements IControllerCallback {
         }
     }
 
+    @Override
+    public void removeController(final Controller controller) {
+        // TODO Auto-generated method stub
+
+    }
+
     private String transformIdentifier(final String identifier,
             final float value) {
         switch (identifier) {

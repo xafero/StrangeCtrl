@@ -7,14 +7,17 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import net.java.games.input.Controller;
 import net.java.games.input.Controller.Type;
 import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.ControllerEvent;
+import net.java.games.input.ControllerListener;
 import pl.grzeslowski.strangectrl.config.Key;
 
 import com.xafero.strangectrl.cmd.ConfigUtils;
@@ -23,13 +26,34 @@ import com.xafero.superloader.NativeLoader;
 public class InputUtils {
 
     private static final String prefix = "VK_";
+    private static ControllerEnvironment environment;
     private final Robot robot;
     private final Map<String, Integer> keyMap;
     private final Map<Key, Boolean> pressedKeys = new HashMap<>();
     private final Map<MouseButton, Boolean> pressedMouseButtons = new HashMap<>();
 
+    static {
+        NativeLoader.setupNative("jinput-platform-", "-natives-");
+
+        environment = ControllerEnvironment
+                .getDefaultEnvironment();
+        environment.addControllerListener(new ControllerListener() {
+
+            @Override
+            public void controllerRemoved(final ControllerEvent ev) {
+                System.out.println("removed");
+            }
+
+            @Override
+            public void controllerAdded(final ControllerEvent ev) {
+                System.out.println("add");
+            }
+        });
+    }
+
     public static enum MouseButton {
-        LEFT(InputEvent.BUTTON1_MASK), RIGHT(InputEvent.BUTTON3_MASK), CENTER(InputEvent.BUTTON2_MASK);
+        LEFT(InputEvent.BUTTON1_MASK), RIGHT(InputEvent.BUTTON3_MASK), CENTER(
+                InputEvent.BUTTON2_MASK);
 
         private final int buttonMask;
 
@@ -48,13 +72,10 @@ public class InputUtils {
         keyMap = ConfigUtils.buildKeyMap(prefix);
     }
 
-    public static List<Controller> getControllers(final Type... types) {
-        NativeLoader.setupNative("jinput-platform-", "-natives-");
-        final ControllerEnvironment env = ControllerEnvironment
-                .getDefaultEnvironment();
-        final List<Controller> controllers = new LinkedList<Controller>();
+    public static Set<Controller> getControllers(final Type... types) {
+        final Set<Controller> controllers = new HashSet<Controller>();
         final List<Type> typeList = Arrays.asList(types);
-        for (final Controller ctrl : env.getControllers()) {
+        for (final Controller ctrl : environment.getControllers()) {
             if (typeList.contains(ctrl.getType())) {
                 controllers.add(ctrl);
             }
