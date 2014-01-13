@@ -24,7 +24,9 @@
 		<key key="T" />
 	</button>
 	<button value="BACK">
-		<key key="F5" />
+		<key key="CONTROL" />
+		<key key="SHIFT" />
+		<key key="T" />
 	</button>
 	<button value="RS">
 		<key key="CENTER_MOUSE" />

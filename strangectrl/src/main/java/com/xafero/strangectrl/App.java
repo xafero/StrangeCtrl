@@ -37,7 +37,7 @@ import com.xafero.strangectrl.input.SimpleCallback;
 public class App {
 
     private static final String EXIT_STR = "Exit";
-    private static final String CFG_FILE = "new_config.xml";
+    private static final String CFG_FILE = "src/main/resources/new_config.xml";
     private static final long PERIOD = 10;
     private final ConfigLoader configLoader = new XStreamConfigLoader();
     private final InputUtils inputUtils;
@@ -54,7 +54,7 @@ public class App {
 
     public static void main(final String[] args) throws IOException,
             AWTException {
-        PropertyConfigurator.configure("log4j.properties");
+        PropertyConfigurator.configure("src/main/resources/log4j.properties");
         
         final SystemTray tray = SystemTray.getSystemTray();
         final Image img = ResourceUtils.loadImage("console-controller2.png");
