@@ -2,6 +2,7 @@ package com.xafero.strangectrl.input;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,7 +11,11 @@ import net.java.games.input.Controller;
 import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
 
+import org.slf4j.LoggerFactory;
+
 public class ControllerPoller extends TimerTask {
+    private static final org.slf4j.Logger logger = LoggerFactory
+            .getLogger(ControllerPoller.class);
     private final Set<Controller> controllers;
     private final long period;
     private final IControllerCallback callback;
@@ -35,10 +40,11 @@ public class ControllerPoller extends TimerTask {
     public void run() {
         callback.doPeriodCommands();
 
-        // Set<Controller> controllers = InputUtils
-        // .getControllers(Type.GAMEPAD);
         synchronized (controllers) {
-            for (final Controller controller : controllers) {
+            for (final Iterator<Controller> it = controllers.iterator(); it
+                    .hasNext();) {
+                final Controller controller = it.next();
+
                 if (controller.poll()) {
                     final EventQueue queue = controller.getEventQueue();
                     final Event event = new Event();
@@ -48,10 +54,22 @@ public class ControllerPoller extends TimerTask {
                 } else {
 
                     // controller is no longer available
-                    controllers.remove(controller);
+                    it.remove();
                     callback.removeController(controller);
                 }
             }
+        }
+    }
+
+    public void updateControllers(final Set<Controller> newControllers) {
+        synchronized (controllers) {
+
+            // removing old controllers
+            for (final Controller controller : newControllers) {
+                callback.removeController(controller);
+            }
+            controllers.clear();
+            controllers.addAll(newControllers);
         }
     }
 

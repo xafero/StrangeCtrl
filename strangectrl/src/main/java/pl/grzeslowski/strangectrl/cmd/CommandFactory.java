@@ -26,12 +26,12 @@ import com.xafero.strangectrl.input.InputUtils;
 import com.xafero.strangectrl.input.InputUtils.MouseButton;
 
 public class CommandFactory {
-    final static double DELTA_FOR_MOUSE_MOVE = 0.2;
+    private final static double DELTA_FOR_MOUSE_MOVE = 0.2;
     public static int MAX_MOUSE_MOVE = 5;
-    
+    private static final int MAX_WHEEL_MOVE = 1;
+
     private final InputUtils inputUtils;
     private final Map<String, ICommand> commands = new HashMap<>();
-    private final int maxWheelMove = 1;
 
     public CommandFactory(final InputUtils inputUtils,
             final Configuration configuration) {
@@ -87,7 +87,7 @@ public class CommandFactory {
 
         // mouse wheel
         final MouseWheelCommand mouseWheelCommand = new MouseWheelCommand(
-                inputUtils, maxWheelMove, 0.1f);
+                inputUtils, MAX_WHEEL_MOVE, 0.1f);
         commands.put("ry", mouseWheelCommand);
     }
 

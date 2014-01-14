@@ -56,7 +56,6 @@ public class InputUtils {
     }
 
     public Set<Controller> getControllers(final Type... types) {
-        
         final DirectAndRawInputEnvironmentPlugin directEnv = new DirectAndRawInputEnvironmentPlugin();
         Controller[] rawsCon;
         if (directEnv.isSupported()) {

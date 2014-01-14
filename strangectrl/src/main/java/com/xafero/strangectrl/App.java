@@ -28,6 +28,7 @@ import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.awt.ResourceUtils;
 import com.xafero.strangectrl.input.ControllerPoller;
 import com.xafero.strangectrl.input.ControllerPoller.IControllerCallback;
+import com.xafero.strangectrl.input.ControllersRefresher;
 import com.xafero.strangectrl.input.InputUtils;
 import com.xafero.strangectrl.input.SimpleCallback;
 
@@ -94,6 +95,9 @@ public class App {
         final ControllerPoller poller = new ControllerPoller(pads, PERIOD,
                 callback);
         poller.start();
+        
+        final ControllersRefresher controllersRefresher = new ControllersRefresher(poller, inputUtils);
+        controllersRefresher.start();
     }
 
     private String readConfigFile(final String filePath) {
