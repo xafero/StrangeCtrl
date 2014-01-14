@@ -1,15 +1,19 @@
 package pl.grzeslowski.strangectrl.cmd;
 
+import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.input.InputUtils;
 
 public class MouseMoveXCommand extends MouseMoveCommand {
 
-    public MouseMoveXCommand(final InputUtils inputUtils, final int maxMove, final double delta) {
-        super(inputUtils, maxMove, delta);
+    public MouseMoveXCommand(final InputUtils inputUtils, final int maxMove,
+            final DesktopUtils desktopUtils) {
+        super(inputUtils, maxMove, desktopUtils);
     }
 
-    public MouseMoveXCommand(final InputUtils inputUtils, final int maxMove) {
-        super(inputUtils, maxMove);
+    public MouseMoveXCommand(final InputUtils inputUtils, final int maxMove,
+            final double delta,
+            final DesktopUtils desktopUtils) {
+        super(inputUtils, maxMove, delta, desktopUtils);
     }
 
     @Override

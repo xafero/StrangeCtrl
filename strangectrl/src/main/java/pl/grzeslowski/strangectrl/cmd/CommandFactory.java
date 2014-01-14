@@ -20,6 +20,7 @@ import pl.grzeslowski.strangectrl.config.SouthPov;
 import pl.grzeslowski.strangectrl.config.SouthWestPov;
 import pl.grzeslowski.strangectrl.config.WestPov;
 
+import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
 import com.xafero.strangectrl.input.InputUtils.MouseButton;
@@ -76,10 +77,11 @@ public class CommandFactory {
     private void loadAnalogCommands() {
 
         // moving mouse
+        final DesktopUtils desktopUtils = new DesktopUtils();
         final MouseMoveCommand mouseMoveXCommand = new MouseMoveXCommand(
-                inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE);
+                inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE, desktopUtils);
         final MouseMoveCommand mouseMoveYCommand = new MouseMoveYCommand(
-                inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE);
+                inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE, desktopUtils);
         commands.put("x", mouseMoveXCommand);
         commands.put("y", mouseMoveYCommand);
 
