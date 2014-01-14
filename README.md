@@ -32,3 +32,7 @@ License
 =======
 
 See License.md
+
+CI
+==
+[![Build Status](https://travis-ci.org/magx2/StrangeCtrl.png?branch=master)](https://travis-ci.org/magx2/StrangeCtrl)
