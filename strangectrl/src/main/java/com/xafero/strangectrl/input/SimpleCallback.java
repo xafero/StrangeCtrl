@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.awt.GraphicsDevice;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import net.java.games.input.Component;
@@ -37,6 +38,8 @@ public class SimpleCallback implements IControllerCallback {
     @Override
     public void onNewEvent(final ControllerPoller poller,
             final Controller controller, final Event event) {
+        checkNotNull(event);
+
         final Component component = event.getComponent();
         final String identifier = component.getIdentifier().getName();
 
@@ -57,7 +60,7 @@ public class SimpleCallback implements IControllerCallback {
 
             if (command.isPeriodCommand()) {
                 final CommandLastValue commandLastValue = new CommandLastValue(
-                        value, command);
+                        value, command, controller);
 
                 if (periodExecutionCommands.contains(commandLastValue)) {
                     periodExecutionCommands.remove(commandLastValue);
@@ -80,8 +83,18 @@ public class SimpleCallback implements IControllerCallback {
 
     @Override
     public void removeController(final Controller controller) {
-        // TODO Auto-generated method stub
+        checkNotNull(controller);
 
+        synchronized (periodExecutionCommands) {
+            for (final Iterator<CommandLastValue> it = periodExecutionCommands
+                    .iterator(); it.hasNext();) {
+                final CommandLastValue next = it.next();
+
+                if (controller.equals(next.controller)) {
+                    it.remove();
+                }
+            }
+        }
     }
 
     private String transformIdentifier(final String identifier,
@@ -141,10 +154,13 @@ public class SimpleCallback implements IControllerCallback {
     private class CommandLastValue {
         private final double value;
         private final ICommand command;
+        private final Controller controller;
 
-        public CommandLastValue(final double value, final ICommand command) {
+        public CommandLastValue(final double value, final ICommand command,
+                final Controller controller) {
             this.value = value;
             this.command = command;
+            this.controller = controller;
         }
 
         @Override
@@ -193,6 +209,18 @@ public class SimpleCallback implements IControllerCallback {
                     + "]";
         }
 
+    }
+
+    boolean containsCommandsFor(final Controller controller) {
+        checkNotNull(controller);
+
+        for (final CommandLastValue commandLastValue : periodExecutionCommands) {
+            if (controller.equals(commandLastValue.controller)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
