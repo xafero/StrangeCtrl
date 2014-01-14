@@ -16,8 +16,7 @@ import java.util.Set;
 import net.java.games.input.Controller;
 import net.java.games.input.Controller.Type;
 import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.ControllerEvent;
-import net.java.games.input.ControllerListener;
+import net.java.games.input.DirectAndRawInputEnvironmentPlugin;
 import pl.grzeslowski.strangectrl.config.Key;
 
 import com.xafero.strangectrl.cmd.ConfigUtils;
@@ -26,7 +25,6 @@ import com.xafero.superloader.NativeLoader;
 public class InputUtils {
 
     private static final String prefix = "VK_";
-    private static ControllerEnvironment environment;
     private final Robot robot;
     private final Map<String, Integer> keyMap;
     private final Map<Key, Boolean> pressedKeys = new HashMap<>();
@@ -34,21 +32,6 @@ public class InputUtils {
 
     static {
         NativeLoader.setupNative("jinput-platform-", "-natives-");
-
-        environment = ControllerEnvironment
-                .getDefaultEnvironment();
-        environment.addControllerListener(new ControllerListener() {
-
-            @Override
-            public void controllerRemoved(final ControllerEvent ev) {
-                System.out.println("removed");
-            }
-
-            @Override
-            public void controllerAdded(final ControllerEvent ev) {
-                System.out.println("add");
-            }
-        });
     }
 
     public static enum MouseButton {
@@ -72,10 +55,19 @@ public class InputUtils {
         keyMap = ConfigUtils.buildKeyMap(prefix);
     }
 
-    public static Set<Controller> getControllers(final Type... types) {
+    public Set<Controller> getControllers(final Type... types) {
+        
+        final DirectAndRawInputEnvironmentPlugin directEnv = new DirectAndRawInputEnvironmentPlugin();
+        Controller[] rawsCon;
+        if (directEnv.isSupported()) {
+            rawsCon = directEnv.getControllers();
+        } else {
+            rawsCon = ControllerEnvironment.getDefaultEnvironment().getControllers();
+        }
+        
         final Set<Controller> controllers = new HashSet<Controller>();
         final List<Type> typeList = Arrays.asList(types);
-        for (final Controller ctrl : environment.getControllers()) {
+        for (final Controller ctrl : rawsCon) {
             if (typeList.contains(ctrl.getType())) {
                 controllers.add(ctrl);
             }

@@ -20,7 +20,8 @@ public class ControllerPoller extends TimerTask {
     public ControllerPoller(final Set<Controller> controllers,
             final long period,
             final IControllerCallback callback) {
-        this.controllers = Collections.synchronizedSet(new HashSet<Controller>(controllers));
+        this.controllers = Collections.synchronizedSet(new HashSet<Controller>(
+                controllers));
         this.period = period;
         this.callback = callback;
     }
@@ -34,18 +35,22 @@ public class ControllerPoller extends TimerTask {
     public void run() {
         callback.doPeriodCommands();
 
-        for (final Controller controller : controllers) {
-            if (controller.poll()) {
-                final EventQueue queue = controller.getEventQueue();
-                final Event event = new Event();
-                while (queue.getNextEvent(event)) {
-                    callback.onNewEvent(this, controller, event);
+        // Set<Controller> controllers = InputUtils
+        // .getControllers(Type.GAMEPAD);
+        synchronized (controllers) {
+            for (final Controller controller : controllers) {
+                if (controller.poll()) {
+                    final EventQueue queue = controller.getEventQueue();
+                    final Event event = new Event();
+                    while (queue.getNextEvent(event)) {
+                        callback.onNewEvent(this, controller, event);
+                    }
+                } else {
+
+                    // controller is no longer available
+                    controllers.remove(controller);
+                    callback.removeController(controller);
                 }
-            } else {
-                
-                // controller is no longer available
-                controllers.remove(controller);
-                callback.removeController(controller);
             }
         }
     }

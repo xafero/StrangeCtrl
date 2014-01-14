@@ -88,7 +88,7 @@ public class App {
         final CommandFactory commandFactory = new CommandFactory(inputUtils,
                 configuration);
 
-        final Set<Controller> pads = InputUtils.getControllers(Type.GAMEPAD);
+        final Set<Controller> pads = inputUtils.getControllers(Type.GAMEPAD);
         final IControllerCallback callback = new SimpleCallback(commandFactory,
                 graphicsDevice);
         final ControllerPoller poller = new ControllerPoller(pads, PERIOD,
