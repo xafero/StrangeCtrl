@@ -38,9 +38,9 @@ public class ControllerPoller extends TimerTask {
 
     @Override
     public void run() {
-        callback.doPeriodCommands();
-
         synchronized (controllers) {
+            callback.doPeriodCommands();
+
             for (final Iterator<Controller> it = controllers.iterator(); it
                     .hasNext();) {
                 final Controller controller = it.next();
