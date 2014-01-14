@@ -21,10 +21,16 @@ public class MouseMoveCommandTest {
     public void move_mouse_y() throws Exception {
 
         // given
+        final DesktopUtils desktopUtils = mock(DesktopUtils.class);
+        final Point mousePosition = new Point(30, 60);
+        when(desktopUtils.getMousePos(Mockito.any(GraphicsDevice.class)))
+                .thenReturn(mousePosition);
+
         final InputUtils inputUtils = mock(InputUtils.class);
         final int maxMove = 10;
+        
         final MouseMoveCommand command = new MouseMoveYCommand(inputUtils,
-                maxMove);
+                maxMove, desktopUtils);
         final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
         final GraphicsConfiguration graphicsConfiguration = mock(GraphicsConfiguration.class);
 
@@ -32,8 +38,6 @@ public class MouseMoveCommandTest {
                 graphicsConfiguration);
         when(graphicsConfiguration.getBounds()).thenReturn(
                 new Rectangle(0, 0, 100, 200));
-
-        final Point mousePosition = DesktopUtils.getMousePos(graphicsDevice);
 
         // expected
         final Point expected = new Point(mousePosition.x,
@@ -50,10 +54,15 @@ public class MouseMoveCommandTest {
     public void move_mouse_x() throws Exception {
 
         // given
+        final DesktopUtils desktopUtils = mock(DesktopUtils.class);
+        final Point mousePosition = new Point(30, 60);
+        when(desktopUtils.getMousePos(Mockito.any(GraphicsDevice.class)))
+                .thenReturn(mousePosition);
+        
         final InputUtils inputUtils = mock(InputUtils.class);
         final int maxMove = 10;
         final MouseMoveCommand command = new MouseMoveXCommand(inputUtils,
-                maxMove);
+                maxMove, desktopUtils);
         final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
         final GraphicsConfiguration graphicsConfiguration = mock(GraphicsConfiguration.class);
 
@@ -61,8 +70,6 @@ public class MouseMoveCommandTest {
                 graphicsConfiguration);
         when(graphicsConfiguration.getBounds()).thenReturn(
                 new Rectangle(0, 0, 100, 200));
-
-        final Point mousePosition = DesktopUtils.getMousePos(graphicsDevice);
 
         // expected
         final Point expected = new Point(mousePosition.x + 10,
@@ -83,7 +90,7 @@ public class MouseMoveCommandTest {
         final int maxMove = 10;
         final double delta = 0.7f;
         final MouseMoveCommand command = new MouseMoveYCommand(inputUtils,
-                maxMove, delta);
+                maxMove, delta, mock(DesktopUtils.class));
         final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
         final GraphicsConfiguration graphicsConfiguration = mock(GraphicsConfiguration.class);
 

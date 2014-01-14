@@ -18,37 +18,37 @@ public class DesktopUtils {
 		return MouseInfo.getPointerInfo().getDevice();
 	}
 
-	public static Point getMousePos(GraphicsDevice dev) {
-		Point pos = MouseInfo.getPointerInfo().getLocation();
-		GraphicsConfiguration cfg = dev.getDefaultConfiguration();
-		int newX = pos.x - cfg.getBounds().x;
-		int newY = pos.y - cfg.getBounds().y;
+	public Point getMousePos(final GraphicsDevice dev) {
+		final Point pos = MouseInfo.getPointerInfo().getLocation();
+		final GraphicsConfiguration cfg = dev.getDefaultConfiguration();
+		final int newX = pos.x - cfg.getBounds().x;
+		final int newY = pos.y - cfg.getBounds().y;
 		return new Point(newX, newY);
 	}
 
-	public static TrayIcon createTrayIcon(Image img, String tip, PopupMenu menu) {
-		TrayIcon icon = new TrayIcon(img, tip, menu);
+	public static TrayIcon createTrayIcon(final Image img, final String tip, final PopupMenu menu) {
+		final TrayIcon icon = new TrayIcon(img, tip, menu);
 		icon.setImageAutoSize(true);
 		return icon;
 	}
 
-	public static GraphicsDevice getDevice(int screenNo) throws AWTException {
-		GraphicsEnvironment env = GraphicsEnvironment
+	public static GraphicsDevice getDevice(final int screenNo) throws AWTException {
+		final GraphicsEnvironment env = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
-		GraphicsDevice device = env.getScreenDevices()[screenNo];
+		final GraphicsDevice device = env.getScreenDevices()[screenNo];
 		return device;
 	}
 
-	public static Robot createRobot(GraphicsDevice device) {
+	public static Robot createRobot(final GraphicsDevice device) {
 		try {
 			return new Robot(device);
-		} catch (AWTException e) {
+		} catch (final AWTException e) {
 			throw new RuntimeException("createRobot", e);
 		}
 	}
 
-	public static Robot createRobot(AtomicReference<GraphicsDevice> deviceRef) {
-		GraphicsDevice device = getMouseScreen();
+	public static Robot createRobot(final AtomicReference<GraphicsDevice> deviceRef) {
+		final GraphicsDevice device = getMouseScreen();
 		deviceRef.set(device);
 		return createRobot(device);
 	}
