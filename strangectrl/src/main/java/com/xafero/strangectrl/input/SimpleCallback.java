@@ -65,9 +65,9 @@ public class SimpleCallback implements IControllerCallback {
         } else if (RELEASE_POV.equalsIgnoreCase(configName)) {
             if (lastPovCommand.isPeriodCommand()) {
                 removeCommand(lastPovCommand);
+            } else {
+                lastPovCommand.execute(graphicsDevice, 0.0);
             }
-
-            lastPovCommand.execute(graphicsDevice, 0.0);
             lastPovCommand = null;
         }
     }

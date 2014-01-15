@@ -319,7 +319,7 @@ public class SimpleCallbackTest {
 
         // then
         verify(command).execute(graphicsDevice, 1.0);
-        verify(command, times(2)).execute(graphicsDevice, 0.0);
+        verify(command).execute(graphicsDevice, 0.0);
         assertThat(callback.containsCommandsFor(controller)).isFalse();
     }
 
