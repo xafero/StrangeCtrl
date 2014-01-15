@@ -18,7 +18,7 @@ public class MouseWheelCommand extends AnalogCommand implements ICommand {
 
     @Override
     public void execute(final GraphicsDevice graphicsDevice, final double value) {
-        if (getDelta() < Math.abs(value)) {
+        if (getDelta() < Math.abs(value) && canExecute(value)) {
             getInputUtils().mouseWheel((int) Math.round(value * getMaxMove()));
         }
     }

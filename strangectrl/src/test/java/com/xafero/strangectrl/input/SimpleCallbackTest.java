@@ -117,7 +117,7 @@ public class SimpleCallbackTest {
         when(component2.getIdentifier()).thenReturn(Identifier.Axis.Y);
 
         final Event event2 = new Event();
-        event2.set(component2, 0, 0);
+        event2.set(component2, 1.0f, 0);
 
         // when
         callback.onNewEvent(controller, event1);
@@ -148,7 +148,7 @@ public class SimpleCallbackTest {
         when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
 
         final Event event = new Event();
-        event.set(component, 0, 0);
+        event.set(component, 1.0f, 0);
 
         // when add command with controller
         callback.onNewEvent(controller, event);
@@ -319,7 +319,7 @@ public class SimpleCallbackTest {
 
         // then
         verify(command).execute(graphicsDevice, 1.0);
-        verify(command).execute(graphicsDevice, 0.0);
+        verify(command, times(2)).execute(graphicsDevice, 0.0);
         assertThat(callback.containsCommandsFor(controller)).isFalse();
     }
 
@@ -430,5 +430,41 @@ public class SimpleCallbackTest {
         verify(command, times(2)).execute(graphicsDevice, value);
         verify(command, times(3)).execute(graphicsDevice, secondValue);
         assertThat(callback.containsCommandsFor(controller)).isTrue();
+    }
+    @Test
+    public void execute_period_command_for_controller_second_time_value_0()
+            throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        when(command.isPeriodCommand()).thenReturn(true);
+
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0);
+        
+        final Event eventZero = new Event();
+        eventZero.set(component,0, 0);
+
+        // when
+        callback.onNewEvent(controller, event);
+        callback.doPeriodCommands();
+        callback.onNewEvent(controller, eventZero);
+
+        // then
+        verify(command, times(2)).execute(graphicsDevice, value);
+        assertThat(callback.containsCommandsFor(controller)).isFalse();
     }
 }

@@ -33,6 +33,8 @@ public class SimpleCallback implements IControllerCallback {
     public void onNewEvent(final Controller controller, final Event event) {
         checkNotNull(event);
 
+        System.out.println("period size = " + periodExecutionCommands.size());
+
         final Component component = event.getComponent();
         final String identifier = component.getIdentifier().getName();
 
@@ -54,8 +56,10 @@ public class SimpleCallback implements IControllerCallback {
             if (command.isPeriodCommand()) {
                 removeCommand(command);
 
-                periodExecutionCommands.add(new CommandLastValue(
-                        value, command, controller));
+                if (value != 0.0) {
+                    periodExecutionCommands.add(new CommandLastValue(
+                            value, command, controller));
+                }
             }
 
         } else if (RELEASE_POV.equalsIgnoreCase(configName)) {
@@ -99,6 +103,7 @@ public class SimpleCallback implements IControllerCallback {
                 final CommandLastValue next = it.next();
 
                 if (next.command.equals(command)) {
+                    command.execute(graphicsDevice, 0.0);
                     it.remove();
                     break;
                 }

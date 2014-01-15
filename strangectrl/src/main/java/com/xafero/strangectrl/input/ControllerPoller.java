@@ -34,6 +34,7 @@ public class ControllerPoller extends TimerTask {
     @Override
     public void run() {
         synchronized (controllers) {
+            System.out.println("RUN poller");
             callback.doPeriodCommands();
 
             for (final Iterator<Controller> it = controllers.iterator(); it
@@ -58,6 +59,7 @@ public class ControllerPoller extends TimerTask {
 
     public void updateControllers(final Set<Controller> newControllers) {
         synchronized (controllers) {
+            System.out.println("Adding controllers");
 
             // removing old controllers
             for (final Controller controller : newControllers) {

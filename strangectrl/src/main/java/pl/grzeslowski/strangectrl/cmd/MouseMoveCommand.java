@@ -26,7 +26,7 @@ public abstract class MouseMoveCommand extends AnalogCommand implements ICommand
 
     @Override
     public void execute(final GraphicsDevice graphicsDevice, final double value) {
-        if (getDelta()< Math.abs(value)) {
+        if (getDelta()< Math.abs(value)&&canExecute(value)) {
             final Point mousePoint = mousePosition(graphicsDevice);
 
             final int newX = moveX(mousePoint.x, value);
@@ -48,4 +48,6 @@ public abstract class MouseMoveCommand extends AnalogCommand implements ICommand
     private Point mousePosition(final GraphicsDevice graphicsDevice) {
         return desktopUtils.getMousePos(graphicsDevice);
     }
+    
+    
 }
