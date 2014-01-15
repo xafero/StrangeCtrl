@@ -30,8 +30,7 @@ public class SimpleCallback implements IControllerCallback {
     }
 
     @Override
-    public void onNewEvent(final ControllerPoller poller,
-            final Controller controller, final Event event) {
+    public void onNewEvent(final Controller controller, final Event event) {
         checkNotNull(event);
 
         final Component component = event.getComponent();

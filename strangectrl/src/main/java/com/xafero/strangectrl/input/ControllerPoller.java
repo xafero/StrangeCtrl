@@ -44,7 +44,7 @@ public class ControllerPoller extends TimerTask {
                     final EventQueue queue = controller.getEventQueue();
                     final Event event = new Event();
                     while (queue.getNextEvent(event)) {
-                        callback.onNewEvent(this, controller, event);
+                        callback.onNewEvent(controller, event);
                     }
                 } else {
 

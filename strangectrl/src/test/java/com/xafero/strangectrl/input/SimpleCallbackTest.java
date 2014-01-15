@@ -45,7 +45,7 @@ public class SimpleCallbackTest {
         event1.set(component1, 0, 0);
 
         // when
-        callback.onNewEvent(null, controller, event1);
+        callback.onNewEvent(controller, event1);
         callback.removeController(controller);
 
         // then
@@ -82,8 +82,8 @@ public class SimpleCallbackTest {
         event2.set(component2, 0, 0);
 
         // when
-        callback.onNewEvent(null, controller, event1);
-        callback.onNewEvent(null, controller, event2);
+        callback.onNewEvent(controller, event1);
+        callback.onNewEvent(controller, event2);
         callback.removeController(controller);
 
         // then
@@ -120,9 +120,9 @@ public class SimpleCallbackTest {
         event2.set(component2, 0, 0);
 
         // when
-        callback.onNewEvent(null, controller, event1);
+        callback.onNewEvent(controller, event1);
         callback.removeController(controller);
-        callback.onNewEvent(null, controller, event2);
+        callback.onNewEvent(controller, event2);
 
         // then
         assertThat(callback.containsCommandsFor(controller)).isTrue();
@@ -151,7 +151,7 @@ public class SimpleCallbackTest {
         event.set(component, 0, 0);
 
         // when add command with controller
-        callback.onNewEvent(null, controller, event);
+        callback.onNewEvent(controller, event);
 
         // then
         assertThat(callback.containsCommandsFor(controller)).isTrue();
@@ -179,7 +179,7 @@ public class SimpleCallbackTest {
         event.set(component, value, 0);
 
         // when
-        callback.onNewEvent(null, controller, event);
+        callback.onNewEvent(controller, event);
 
         // then
         verify(command).execute(graphicsDevice, value);
@@ -210,7 +210,7 @@ public class SimpleCallbackTest {
         event.set(component, value, 0);
 
         // when
-        callback.onNewEvent(null, controller, event);
+        callback.onNewEvent(controller, event);
 
         // then
         verify(command).execute(graphicsDevice, value);
@@ -242,7 +242,7 @@ public class SimpleCallbackTest {
         event.set(component, value, 0);
 
         // when
-        callback.onNewEvent(null, controller, event);
+        callback.onNewEvent(controller, event);
 
         // then
         verify(command).execute(graphicsDevice, 1.0);
@@ -276,8 +276,8 @@ public class SimpleCallbackTest {
         eventRelease.set(component, 0.0f, 0);
 
         // when
-        callback.onNewEvent(null, controller, eventPush);
-        callback.onNewEvent(null, controller, eventRelease);
+        callback.onNewEvent(controller, eventPush);
+        callback.onNewEvent(controller, eventRelease);
 
         // then
         verify(command).execute(graphicsDevice, 1.0);
@@ -314,8 +314,8 @@ public class SimpleCallbackTest {
         eventRelease.set(component, 0.0f, 0);
 
         // when
-        callback.onNewEvent(null, controller, eventPush);
-        callback.onNewEvent(null, controller, eventRelease);
+        callback.onNewEvent(controller, eventPush);
+        callback.onNewEvent(controller, eventRelease);
 
         // then
         verify(command).execute(graphicsDevice, 1.0);
@@ -348,7 +348,7 @@ public class SimpleCallbackTest {
         event.set(component, value, 0);
 
         // when
-        callback.onNewEvent(null, controller, event);
+        callback.onNewEvent(controller, event);
         callback.doPeriodCommands();
 
         // then
@@ -381,7 +381,7 @@ public class SimpleCallbackTest {
         event.set(component, value, 0);
 
         // when
-        callback.onNewEvent(null, controller, event);
+        callback.onNewEvent(controller, event);
         callback.doPeriodCommands();
         callback.removeController(controller);
         callback.doPeriodCommands();
@@ -420,9 +420,9 @@ public class SimpleCallbackTest {
         secondEvent.set(component, secondValue, 0);
 
         // when
-        callback.onNewEvent(null, controller, event);
+        callback.onNewEvent(controller, event);
         callback.doPeriodCommands();
-        callback.onNewEvent(null, controller, secondEvent);
+        callback.onNewEvent(controller, secondEvent);
         callback.doPeriodCommands();
         callback.doPeriodCommands();
         
