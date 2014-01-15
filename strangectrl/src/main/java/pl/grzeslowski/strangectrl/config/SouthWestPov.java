@@ -1,14 +1,10 @@
 package pl.grzeslowski.strangectrl.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
 public class SouthWestPov extends PovDirection {
-    private final List<Key> keys = new ArrayList<>();
-    private final List<State> states = new ArrayList<>();
-
     private SouthWestPov() {
     }
 
