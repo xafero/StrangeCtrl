@@ -11,9 +11,6 @@ import java.util.Set;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Event;
-
-import org.slf4j.LoggerFactory;
-
 import pl.grzeslowski.strangectrl.cmd.CommandFactory;
 
 import com.xafero.strangectrl.cmd.ICommand;
@@ -21,8 +18,6 @@ import com.xafero.strangectrl.input.ControllerPoller.IControllerCallback;
 
 public class SimpleCallback implements IControllerCallback {
     private static final String RELEASE_POV = "RELEASE_POV";
-    private static final org.slf4j.Logger logger = LoggerFactory
-            .getLogger(SimpleCallback.class);
     private final CommandFactory commandFactory;
     private final GraphicsDevice graphicsDevice;
     private final Set<CommandLastValue> periodExecutionCommands = Collections
