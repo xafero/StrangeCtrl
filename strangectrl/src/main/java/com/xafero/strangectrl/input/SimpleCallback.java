@@ -46,24 +46,25 @@ public class SimpleCallback implements IControllerCallback {
 
             if ("pov".equalsIgnoreCase(identifier)) {
                 value = value == 0.0 ? 0.0 : 1.0;
-
                 lastPovCommand = command;
             }
+
+            // execute command
             command.execute(graphicsDevice, value);
 
+            // add period command
             if (command.isPeriodCommand()) {
                 removeCommand(command);
-                
-                final CommandLastValue commandLastValue = new CommandLastValue(
-                        value, command, controller);
-                periodExecutionCommands.add(commandLastValue);
+
+                periodExecutionCommands.add(new CommandLastValue(
+                        value, command, controller));
             }
 
         } else if (RELEASE_POV.equalsIgnoreCase(configName)) {
             if (lastPovCommand.isPeriodCommand()) {
                 removeCommand(lastPovCommand);
             }
-            
+
             lastPovCommand.execute(graphicsDevice, 0.0);
             lastPovCommand = null;
         }
@@ -94,13 +95,15 @@ public class SimpleCallback implements IControllerCallback {
     }
 
     private void removeCommand(final ICommand command) {
-        for (final Iterator<CommandLastValue> it = periodExecutionCommands
-                .iterator(); it.hasNext();) {
-            final CommandLastValue next = it.next();
+        synchronized (periodExecutionCommands) {
+            for (final Iterator<CommandLastValue> it = periodExecutionCommands
+                    .iterator(); it.hasNext();) {
+                final CommandLastValue next = it.next();
 
-            if (next.command.equals(command)) {
-                it.remove();
-                break;
+                if (next.command.equals(command)) {
+                    it.remove();
+                    break;
+                }
             }
         }
     }
