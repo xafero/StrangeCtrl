@@ -2,6 +2,7 @@ package com.xafero.strangectrl.input;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -320,5 +321,114 @@ public class SimpleCallbackTest {
         verify(command).execute(graphicsDevice, 1.0);
         verify(command).execute(graphicsDevice, 0.0);
         assertThat(callback.containsCommandsFor(controller)).isFalse();
+    }
+
+    @Test
+    public void execute_period_command_for_controller_second_time()
+            throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        when(command.isPeriodCommand()).thenReturn(true);
+
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0);
+
+        // when
+        callback.onNewEvent(null, controller, event);
+        callback.doPeriodCommands();
+
+        // then
+        verify(command, times(2)).execute(graphicsDevice, value);
+        assertThat(callback.containsCommandsFor(controller)).isTrue();
+    }
+
+    @Test
+    public void execute_period_command_for_controller_second_time_and_remove_it()
+            throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        when(command.isPeriodCommand()).thenReturn(true);
+
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0);
+
+        // when
+        callback.onNewEvent(null, controller, event);
+        callback.doPeriodCommands();
+        callback.removeController(controller);
+        callback.doPeriodCommands();
+
+        // then
+        verify(command, times(2)).execute(graphicsDevice, value);
+        assertThat(callback.containsCommandsFor(controller)).isFalse();
+    }
+    
+    @Test
+    public void execute_period_command_for_controller_second_time_then_goes_new_event()
+            throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        when(command.isPeriodCommand()).thenReturn(true);
+
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0); 
+        
+        final Event secondEvent = new Event();
+        final float secondValue = 0.777f;
+        secondEvent.set(component, secondValue, 0);
+
+        // when
+        callback.onNewEvent(null, controller, event);
+        callback.doPeriodCommands();
+        callback.onNewEvent(null, controller, secondEvent);
+        callback.doPeriodCommands();
+        callback.doPeriodCommands();
+        
+        // then
+        verify(command, times(2)).execute(graphicsDevice, value);
+        verify(command, times(3)).execute(graphicsDevice, secondValue);
+        assertThat(callback.containsCommandsFor(controller)).isTrue();
     }
 }
