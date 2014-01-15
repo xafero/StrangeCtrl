@@ -595,4 +595,43 @@ public class SimpleCallbackTest {
         verify(command).execute(graphicsDevice, 0.0);
         assertThat(callback.isCommandExecuting(command)).isFalse();
     }
+
+    @Test
+    public void add_command_to_execute_then_remove_controller_then_add_new_controller()
+            throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+        final Controller newController = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0);
+
+        final Event eventZero = new Event();
+        eventZero.set(component, 0, 0);
+
+        // when
+        callback.onNewEvent(controller, event);
+        callback.removeController(controller);
+        callback.onNewEvent(newController, event);
+        callback.removeController(controller);
+        callback.removeController(newController);
+
+        // then
+        verify(command, times(2)).execute(graphicsDevice, value);
+        verify(command,times(2)).execute(graphicsDevice, 0.0);
+        assertThat(callback.isCommandExecuting(command)).isFalse();
+    }
 }
