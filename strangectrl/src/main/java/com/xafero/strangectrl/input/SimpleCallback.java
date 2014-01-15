@@ -14,7 +14,6 @@ import net.java.games.input.Event;
 import pl.grzeslowski.strangectrl.cmd.CommandFactory;
 
 import com.xafero.strangectrl.cmd.ICommand;
-import com.xafero.strangectrl.input.ControllerPoller.IControllerCallback;
 
 public class SimpleCallback implements IControllerCallback {
     private static final String RELEASE_POV = "RELEASE_POV";

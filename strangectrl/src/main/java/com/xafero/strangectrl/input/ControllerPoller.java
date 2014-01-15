@@ -11,15 +11,10 @@ import net.java.games.input.Controller;
 import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
 
-import org.slf4j.LoggerFactory;
-
 public class ControllerPoller extends TimerTask {
-    private static final org.slf4j.Logger logger = LoggerFactory
-            .getLogger(ControllerPoller.class);
     private final Set<Controller> controllers;
     private final long period;
     private final IControllerCallback callback;
-
     private Timer daemon;
 
     public ControllerPoller(final Set<Controller> controllers,
@@ -76,15 +71,5 @@ public class ControllerPoller extends TimerTask {
     public void stop() {
         daemon.cancel();
         daemon.purge();
-    }
-
-    public static interface IControllerCallback {
-        void onNewEvent(final ControllerPoller poller,
-                final Controller controller,
-                final Event event);
-
-        void removeController(final Controller controller);
-
-        void doPeriodCommands();
     }
 }

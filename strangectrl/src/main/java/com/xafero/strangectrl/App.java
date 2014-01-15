@@ -27,8 +27,8 @@ import pl.grzeslowski.strangectrl.config.XStreamConfigLoader;
 import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.awt.ResourceUtils;
 import com.xafero.strangectrl.input.ControllerPoller;
-import com.xafero.strangectrl.input.ControllerPoller.IControllerCallback;
 import com.xafero.strangectrl.input.ControllersRefresher;
+import com.xafero.strangectrl.input.IControllerCallback;
 import com.xafero.strangectrl.input.InputUtils;
 import com.xafero.strangectrl.input.SimpleCallback;
 
