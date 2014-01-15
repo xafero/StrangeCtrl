@@ -390,7 +390,7 @@ public class SimpleCallbackTest {
         verify(command, times(2)).execute(graphicsDevice, value);
         assertThat(callback.containsCommandsFor(controller)).isFalse();
     }
-    
+
     @Test
     public void execute_period_command_for_controller_second_time_then_goes_new_event()
             throws Exception {
@@ -413,8 +413,8 @@ public class SimpleCallbackTest {
 
         final Event event = new Event();
         final float value = 0.333f;
-        event.set(component, value, 0); 
-        
+        event.set(component, value, 0);
+
         final Event secondEvent = new Event();
         final float secondValue = 0.777f;
         secondEvent.set(component, secondValue, 0);
@@ -425,12 +425,13 @@ public class SimpleCallbackTest {
         callback.onNewEvent(controller, secondEvent);
         callback.doPeriodCommands();
         callback.doPeriodCommands();
-        
+
         // then
         verify(command, times(2)).execute(graphicsDevice, value);
         verify(command, times(3)).execute(graphicsDevice, secondValue);
         assertThat(callback.containsCommandsFor(controller)).isTrue();
     }
+
     @Test
     public void execute_period_command_for_controller_second_time_value_0()
             throws Exception {
@@ -454,9 +455,9 @@ public class SimpleCallbackTest {
         final Event event = new Event();
         final float value = 0.333f;
         event.set(component, value, 0);
-        
+
         final Event eventZero = new Event();
-        eventZero.set(component,0, 0);
+        eventZero.set(component, 0, 0);
 
         // when
         callback.onNewEvent(controller, event);
@@ -466,5 +467,132 @@ public class SimpleCallbackTest {
         // then
         verify(command, times(2)).execute(graphicsDevice, value);
         assertThat(callback.containsCommandsFor(controller)).isFalse();
+    }
+
+    @Test
+    public void add_command_to_execute() throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0);
+
+        // when
+        callback.onNewEvent(controller, event);
+
+        // then
+        verify(command).execute(graphicsDevice, value);
+        assertThat(callback.isCommandExecuting(command)).isTrue();
+    }
+
+    @Test
+    public void add_command_to_execute_two_times() throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0);
+
+        // when
+        callback.onNewEvent(controller, event);
+        callback.onNewEvent(controller, event);
+
+        // then
+        verify(command, times(2)).execute(graphicsDevice, value);
+        assertThat(callback.isCommandExecuting(command)).isTrue();
+    }
+
+    @Test
+    public void add_command_to_execute_then_remove() throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0);
+
+        final Event eventZero = new Event();
+        eventZero.set(component, 0, 0);
+
+        // when
+        callback.onNewEvent(controller, event);
+        callback.onNewEvent(controller, eventZero);
+
+        // then
+        verify(command).execute(graphicsDevice, value);
+        assertThat(callback.isCommandExecuting(command)).isFalse();
+    }
+
+    @Test
+    public void add_command_to_execute_then_remove_controller()
+            throws Exception {
+
+        // given
+        final ICommand command = mock(ICommand.class);
+        final CommandFactory commandFactory = mock(CommandFactory.class);
+        when(commandFactory.getCommand("x")).thenReturn(command);
+
+        final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+        final SimpleCallback callback = new SimpleCallback(commandFactory,
+                graphicsDevice);
+
+        final Controller controller = mock(Controller.class);
+
+        final Component component = mock(Component.class);
+        when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+        final Event event = new Event();
+        final float value = 0.333f;
+        event.set(component, value, 0);
+
+        final Event eventZero = new Event();
+        eventZero.set(component, 0, 0);
+
+        // when
+        callback.onNewEvent(controller, event);
+        callback.removeController(controller);
+
+        // then
+        verify(command).execute(graphicsDevice, value);
+        verify(command).execute(graphicsDevice, 0.0);
+        assertThat(callback.isCommandExecuting(command)).isFalse();
     }
 }

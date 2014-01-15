@@ -21,6 +21,8 @@ public class SimpleCallback implements IControllerCallback {
     private final GraphicsDevice graphicsDevice;
     private final Set<CommandLastValue> periodExecutionCommands = Collections
             .synchronizedSet(new HashSet<CommandLastValue>());
+    private final Set<CommandLastValue> executedCommands = Collections
+            .synchronizedSet(new HashSet<CommandLastValue>());
     private ICommand lastPovCommand;
 
     public SimpleCallback(final CommandFactory commandFactory,
@@ -30,7 +32,8 @@ public class SimpleCallback implements IControllerCallback {
     }
 
     @Override
-    public void onNewEvent(final Controller controller, final Event event) {
+    public synchronized void onNewEvent(final Controller controller,
+            final Event event) {
         checkNotNull(event);
 
         System.out.println("period size = " + periodExecutionCommands.size());
@@ -60,6 +63,21 @@ public class SimpleCallback implements IControllerCallback {
                     periodExecutionCommands.add(new CommandLastValue(
                             value, command, controller));
                 }
+            } else {
+                if (value != 0.0) {
+                    executedCommands.add(new CommandLastValue(value, command,
+                            controller));
+                } else {
+                    for (final Iterator<CommandLastValue> it = executedCommands
+                            .iterator(); it
+                            .hasNext();) {
+                        final CommandLastValue next = it.next();
+
+                        if (next.command.equals(command)) {
+                            it.remove();
+                        }
+                    }
+                }
             }
 
         } else if (RELEASE_POV.equalsIgnoreCase(configName)) {
@@ -73,7 +91,7 @@ public class SimpleCallback implements IControllerCallback {
     }
 
     @Override
-    public void doPeriodCommands() {
+    public synchronized void doPeriodCommands() {
         for (final CommandLastValue commandLastValue : periodExecutionCommands) {
             commandLastValue.command.execute(graphicsDevice,
                     commandLastValue.value);
@@ -81,7 +99,7 @@ public class SimpleCallback implements IControllerCallback {
     }
 
     @Override
-    public void removeController(final Controller controller) {
+    public synchronized void removeController(final Controller controller) {
         checkNotNull(controller);
 
         synchronized (periodExecutionCommands) {
@@ -91,6 +109,19 @@ public class SimpleCallback implements IControllerCallback {
 
                 if (controller.equals(next.controller)) {
                     it.remove();
+                }
+            }
+        }
+
+        synchronized (executedCommands) {
+            for (final Iterator<CommandLastValue> it = executedCommands
+                    .iterator(); it.hasNext();) {
+                final CommandLastValue next = it.next();
+
+                if (controller.equals(next.controller)) {
+                    it.remove();
+
+                    next.command.execute(graphicsDevice, 0.0);
                 }
             }
         }
@@ -231,6 +262,18 @@ public class SimpleCallback implements IControllerCallback {
         for (final CommandLastValue commandLastValue : periodExecutionCommands) {
             if (controller.equals(commandLastValue.controller)) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    boolean isCommandExecuting(final ICommand command) {
+        synchronized (executedCommands) {
+            for (final CommandLastValue tmp : executedCommands) {
+                if (tmp.command.equals(command)) {
+                    return true;
+                }
             }
         }
 
