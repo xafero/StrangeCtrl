@@ -33,10 +33,12 @@ public class ControllerPoller extends TimerTask {
 	}
 
 	public void start() {
-		checkState(canRun(), "Cannot run! Controllers is empty!");
 		checkState(!started, "Cannot start twice!");
 
-		controller = controllers.iterator().next();
+		if (!controllers.isEmpty()) {
+			controller = controllers.iterator().next();
+		}
+
 		started = true;
 		daemon.scheduleAtFixedRate(this, 0, period);
 	}
@@ -50,6 +52,16 @@ public class ControllerPoller extends TimerTask {
 		checkState(started, "Did not start!");
 
 		if (canRun()) {
+			runForController();
+		} else {
+
+			// need to refresh controllers
+			refreshControllers();
+		}
+	}
+
+	private void runForController() {
+		{
 			callback.doPeriodCommands();
 
 			if (controller.poll()) {
@@ -68,10 +80,6 @@ public class ControllerPoller extends TimerTask {
 					controller = controllers.iterator().next();
 				}
 			}
-		} else {
-
-			// need to refresh controllers
-			refreshControllers();
 		}
 	}
 
