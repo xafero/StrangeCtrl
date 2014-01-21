@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import pl.grzeslowski.strangectrl.config.Key;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
@@ -33,8 +34,10 @@ public class KeyCommand implements ICommand {
     @Override
     public void execute(final GraphicsDevice dev, final double value) {
         if (value >= 0.5f) {
+            System.out.println("pressed keys "+Joiner.on(", ").join(keys));
             inputUtils.pressKey(keys);
         } else {
+            System.out.println("released keys "+Joiner.on(", ").join(keys));
             inputUtils.releaseKey(keys);
         }
     }

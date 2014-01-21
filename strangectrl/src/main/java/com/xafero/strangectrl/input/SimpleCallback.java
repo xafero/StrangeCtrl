@@ -36,8 +36,6 @@ public class SimpleCallback implements IControllerCallback {
             final Event event) {
         checkNotNull(event);
 
-        System.out.println("period size = " + periodExecutionCommands.size());
-
         final Component component = event.getComponent();
         final String identifier = component.getIdentifier().getName();
 
@@ -65,15 +63,15 @@ public class SimpleCallback implements IControllerCallback {
                 }
             } else {
                 if (value != 0.0) {
+                    System.out.println("\tadd command");
                     executedCommands.add(new CommandLastValue(value, command,
                             controller));
                 } else {
                     for (final Iterator<CommandLastValue> it = executedCommands
-                            .iterator(); it
-                            .hasNext();) {
+                            .iterator(); it.hasNext();) {
                         final CommandLastValue next = it.next();
 
-                        if (next.command.equals(command)) {
+                        if (next.command.equals(command) && next.controller.equals(controller)) {
                             it.remove();
                         }
                     }
@@ -120,8 +118,6 @@ public class SimpleCallback implements IControllerCallback {
 
                 if (controller.equals(next.controller)) {
                     it.remove();
-
-                    next.command.execute(graphicsDevice, 0.0);
                 }
             }
         }
@@ -215,6 +211,11 @@ public class SimpleCallback implements IControllerCallback {
             result = prime * result + getOuterType().hashCode();
             result = prime * result
                     + (command == null ? 0 : command.hashCode());
+            result = prime * result
+                    + (controller == null ? 0 : controller.hashCode());
+            long temp;
+            temp = Double.doubleToLongBits(value);
+            result = prime * result + (int) (temp ^ temp >>> 32);
             return result;
         }
 
@@ -226,7 +227,7 @@ public class SimpleCallback implements IControllerCallback {
             if (obj == null) {
                 return false;
             }
-            if (getClass() != obj.getClass()) {
+            if (!(obj instanceof CommandLastValue)) {
                 return false;
             }
             final CommandLastValue other = (CommandLastValue) obj;
@@ -238,6 +239,17 @@ public class SimpleCallback implements IControllerCallback {
                     return false;
                 }
             } else if (!command.equals(other.command)) {
+                return false;
+            }
+            if (controller == null) {
+                if (other.controller != null) {
+                    return false;
+                }
+            } else if (!controller.equals(other.controller)) {
+                return false;
+            }
+            if (Double.doubleToLongBits(value) != Double
+                    .doubleToLongBits(other.value)) {
                 return false;
             }
             return true;
