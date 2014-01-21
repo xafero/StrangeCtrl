@@ -2,7 +2,11 @@ package com.xafero.strangectrl.input;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Timer;
 import java.util.TimerTask;
 
 import net.java.games.input.Controller;
@@ -10,22 +14,38 @@ import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
 
 public class ControllerPoller extends TimerTask {
-	private final ControllersRefresher refresher;
-	private final Controller controller;
+	private final Collection<Controller> controllers;
 	private final IControllerCallback callback;
-	private boolean canRun = true;
+	private Controller controller;
+	private boolean started = false;
+	private final long period;
+	private final Timer daemon = new Timer(true);
 
-	public ControllerPoller(final ControllersRefresher refresher,
-			final Controller controller, final IControllerCallback callback) {
-		this.refresher = checkNotNull(refresher);
-		this.controller = checkNotNull(controller);
+	public ControllerPoller(final Collection<Controller> controllers,
+			final IControllerCallback callback, final long period) {
+		this.controllers = new HashSet<>(checkNotNull(controllers));
 		this.callback = checkNotNull(callback);
+		checkArgument(period > 0);
+		this.period = period;
+	}
+
+	public void start() {
+		checkState(canRun(), "Cannot run! Controllers is empty!");
+		checkState(!started, "Cannot start twice!");
+
+		controller = controllers.iterator().next();
+		started = true;
+		daemon.scheduleAtFixedRate(this, 0, period);
+	}
+
+	public boolean canRun() {
+		return !controllers.isEmpty();
 	}
 
 	@Override
 	public void run() {
-		checkArgument(canRun,
-				"This ControllerPoller cannot be still executed!");
+		checkState(controller != null, "Did not start!");
+
 		callback.doPeriodCommands();
 
 		if (controller.poll()) {
@@ -39,10 +59,19 @@ public class ControllerPoller extends TimerTask {
 
 			// controller is no longer available
 			callback.controllerRemoved();
-			refresher.controllerNotAvailable(controller);
-			cancel();
-			canRun = false;
+			controllers.remove(controller);
+			if (canRun()) {
+				controller = controllers.iterator().next();
+			} else {
+				stop();
+			}
 		}
 	}
 
+	public void stop() {
+		checkState(started, "Cannot stop before starting!");
+		daemon.cancel();
+		daemon.purge();
+		started = false;
+	}
 }
