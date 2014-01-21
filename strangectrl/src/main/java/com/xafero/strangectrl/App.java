@@ -26,6 +26,8 @@ import pl.grzeslowski.strangectrl.config.XStreamConfigLoader;
 
 import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.awt.ResourceUtils;
+import com.xafero.strangectrl.input.ControllerPoller;
+import com.xafero.strangectrl.input.ControllersRefresher;
 import com.xafero.strangectrl.input.IControllerCallback;
 import com.xafero.strangectrl.input.InputUtils;
 import com.xafero.strangectrl.input.SimpleCallback;
@@ -90,15 +92,11 @@ public class App {
 		final Set<Controller> pads = inputUtils.getControllers(Type.GAMEPAD);
 		final IControllerCallback callback = new SimpleCallback(commandFactory,
 				graphicsDevice);
-		// TODO:
-		// final ControllerPoller poller = new ControllerPoller(pads.iterator()
-		// .next(), PERIOD, callback);
-		// poller.start();
-		//
-		// final WindowsControllersRefresher controllersRefresher = new
-		// WindowsControllersRefresher(
-		// poller, inputUtils);
-		// controllersRefresher.start();
+		final ControllersRefresher controllersRefresher = new ControllersRefresher(
+				inputUtils);
+		final ControllerPoller poller = new ControllerPoller(pads, callback,
+				controllersRefresher, PERIOD);
+		poller.start();
 	}
 
 	private String readConfigFile(final String filePath) {

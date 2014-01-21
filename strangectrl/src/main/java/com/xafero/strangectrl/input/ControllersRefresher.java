@@ -10,8 +10,7 @@ import net.java.games.input.Controller.Type;
 public class ControllersRefresher {
 	private final InputUtils inputUtils;
 
-	public ControllersRefresher(final ControllerPoller controllerPoller,
-			final InputUtils inputUtils) {
+	public ControllersRefresher(final InputUtils inputUtils) {
 		this.inputUtils = checkNotNull(inputUtils);
 	}
 
