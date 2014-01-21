@@ -17,12 +17,11 @@ public class ControllerPollerTest {
 		final Controller controller = mock(Controller.class);
 		when(controller.poll()).thenReturn(false);
 
-		final long period = 100;
 		final IControllerCallback callback = mock(IControllerCallback.class);
 		final ControllersRefresher refresher = mock(ControllersRefresher.class);
 
 		final ControllerPoller poller = spy(new ControllerPoller(refresher,
-				controller, period, callback));
+				controller, callback));
 
 		// when
 		poller.run();
