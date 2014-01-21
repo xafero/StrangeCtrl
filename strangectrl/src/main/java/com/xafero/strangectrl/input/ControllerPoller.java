@@ -52,6 +52,9 @@ public class ControllerPoller extends TimerTask {
 		checkState(started, "Did not start!");
 
 		if (canRun()) {
+			if (controller == null) {
+				controller = controllers.iterator().next();
+			}
 			runForController();
 		} else {
 
@@ -76,9 +79,7 @@ public class ControllerPoller extends TimerTask {
 				// controller is no longer available
 				callback.controllerRemoved();
 				controllers.remove(controller);
-				if (canRun()) {
-					controller = controllers.iterator().next();
-				}
+				controller = null;
 			}
 		}
 	}
