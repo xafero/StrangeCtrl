@@ -357,4 +357,175 @@ public class SimpleCallbackTest {
 		verify(command).execute(graphicsDevice, value);
 	}
 
+	@Test
+	public void when_controlled_removed_flush_all_period_commands()
+			throws Exception {
+
+		// given
+		final ICommand command = mock(ICommand.class);
+		when(command.isPeriodCommand()).thenReturn(true);
+
+		final CommandFactory commandFactory = mock(CommandFactory.class);
+		when(commandFactory.getCommand("x")).thenReturn(command);
+
+		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+		final SimpleCallback callback = new SimpleCallback(commandFactory,
+				graphicsDevice);
+
+		final Component component = mock(Component.class);
+		when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+		final Event event = new Event();
+		final float value = 0.333f;
+		event.set(component, value, 0);
+
+		// when
+		callback.onNewEvent(event);
+		callback.doPeriodCommands();
+		callback.controllerRemoved();
+
+		// then
+		verify(command, times(2)).execute(graphicsDevice, value);
+		verify(command).execute(graphicsDevice, 0.0);
+	}
+
+	@Test
+	public void when_controlled_removed_flush_all_normal_commands()
+			throws Exception {
+
+		// given
+		final ICommand command = mock(ICommand.class);
+		when(command.isPeriodCommand()).thenReturn(false);
+
+		final CommandFactory commandFactory = mock(CommandFactory.class);
+		when(commandFactory.getCommand("x")).thenReturn(command);
+
+		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+		final SimpleCallback callback = new SimpleCallback(commandFactory,
+				graphicsDevice);
+
+		final Component component = mock(Component.class);
+		when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+		final Event event = new Event();
+		final float value = 0.333f;
+		event.set(component, value, 0);
+
+		// when
+		callback.onNewEvent(event);
+		callback.doPeriodCommands();
+		callback.controllerRemoved();
+
+		// then
+		verify(command).execute(graphicsDevice, value);
+		verify(command).execute(graphicsDevice, 0.0);
+	}
+
+	@Test
+	public void reuse_callback_after_adding_period_command() throws Exception {
+
+		// given - first use
+		final ICommand command = mock(ICommand.class);
+		when(command.isPeriodCommand()).thenReturn(true);
+
+		final Component component = mock(Component.class);
+		when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+		final Event event = new Event();
+		final float value = 0.333f;
+		event.set(component, value, 0);
+
+		// given - second use
+		final ICommand commandSecondUse = mock(ICommand.class);
+		when(commandSecondUse.isPeriodCommand()).thenReturn(true);
+
+		final Component componentSecondUse = mock(Component.class);
+		when(componentSecondUse.getIdentifier()).thenReturn(Identifier.Axis.Y);
+
+		final Event eventSecondUse = new Event();
+		final float valueSecondUse = 0.667f;
+		eventSecondUse.set(componentSecondUse, valueSecondUse, 0);
+
+		// given
+		final CommandFactory commandFactory = mock(CommandFactory.class);
+		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand("y")).thenReturn(commandSecondUse);
+
+		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+		final SimpleCallback callback = new SimpleCallback(commandFactory,
+				graphicsDevice);
+
+		// when - first use
+		callback.onNewEvent(event);
+		callback.doPeriodCommands();
+		callback.controllerRemoved();
+
+		// when - second use
+		callback.onNewEvent(eventSecondUse);
+		callback.doPeriodCommands();
+		callback.controllerRemoved();
+
+		// then - first use
+		verify(command, times(2)).execute(graphicsDevice, value);
+		verify(command).execute(graphicsDevice, 0.0);
+
+		// then - second use
+		verify(commandSecondUse, times(2)).execute(graphicsDevice,
+				valueSecondUse);
+		verify(commandSecondUse).execute(graphicsDevice, 0.0);
+	}
+
+	@Test
+	public void reuse_callback_after_adding_command() throws Exception {
+
+		// given - first use
+		final ICommand command = mock(ICommand.class);
+		when(command.isPeriodCommand()).thenReturn(false);
+
+		final Component component = mock(Component.class);
+		when(component.getIdentifier()).thenReturn(Identifier.Axis.X);
+
+		final Event event = new Event();
+		final float value = 0.333f;
+		event.set(component, value, 0);
+
+		// given - second use
+		final ICommand commandSecondUse = mock(ICommand.class);
+		when(commandSecondUse.isPeriodCommand()).thenReturn(false);
+
+		final Component componentSecondUse = mock(Component.class);
+		when(componentSecondUse.getIdentifier()).thenReturn(Identifier.Axis.Y);
+
+		final Event eventSecondUse = new Event();
+		final float valueSecondUse = 0.667f;
+		eventSecondUse.set(componentSecondUse, valueSecondUse, 0);
+
+		// given
+		final CommandFactory commandFactory = mock(CommandFactory.class);
+		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand("y")).thenReturn(commandSecondUse);
+
+		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
+		final SimpleCallback callback = new SimpleCallback(commandFactory,
+				graphicsDevice);
+
+		// when - first use
+		callback.onNewEvent(event);
+		callback.doPeriodCommands();
+		callback.controllerRemoved();
+
+		// when - second use
+		callback.onNewEvent(eventSecondUse);
+		callback.doPeriodCommands();
+		callback.controllerRemoved();
+
+		// then - first use
+		verify(command).execute(graphicsDevice, value);
+		verify(command).execute(graphicsDevice, 0.0);
+
+		// then - second use
+		verify(commandSecondUse).execute(graphicsDevice, valueSecondUse);
+		verify(commandSecondUse).execute(graphicsDevice, 0.0);
+	}
+
 }

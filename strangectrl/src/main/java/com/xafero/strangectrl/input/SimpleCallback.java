@@ -22,6 +22,8 @@ public class SimpleCallback implements IControllerCallback {
 	private final GraphicsDevice graphicsDevice;
 	private final Set<CommandLastValue> periodExecutionCommands = Collections
 			.synchronizedSet(new HashSet<CommandLastValue>());
+	private final Set<CommandLastValue> commandsInExecution = Collections
+			.synchronizedSet(new HashSet<CommandLastValue>());
 	private ICommand lastPovCommand;
 
 	public SimpleCallback(final CommandFactory commandFactory,
@@ -59,6 +61,23 @@ public class SimpleCallback implements IControllerCallback {
 					periodExecutionCommands.add(new CommandLastValue(value,
 							command));
 				}
+			} else {
+				if (value != 0.0) {
+					commandsInExecution
+					.add(new CommandLastValue(value, command));
+				} else {
+					synchronized (commandsInExecution) {
+						for (final Iterator<CommandLastValue> it = commandsInExecution
+								.iterator(); it.hasNext();) {
+							final CommandLastValue next = it.next();
+
+							if (equal(command, next.command)) {
+								it.remove();
+								break;
+							}
+						}
+					}
+				}
 			}
 
 		} else if (RELEASE_POV.equalsIgnoreCase(configName)) {
@@ -76,6 +95,25 @@ public class SimpleCallback implements IControllerCallback {
 		for (final CommandLastValue commandLastValue : periodExecutionCommands) {
 			commandLastValue.command.execute(graphicsDevice,
 					commandLastValue.value);
+		}
+	}
+
+	@Override
+	public void controllerRemoved() {
+		synchronized (periodExecutionCommands) {
+			for (final CommandLastValue command : periodExecutionCommands) {
+				command.command.execute(graphicsDevice, 0.0);
+			}
+
+			periodExecutionCommands.clear();
+		}
+
+		synchronized (commandsInExecution) {
+			for (final CommandLastValue command : commandsInExecution) {
+				command.command.execute(graphicsDevice, 0.0);
+			}
+
+			commandsInExecution.clear();
 		}
 	}
 
@@ -178,12 +216,6 @@ public class SimpleCallback implements IControllerCallback {
 			return "CommandLastValue [value=" + value + ", command="
 					+ command.getClass().getSimpleName() + "]";
 		}
-
-	}
-
-	@Override
-	public void controllerRemoved() {
-		// TODO Auto-generated method stub
 
 	}
 }
