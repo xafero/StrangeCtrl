@@ -1,5 +1,6 @@
 package com.xafero.strangectrl.input;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.TimerTask;
@@ -12,6 +13,7 @@ public class ControllerPoller extends TimerTask {
 	private final ControllersRefresher refresher;
 	private final Controller controller;
 	private final IControllerCallback callback;
+	private boolean canRun = true;
 
 	public ControllerPoller(final ControllersRefresher refresher,
 			final Controller controller, final IControllerCallback callback) {
@@ -22,6 +24,8 @@ public class ControllerPoller extends TimerTask {
 
 	@Override
 	public void run() {
+		checkArgument(canRun,
+				"This ControllerPoller cannot be still executed!");
 		callback.doPeriodCommands();
 
 		if (controller.poll()) {
@@ -37,6 +41,7 @@ public class ControllerPoller extends TimerTask {
 			callback.controllerRemoved();
 			refresher.controllerNotAvailable(controller);
 			cancel();
+			canRun = false;
 		}
 	}
 

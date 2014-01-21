@@ -54,4 +54,22 @@ public class ControllerPollerTest {
 		verify(controller).poll();
 		verify(controller).getEventQueue();
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void do_not_run_when_after_canceling_timer_task() throws Exception {
+
+		// given
+		final Controller controller = mock(Controller.class);
+		when(controller.poll()).thenReturn(false);
+
+		final IControllerCallback callback = mock(IControllerCallback.class);
+		final ControllersRefresher refresher = mock(ControllersRefresher.class);
+
+		final ControllerPoller poller = spy(new ControllerPoller(refresher,
+				controller, callback));
+
+		// when
+		poller.run();
+		poller.run();
+	}
 }
