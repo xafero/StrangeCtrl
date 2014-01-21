@@ -22,15 +22,15 @@ public class ControllerPollerTest {
 		final ControllersRefresher refresher = mock(ControllersRefresher.class);
 
 		final ControllerPoller poller = spy(new ControllerPoller(refresher,
-				controller,
-				period, callback));
+				controller, period, callback));
 
 		// when
-		poller.start();
+		poller.run();
 
 		// then
-		verify(poller).stop();
+		verify(poller).cancel();
 		verify(callback).controllerRemoved();
-		verify(refresher).controllerNotAvaible(controller);
+		verify(refresher).controllerNotAvailable(controller);
 	}
+
 }
