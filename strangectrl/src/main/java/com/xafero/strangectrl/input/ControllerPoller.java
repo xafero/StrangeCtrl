@@ -1,5 +1,9 @@
 package com.xafero.strangectrl.input;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -8,21 +12,28 @@ import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
 
 public class ControllerPoller extends TimerTask {
+	private final ControllersRefresher refresher;
 	private final Controller controller;
 	private final long period;
 	private final IControllerCallback callback;
-	private Timer daemon;
+	private final Timer daemon;
+	private boolean started = false;
 
-	public ControllerPoller(final Controller controller, final long period,
+	public ControllerPoller(final ControllersRefresher refresher,
+			final Controller controller, final long period,
 			final IControllerCallback callback) {
-		this.controller = controller;
+		this.refresher = checkNotNull(refresher);
+		this.controller = checkNotNull(controller);
+		checkArgument(period > 0, "Period need to be greater than 0!");
 		this.period = period;
-		this.callback = callback;
+		this.callback = checkNotNull(callback);
+		daemon = new Timer(true);
 	}
 
 	public void start() {
-		daemon = new Timer(true);
-		daemon.scheduleAtFixedRate(this, period, period);
+		checkState(!started, "Cannot start twice!");
+		daemon.scheduleAtFixedRate(this, 0, period);
+		started = true;
 	}
 
 	@Override
@@ -38,11 +49,14 @@ public class ControllerPoller extends TimerTask {
 		} else {
 
 			// controller is no longer available
-			// TODO
+			stop();
+			callback.controllerRemoved();
+			refresher.controllerNotAvaible(controller);
 		}
 	}
 
 	public void stop() {
+		checkState(started, "Cannot stop before starting!");
 		daemon.cancel();
 		daemon.purge();
 	}

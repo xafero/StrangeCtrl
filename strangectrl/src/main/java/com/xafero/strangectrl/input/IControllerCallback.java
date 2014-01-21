@@ -6,4 +6,6 @@ public interface IControllerCallback {
 	void onNewEvent(final Event event);
 
 	void doPeriodCommands();
+
+	void controllerRemoved();
 }

@@ -180,4 +180,10 @@ public class SimpleCallback implements IControllerCallback {
 		}
 
 	}
+
+	@Override
+	public void controllerRemoved() {
+		// TODO Auto-generated method stub
+
+	}
 }
