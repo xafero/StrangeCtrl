@@ -37,92 +37,94 @@ import com.xafero.strangectrl.input.SimpleCallback;
  */
 public class App {
 
-    private static final String LOG4J_PROPERTIES_PATH = "src/main/resources/log4j.properties";
-    private static final String EXIT_STR = "Exit";
-    private static final String CFG_FILE = "src/main/resources/new_config.xml";
-    private static final long PERIOD = 10;
-    private final ConfigLoader configLoader = new XStreamConfigLoader();
-    private final InputUtils inputUtils;
-    private final GraphicsDevice graphicsDevice;
-    private final Robot robot;
+	private static final String LOG4J_PROPERTIES_PATH = "src/main/resources/log4j.properties";
+	private static final String EXIT_STR = "Exit";
+	private static final String CFG_FILE = "src/main/resources/new_config.xml";
+	private static final long PERIOD = 10;
+	private final ConfigLoader configLoader = new XStreamConfigLoader();
+	private final InputUtils inputUtils;
+	private final GraphicsDevice graphicsDevice;
+	private final Robot robot;
 
-    public App() {
-        AtomicReference<GraphicsDevice> devRef;
-        robot = DesktopUtils
-                .createRobot(devRef = new AtomicReference<GraphicsDevice>());
-        graphicsDevice = devRef.get();
-        inputUtils = new InputUtils(robot);
-    }
+	public App() {
+		AtomicReference<GraphicsDevice> devRef;
+		robot = DesktopUtils
+				.createRobot(devRef = new AtomicReference<GraphicsDevice>());
+		graphicsDevice = devRef.get();
+		inputUtils = new InputUtils(robot);
+	}
 
-    public static void main(final String[] args) throws IOException,
-            AWTException {
-        PropertyConfigurator.configure(LOG4J_PROPERTIES_PATH);
-        
-        final SystemTray tray = SystemTray.getSystemTray();
-        final Image img = ResourceUtils.loadImage("console-controller2.png");
-        final String tip = "Strange Control";
+	public static void main(final String[] args) throws IOException,
+	AWTException {
+		PropertyConfigurator.configure(LOG4J_PROPERTIES_PATH);
 
-        final PopupMenu menu = new PopupMenu("test2!");
-        menu.add(EXIT_STR);
-        menu.addActionListener(new ActionListener() {
+		final SystemTray tray = SystemTray.getSystemTray();
+		final Image img = ResourceUtils.loadImage("console-controller2.png");
+		final String tip = "Strange Control";
 
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (e.getActionCommand() == EXIT_STR) {
-                    System.exit(0);
-                }
-            }
-        });
+		final PopupMenu menu = new PopupMenu("test2!");
+		menu.add(EXIT_STR);
+		menu.addActionListener(new ActionListener() {
 
-        tray.add(DesktopUtils.createTrayIcon(img, tip, menu));
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (e.getActionCommand() == EXIT_STR) {
+					System.exit(0);
+				}
+			}
+		});
 
-        // start app
-        new App().start();
-    }
+		tray.add(DesktopUtils.createTrayIcon(img, tip, menu));
 
-    private void start() {
-        // load conf
-        final String readedFile = readConfigFile(CFG_FILE);
-        final Configuration configuration = configLoader.loadXml(readedFile);
+		// start app
+		new App().start();
+	}
 
-        // get all commands
-        final CommandFactory commandFactory = new CommandFactory(inputUtils,
-                configuration);
+	private void start() {
+		// load conf
+		final String readedFile = readConfigFile(CFG_FILE);
+		final Configuration configuration = configLoader.loadXml(readedFile);
 
-        final Set<Controller> pads = inputUtils.getControllers(Type.GAMEPAD);
-        final IControllerCallback callback = new SimpleCallback(commandFactory,
-                graphicsDevice);
-        final ControllerPoller poller = new ControllerPoller(pads, PERIOD,
-                callback);
-        poller.start();
-        
-        final ControllersRefresher controllersRefresher = new ControllersRefresher(poller, inputUtils);
-        controllersRefresher.start();
-    }
+		// get all commands
+		final CommandFactory commandFactory = new CommandFactory(inputUtils,
+				configuration);
 
-    private String readConfigFile(final String filePath) {
-        BufferedReader in = null;
-        String readedFile = "";
-        try {
-            in = new BufferedReader(new FileReader(filePath));
-            String str;
-            final StringBuilder builder = new StringBuilder();
-            while ((str = in.readLine()) != null) {
-                builder.append(str);
-            }
+		final Set<Controller> pads = inputUtils.getControllers(Type.GAMEPAD);
+		final IControllerCallback callback = new SimpleCallback(commandFactory,
+				graphicsDevice);
+		// TODO:
+		final ControllerPoller poller = new ControllerPoller(pads.iterator()
+				.next(), PERIOD,
+				callback);
+		poller.start();
 
-            readedFile = builder.toString();
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return readedFile;
-    }
+		final ControllersRefresher controllersRefresher = new ControllersRefresher(poller, inputUtils);
+		controllersRefresher.start();
+	}
+
+	private String readConfigFile(final String filePath) {
+		BufferedReader in = null;
+		String readedFile = "";
+		try {
+			in = new BufferedReader(new FileReader(filePath));
+			String str;
+			final StringBuilder builder = new StringBuilder();
+			while ((str = in.readLine()) != null) {
+				builder.append(str);
+			}
+
+			readedFile = builder.toString();
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (final IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
+		return readedFile;
+	}
 }
