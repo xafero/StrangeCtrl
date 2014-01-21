@@ -16,15 +16,18 @@ import net.java.games.input.EventQueue;
 public class ControllerPoller extends TimerTask {
 	private final Collection<Controller> controllers;
 	private final IControllerCallback callback;
+	private final ControllersRefresher controllersRefresher;
 	private Controller controller;
 	private boolean started = false;
 	private final long period;
 	private final Timer daemon = new Timer(true);
 
 	public ControllerPoller(final Collection<Controller> controllers,
-			final IControllerCallback callback, final long period) {
+			final IControllerCallback callback,
+			final ControllersRefresher controllersRefresher, final long period) {
 		this.controllers = new HashSet<>(checkNotNull(controllers));
 		this.callback = checkNotNull(callback);
+		this.controllersRefresher = checkNotNull(controllersRefresher);
 		checkArgument(period > 0);
 		this.period = period;
 	}
@@ -44,28 +47,36 @@ public class ControllerPoller extends TimerTask {
 
 	@Override
 	public void run() {
-		checkState(controller != null, "Did not start!");
+		checkState(started, "Did not start!");
 
-		callback.doPeriodCommands();
+		if (canRun()) {
+			callback.doPeriodCommands();
 
-		if (controller.poll()) {
+			if (controller.poll()) {
 
-			final EventQueue queue = controller.getEventQueue();
-			final Event event = new Event();
-			while (queue.getNextEvent(event)) {
-				callback.onNewEvent(event);
+				final EventQueue queue = controller.getEventQueue();
+				final Event event = new Event();
+				while (queue.getNextEvent(event)) {
+					callback.onNewEvent(event);
+				}
+			} else {
+
+				// controller is no longer available
+				callback.controllerRemoved();
+				controllers.remove(controller);
+				if (canRun()) {
+					controller = controllers.iterator().next();
+				}
 			}
 		} else {
 
-			// controller is no longer available
-			callback.controllerRemoved();
-			controllers.remove(controller);
-			if (canRun()) {
-				controller = controllers.iterator().next();
-			} else {
-				stop();
-			}
+			// need to refresh controllers
+			refreshControllers();
 		}
+	}
+
+	private void refreshControllers() {
+		controllers.addAll(controllersRefresher.getController());
 	}
 
 	public void stop() {

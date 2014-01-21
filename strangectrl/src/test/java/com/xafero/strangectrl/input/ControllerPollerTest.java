@@ -1,5 +1,6 @@
 package com.xafero.strangectrl.input;
 
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -28,7 +29,8 @@ public class ControllerPollerTest {
 
 		final int period = 100;
 		final ControllerPoller poller = spy(new ControllerPoller(
-				Arrays.asList(controller), callback, period));
+				Arrays.asList(controller), callback,
+				mock(ControllersRefresher.class), period));
 
 		// when
 		poller.start();
@@ -66,7 +68,8 @@ public class ControllerPollerTest {
 
 		final long period = 100;
 		final ControllerPoller poller = spy(new ControllerPoller(
-				Arrays.asList(controller), callback, period));
+				Arrays.asList(controller), callback,
+				mock(ControllersRefresher.class), period));
 
 		// when
 		poller.start();
@@ -83,7 +86,7 @@ public class ControllerPollerTest {
 	}
 
 	@Test
-	public void stop_when_queue_is_empty() throws Exception {
+	public void refresh_controllers_when_queue_is_empty() throws Exception {
 
 		// given
 		final Controller controller = mock(Controller.class);
@@ -92,8 +95,11 @@ public class ControllerPollerTest {
 		final IControllerCallback callback = mock(IControllerCallback.class);
 
 		final int period = 100;
+		final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
 		final ControllerPoller poller = spy(new ControllerPoller(
-				Arrays.asList(controller), callback, period));
+				Arrays.asList(controller), callback,
+				controllersRefresher,
+				period));
 
 		// when
 		poller.start();
@@ -106,7 +112,7 @@ public class ControllerPollerTest {
 
 		// then
 		verify(callback).controllerRemoved();
-		verify(poller).stop();
+		verify(controllersRefresher, atLeast(1)).getController();
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -120,7 +126,8 @@ public class ControllerPollerTest {
 
 		final int period = 100;
 		final ControllerPoller poller = spy(new ControllerPoller(
-				Arrays.asList(controller), callback, period));
+				Arrays.asList(controller), callback,
+				mock(ControllersRefresher.class), period));
 
 		// when
 		poller.start();
