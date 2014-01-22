@@ -1,43 +1,68 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-<properties>
-	<comment>Configuration file for Strange Control</comment>
-
-	<!-- Mouse move: left stick slow, right stick fast -->
-	<entry key="X Axis">mouseMove 10 x</entry>
-	<entry key="Y Axis">mouseMove 10 y</entry>
-	<entry key="X Rotation">mouseMove 15 x</entry>
-	<entry key="Y Rotation">mouseMove 15 y</entry>
-	
-	<entry key="X Axis">mouseMove 10 x</entry>
-	<entry key="Y Axis">mouseMove 10 y</entry>
-	<entry key="Obrót X">mouseMove 15 x</entry>
-	<entry key="Obrót Y">mouseMove 15 y</entry>
-
-	<!-- Left mouse click  A -->
-	<entry key="Button 0">mouseClick 1</entry>
-	<entry key="Przycisk 0">mouseClick 1</entry>
-	<entry key="Przycisk 5">mouseClick 1</entry>
-
-	<!-- Right mouse click Y -->
-	<entry key="Button 3">mouseClick 3</entry>
-	<entry key="Przycisk 3">mouseClick 3</entry>
-	<entry key="Przycisk 4">mouseClick 3</entry>
-
-	<!-- Keyboard: open and close tab -->
-	<!-- B -->
-	<entry key="Button 1">keyCombo CONTROL T</entry>
-	<entry key="Przycisk 1">keyCombo CONTROL T</entry>
-	<!-- X -->
-	<entry key="Button 2">keyCombo CONTROL W</entry>
-	<entry key="Przycisk 2">keyCombo CONTROL W</entry>
-	
-	<!-- 
-	Start = Button 7
-	Back = Button 6 
-	RB = Button 5
-	LB = Button 4
-	Left stick = Button 8
-	Right stick = Button 9
-	-->
-</properties>
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<button value="A">
+		<key key="ENTER" />
+	</button>
+	<button value="B">
+		<key key="BACK_SPACE" />
+	</button>
+	<button value="X">
+		<key key="ESCAPE" />
+	</button>
+	<button value="Y">
+		<key key="ALT" />
+		<key key="TAB" />
+	</button>
+	<button value="RB">
+		<key key="LEFT_MOUSE" />
+	</button>
+	<button value="LB">
+		<key key="RIGHT_MOUSE" />
+	</button>
+	<button value="START">
+		<key key="CONTROL" />
+		<key key="T" />
+	</button>
+	<button value="BACK">
+		<key key="CONTROL" />
+		<key key="SHIFT" />
+		<key key="T" />
+	</button>
+	<button value="RS">
+		<key key="CENTER_MOUSE" />
+	</button>
+	<button value="LS">
+		<key key="CONTROL" />
+		<key key="W" />
+	</button>
+	<pov>
+		<N>
+			<key key="UP" />
+		</N>
+		<S>
+			<key key="DOWN" />
+		</S>
+		<E>
+			<key key="RIGHT" />
+		</E>
+		<W>
+			<key key="LEFT" />
+		</W>
+		<NE>
+			<key key="UP" />
+			<key key="RIGHT" />
+		</NE>
+		<NW>
+			<key key="UP" />
+			<key key="LEFT" />
+		</NW>
+		<SE>
+			<key key="DOWN" />
+			<key key="RIGHT" />
+		</SE>
+		<SW>
+			<key key="DOWN" />
+			<key key="LEFT" />
+		</SW>
+	</pov>
+</configuration>

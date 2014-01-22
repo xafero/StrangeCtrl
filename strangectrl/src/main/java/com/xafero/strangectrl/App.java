@@ -47,7 +47,7 @@ public class App {
 	private static final String RESOURCES_PATH = "/resources/";
 	private static final String LOG4J_PROPERTIES = "log4j.properties";
 	private static final String TRAY_ICON = "console-controller2.png";
-	private static final String CFG_FILE = "new_config.xml";
+	private static final String CFG_FILE = "config.xml";
 	private static final String EXIT_STR = "Exit";
 	private static final long PERIOD = 10;
 	private final ConfigLoader configLoader = new XStreamConfigLoader();
