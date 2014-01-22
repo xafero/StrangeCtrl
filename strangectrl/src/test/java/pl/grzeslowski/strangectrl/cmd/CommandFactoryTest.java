@@ -27,215 +27,218 @@ import com.xafero.strangectrl.input.InputUtils.MouseButton;
 
 public class CommandFactoryTest {
 
-    @Test(expected = NullPointerException.class)
-    public void null_conf() throws Exception {
+	@Test(expected = NullPointerException.class)
+	public void null_conf() throws Exception {
 
-        // given
-        new CommandFactory(mock(InputUtils.class), null);
+		// given
+		new CommandFactory(mock(InputUtils.class), null);
 
-    }
+	}
 
-    @Test
-    public void get_commands_one_button() throws Exception {
+	@Test
+	public void get_commands_one_button() throws Exception {
 
-        // given
-        final Key key = new Key("Q");
-        final Button button = new Button("A", key);
-        final Configuration configuration = new Configuration(button);
-        final InputUtils inputUtils = mock(InputUtils.class);
+		// given
+		final Key key = new Key("Q");
+		final Button button = new Button("A", key);
+		final Configuration configuration = new Configuration(button);
+		final InputUtils inputUtils = mock(InputUtils.class);
 
-        // expected
-        final KeyCommand expected = new KeyCommand(key, inputUtils);
+		// expected
+		final KeyCommand expected = new KeyCommand(key, inputUtils);
 
-        // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils,
-                configuration);
+		// when
+		final CommandFactory commandFactory = new CommandFactory(inputUtils,
+				configuration);
 
-        // then
-        final ICommand keyCommand = commandFactory.getCommand("A");
+		// then
+		final ICommand keyCommand = commandFactory.getCommand("A");
 
-        assertThat(keyCommand).isEqualTo(expected);
-    }
+		assertThat(keyCommand).isEqualTo(expected);
+	}
 
-    @Test
-    public void get_commands_two_buttons() throws Exception {
+	@Test
+	public void get_commands_two_buttons() throws Exception {
 
-        // given
-        final Key key1 = new Key("Q");
-        final Button button1 = new Button("A", key1);
+		// given
+		final Key key1 = new Key("Q");
+		final Button button1 = new Button("A", key1);
 
-        final Key key2 = new Key("W");
-        final Button button2 = new Button("C", key1, key2);
+		final Key key2 = new Key("W");
+		final Button button2 = new Button("C", key1, key2);
 
-        final Configuration configuration = new Configuration(button1, button2);
+		final Configuration configuration = new Configuration(button1, button2);
 
-        final InputUtils inputUtils = mock(InputUtils.class);
+		final InputUtils inputUtils = mock(InputUtils.class);
 
-        // expected
-        final KeyCommand expected1 = new KeyCommand(key1, inputUtils);
-        final KeyCommand expected2 = new KeyCommand(Lists.newArrayList(key1,
-                key2),
-                inputUtils);
+		// expected
+		final KeyCommand expected1 = new KeyCommand(key1, inputUtils);
+		final KeyCommand expected2 = new KeyCommand(Lists.newArrayList(key1,
+				key2), inputUtils);
 
-        // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils,
-                configuration);
+		// when
+		final CommandFactory commandFactory = new CommandFactory(inputUtils,
+				configuration);
 
-        // then
-        final ICommand keyCommand1 = commandFactory.getCommand("A");
-        final ICommand keyCommand2 = commandFactory.getCommand("C");
+		// then
+		final ICommand keyCommand1 = commandFactory.getCommand("A");
+		final ICommand keyCommand2 = commandFactory.getCommand("C");
 
-        assertThat(keyCommand1).isEqualTo(expected1);
-        assertThat(keyCommand2).isEqualTo(expected2);
-    }
+		assertThat(keyCommand1).isEqualTo(expected1);
+		assertThat(keyCommand2).isEqualTo(expected2);
+	}
 
-    @Test
-    public void pov_in_conf_4() throws Exception {
+	@Test
+	public void pov_in_conf_4() throws Exception {
 
-        final List<Key> nKeys = Lists.newArrayList(new Key("w"), new Key("d"),
-                new Key("r"));
-        final List<Key> sKeys = Lists.newArrayList(new Key("h"), new Key("a"),
-                new Key("d"));
-        final List<Key> eKeys = Lists.newArrayList(new Key("p"), new Key("c"),
-                new Key("g"));
-        final List<Key> wKeys = Lists.newArrayList(new Key("z"), new Key("j"),
-                new Key("h"));
+		final List<Key> nKeys = Lists.newArrayList(new Key("w"), new Key("d"),
+				new Key("r"));
+		final List<Key> sKeys = Lists.newArrayList(new Key("h"), new Key("a"),
+				new Key("d"));
+		final List<Key> eKeys = Lists.newArrayList(new Key("p"), new Key("c"),
+				new Key("g"));
+		final List<Key> wKeys = Lists.newArrayList(new Key("z"), new Key("j"),
+				new Key("h"));
 
-        final NorthPov n = new NorthPov(nKeys);
-        final SouthPov s = new SouthPov(sKeys);
-        final EastPov e = new EastPov(eKeys);
-        final WestPov w = new WestPov(wKeys);
-        // given
-        final Pov pov = new Pov(n, s, e, w);
-        final Configuration configuration = new Configuration(pov);
+		final NorthPov n = new NorthPov(nKeys);
+		final SouthPov s = new SouthPov(sKeys);
+		final EastPov e = new EastPov(eKeys);
+		final WestPov w = new WestPov(wKeys);
+		// given
 
-        final InputUtils inputUtils = mock(InputUtils.class);
+		final Pov pov = new Pov.PovBuilder().northPov(n).southPov(s).eastPov(e)
+				.westPov(w).build();
+		final Configuration configuration = new Configuration(pov);
 
-        // expected
-        final KeyCommand nExpected = new KeyCommand(nKeys, inputUtils);
-        final KeyCommand sExpected = new KeyCommand(sKeys, inputUtils);
-        final KeyCommand eExpected = new KeyCommand(eKeys, inputUtils);
-        final KeyCommand wExpected = new KeyCommand(wKeys, inputUtils);
+		final InputUtils inputUtils = mock(InputUtils.class);
 
-        // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils,
-                configuration);
+		// expected
+		final KeyCommand nExpected = new KeyCommand(nKeys, inputUtils);
+		final KeyCommand sExpected = new KeyCommand(sKeys, inputUtils);
+		final KeyCommand eExpected = new KeyCommand(eKeys, inputUtils);
+		final KeyCommand wExpected = new KeyCommand(wKeys, inputUtils);
 
-        // then
-        final ICommand keyCommandN = commandFactory.getCommand(n
-                .getIdentifier());
-        final ICommand keyCommandS = commandFactory.getCommand(s
-                .getIdentifier());
-        final ICommand keyCommandE = commandFactory.getCommand(e
-                .getIdentifier());
-        final ICommand keyCommandW = commandFactory.getCommand(w
-                .getIdentifier());
+		// when
+		final CommandFactory commandFactory = new CommandFactory(inputUtils,
+				configuration);
 
-        assertThat(keyCommandN).isEqualTo(nExpected);
-        assertThat(keyCommandS).isEqualTo(sExpected);
-        assertThat(keyCommandE).isEqualTo(eExpected);
-        assertThat(keyCommandW).isEqualTo(wExpected);
-    }
+		// then
+		final ICommand keyCommandN = commandFactory.getCommand(n
+				.getIdentifier());
+		final ICommand keyCommandS = commandFactory.getCommand(s
+				.getIdentifier());
+		final ICommand keyCommandE = commandFactory.getCommand(e
+				.getIdentifier());
+		final ICommand keyCommandW = commandFactory.getCommand(w
+				.getIdentifier());
 
-    @Test
-    public void pov_in_conf_8() throws Exception {
+		assertThat(keyCommandN).isEqualTo(nExpected);
+		assertThat(keyCommandS).isEqualTo(sExpected);
+		assertThat(keyCommandE).isEqualTo(eExpected);
+		assertThat(keyCommandW).isEqualTo(wExpected);
+	}
 
-        final List<Key> nKeys = Lists.newArrayList(new Key("w"), new Key("d"),
-                new Key("r"));
-        final List<Key> sKeys = Lists.newArrayList(new Key("h"), new Key("a"),
-                new Key("d"));
-        final List<Key> eKeys = Lists.newArrayList(new Key("p"), new Key("c"),
-                new Key("g"));
-        final List<Key> wKeys = Lists.newArrayList(new Key("z"), new Key("j"),
-                new Key("h"));
+	@Test
+	public void pov_in_conf_8() throws Exception {
 
-        final List<Key> neKeys = Lists.newArrayList(new Key("a"), new Key("t"),
-                new Key("e"));
-        final List<Key> nwKeys = Lists.newArrayList(new Key("d"), new Key("s"),
-                new Key("s"));
-        final List<Key> seKeys = Lists.newArrayList(new Key("f"), new Key("d"),
-                new Key("d"));
-        final List<Key> swKeys = Lists.newArrayList(new Key("g"), new Key("t"),
-                new Key("a"));
+		final List<Key> nKeys = Lists.newArrayList(new Key("w"), new Key("d"),
+				new Key("r"));
+		final List<Key> sKeys = Lists.newArrayList(new Key("h"), new Key("a"),
+				new Key("d"));
+		final List<Key> eKeys = Lists.newArrayList(new Key("p"), new Key("c"),
+				new Key("g"));
+		final List<Key> wKeys = Lists.newArrayList(new Key("z"), new Key("j"),
+				new Key("h"));
 
-        final NorthPov n = new NorthPov(nKeys);
-        final SouthPov s = new SouthPov(sKeys);
-        final EastPov e = new EastPov(eKeys);
-        final WestPov w = new WestPov(wKeys);
+		final List<Key> neKeys = Lists.newArrayList(new Key("a"), new Key("t"),
+				new Key("e"));
+		final List<Key> nwKeys = Lists.newArrayList(new Key("d"), new Key("s"),
+				new Key("s"));
+		final List<Key> seKeys = Lists.newArrayList(new Key("f"), new Key("d"),
+				new Key("d"));
+		final List<Key> swKeys = Lists.newArrayList(new Key("g"), new Key("t"),
+				new Key("a"));
 
-        final NorthEastPov ne = new NorthEastPov(neKeys);
-        final NorthWestPov nw = new NorthWestPov(nwKeys);
-        final SouthEastPov se = new SouthEastPov(seKeys);
-        final SouthWestPov sw = new SouthWestPov(swKeys);
-        // given
-        final Pov pov = new Pov(n, s, e, w, ne, nw, se, sw);
-        final Configuration configuration = new Configuration(pov);
+		final NorthPov n = new NorthPov(nKeys);
+		final SouthPov s = new SouthPov(sKeys);
+		final EastPov e = new EastPov(eKeys);
+		final WestPov w = new WestPov(wKeys);
 
-        final InputUtils inputUtils = mock(InputUtils.class);
+		final NorthEastPov ne = new NorthEastPov(neKeys);
+		final NorthWestPov nw = new NorthWestPov(nwKeys);
+		final SouthEastPov se = new SouthEastPov(seKeys);
+		final SouthWestPov sw = new SouthWestPov(swKeys);
+		// given
+		final Pov pov = new Pov.PovBuilder().northPov(n).southPov(s).eastPov(e)
+				.westPov(w).northEastPov(ne).northWestPov(nw).southEastPov(se)
+				.southWestPov(sw).build();
+		final Configuration configuration = new Configuration(pov);
 
-        // expected
-        final KeyCommand nExpected = new KeyCommand(nKeys, inputUtils);
-        final KeyCommand sExpected = new KeyCommand(sKeys, inputUtils);
-        final KeyCommand eExpected = new KeyCommand(eKeys, inputUtils);
-        final KeyCommand wExpected = new KeyCommand(wKeys, inputUtils);
-        final KeyCommand neExpected = new KeyCommand(neKeys, inputUtils);
-        final KeyCommand nwExpected = new KeyCommand(nwKeys, inputUtils);
-        final KeyCommand seExpected = new KeyCommand(seKeys, inputUtils);
-        final KeyCommand swExpected = new KeyCommand(swKeys, inputUtils);
+		final InputUtils inputUtils = mock(InputUtils.class);
 
-        // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils,
-                configuration);
+		// expected
+		final KeyCommand nExpected = new KeyCommand(nKeys, inputUtils);
+		final KeyCommand sExpected = new KeyCommand(sKeys, inputUtils);
+		final KeyCommand eExpected = new KeyCommand(eKeys, inputUtils);
+		final KeyCommand wExpected = new KeyCommand(wKeys, inputUtils);
+		final KeyCommand neExpected = new KeyCommand(neKeys, inputUtils);
+		final KeyCommand nwExpected = new KeyCommand(nwKeys, inputUtils);
+		final KeyCommand seExpected = new KeyCommand(seKeys, inputUtils);
+		final KeyCommand swExpected = new KeyCommand(swKeys, inputUtils);
 
-        // then
+		// when
+		final CommandFactory commandFactory = new CommandFactory(inputUtils,
+				configuration);
 
-        final ICommand keyCommandN = commandFactory.getCommand(n
-                .getIdentifier());
-        final ICommand keyCommandS = commandFactory.getCommand(s
-                .getIdentifier());
-        final ICommand keyCommandE = commandFactory.getCommand(e
-                .getIdentifier());
-        final ICommand keyCommandW = commandFactory.getCommand(w
-                .getIdentifier());
-        final ICommand keyCommandNE = commandFactory.getCommand(ne
-                .getIdentifier());
-        final ICommand keyCommandNW = commandFactory.getCommand(nw
-                .getIdentifier());
-        final ICommand keyCommandSE = commandFactory.getCommand(se
-                .getIdentifier());
-        final ICommand keyCommandSW = commandFactory.getCommand(sw
-                .getIdentifier());
+		// then
 
-        assertThat(keyCommandN).isEqualTo(nExpected);
-        assertThat(keyCommandS).isEqualTo(sExpected);
-        assertThat(keyCommandE).isEqualTo(eExpected);
-        assertThat(keyCommandW).isEqualTo(wExpected);
-        assertThat(keyCommandNE).isEqualTo(neExpected);
-        assertThat(keyCommandNW).isEqualTo(nwExpected);
-        assertThat(keyCommandSE).isEqualTo(seExpected);
-        assertThat(keyCommandSW).isEqualTo(swExpected);
-    }
+		final ICommand keyCommandN = commandFactory.getCommand(n
+				.getIdentifier());
+		final ICommand keyCommandS = commandFactory.getCommand(s
+				.getIdentifier());
+		final ICommand keyCommandE = commandFactory.getCommand(e
+				.getIdentifier());
+		final ICommand keyCommandW = commandFactory.getCommand(w
+				.getIdentifier());
+		final ICommand keyCommandNE = commandFactory.getCommand(ne
+				.getIdentifier());
+		final ICommand keyCommandNW = commandFactory.getCommand(nw
+				.getIdentifier());
+		final ICommand keyCommandSE = commandFactory.getCommand(se
+				.getIdentifier());
+		final ICommand keyCommandSW = commandFactory.getCommand(sw
+				.getIdentifier());
 
-    @Test
-    public void load_mouse_click() throws Exception {
+		assertThat(keyCommandN).isEqualTo(nExpected);
+		assertThat(keyCommandS).isEqualTo(sExpected);
+		assertThat(keyCommandE).isEqualTo(eExpected);
+		assertThat(keyCommandW).isEqualTo(wExpected);
+		assertThat(keyCommandNE).isEqualTo(neExpected);
+		assertThat(keyCommandNW).isEqualTo(nwExpected);
+		assertThat(keyCommandSE).isEqualTo(seExpected);
+		assertThat(keyCommandSW).isEqualTo(swExpected);
+	}
 
-        // given
-        final InputUtils inputUtils = mock(InputUtils.class);
+	@Test
+	public void load_mouse_click() throws Exception {
 
-        final Key key = new Key("LEFT_MOUSE");
-        final Button button = new Button("A", key);
-        final Configuration configuration = new Configuration(button);
+		// given
+		final InputUtils inputUtils = mock(InputUtils.class);
 
-        // expected
-        final MouseCommand expected = new MouseCommand(MouseButton.LEFT,
-                inputUtils);
+		final Key key = new Key("LEFT_MOUSE");
+		final Button button = new Button("A", key);
+		final Configuration configuration = new Configuration(button);
 
-        // when
-        final CommandFactory commandFactory = new CommandFactory(inputUtils,
-                configuration);
+		// expected
+		final MouseCommand expected = new MouseCommand(MouseButton.LEFT,
+				inputUtils);
 
-        // then
-        final ICommand command = commandFactory.getCommand("A");
-        assertThat(command).isEqualTo(expected);
-    }
+		// when
+		final CommandFactory commandFactory = new CommandFactory(inputUtils,
+				configuration);
+
+		// then
+		final ICommand command = commandFactory.getCommand("A");
+		assertThat(command).isEqualTo(expected);
+	}
 }
