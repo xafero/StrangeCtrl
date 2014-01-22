@@ -13,7 +13,6 @@ public class XStreamConfigLoader implements ConfigLoader {
         // creating aliases
         xstream.alias("configuration", Configuration.class);
         xstream.alias("button", Button.class);
-        xstream.alias("state", State.class);
         xstream.alias("key", Key.class);
 
         xstream.alias("pov", Pov.class);
@@ -32,7 +31,6 @@ public class XStreamConfigLoader implements ConfigLoader {
         xstream.addImplicitCollection(Configuration.class, "buttons");
         xstream.addImplicitCollection(Button.class, "keys", "key", Key.class);
         xstream.addImplicitCollection(Button.class, "states");
-        xstream.addImplicitCollection(State.class, "keys");
 
         xstream.addImplicitCollection(NorthPov.class, "keys", "key", Key.class);
         xstream.addImplicitCollection(NorthPov.class, "states");
@@ -58,8 +56,6 @@ public class XStreamConfigLoader implements ConfigLoader {
 
         // attributes
         xstream.useAttributeFor(Button.class, "value");
-        xstream.useAttributeFor(State.class, "id");
-        xstream.useAttributeFor(State.class, "next");
         xstream.useAttributeFor(Key.class, "key");
 
         // creating field aliases

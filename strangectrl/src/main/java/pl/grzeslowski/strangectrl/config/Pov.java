@@ -1,5 +1,9 @@
 package pl.grzeslowski.strangectrl.config;
 
+import static com.google.common.base.Objects.equal;
+
+import com.google.common.base.Objects;
+
 public class Pov {
 	private NorthPov northPov;
 	private SouthPov southPov;
@@ -47,92 +51,26 @@ public class Pov {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (eastPov == null ? 0 : eastPov.hashCode());
-		result = prime * result
-				+ (northEastPov == null ? 0 : northEastPov.hashCode());
-		result = prime * result + (northPov == null ? 0 : northPov.hashCode());
-		result = prime * result
-				+ (northWestPov == null ? 0 : northWestPov.hashCode());
-		result = prime * result
-				+ (southEastPov == null ? 0 : southEastPov.hashCode());
-		result = prime * result + (southPov == null ? 0 : southPov.hashCode());
-		result = prime * result
-				+ (southWestPov == null ? 0 : southWestPov.hashCode());
-		result = prime * result + (westPov == null ? 0 : westPov.hashCode());
-		return result;
+		return Objects.hashCode(northPov, southPov, eastPov, westPov,
+				northEastPov, northWestPov, southEastPov, southWestPov);
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
+		if (obj instanceof Pov) {
+			final Pov pov = (Pov) obj;
+
+			return equal(northPov, pov.northPov)
+					&& equal(southPov, pov.southPov)
+					&& equal(eastPov, pov.eastPov)
+					&& equal(westPov, pov.westPov)
+					&& equal(northEastPov, pov.northEastPov)
+					&& equal(northWestPov, pov.northWestPov)
+					&& equal(southEastPov, pov.southEastPov)
+					&& equal(southWestPov, pov.southWestPov);
+		} else {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Pov other = (Pov) obj;
-		if (eastPov == null) {
-			if (other.eastPov != null) {
-				return false;
-			}
-		} else if (!eastPov.equals(other.eastPov)) {
-			return false;
-		}
-		if (northEastPov == null) {
-			if (other.northEastPov != null) {
-				return false;
-			}
-		} else if (!northEastPov.equals(other.northEastPov)) {
-			return false;
-		}
-		if (northPov == null) {
-			if (other.northPov != null) {
-				return false;
-			}
-		} else if (!northPov.equals(other.northPov)) {
-			return false;
-		}
-		if (northWestPov == null) {
-			if (other.northWestPov != null) {
-				return false;
-			}
-		} else if (!northWestPov.equals(other.northWestPov)) {
-			return false;
-		}
-		if (southEastPov == null) {
-			if (other.southEastPov != null) {
-				return false;
-			}
-		} else if (!southEastPov.equals(other.southEastPov)) {
-			return false;
-		}
-		if (southPov == null) {
-			if (other.southPov != null) {
-				return false;
-			}
-		} else if (!southPov.equals(other.southPov)) {
-			return false;
-		}
-		if (southWestPov == null) {
-			if (other.southWestPov != null) {
-				return false;
-			}
-		} else if (!southWestPov.equals(other.southWestPov)) {
-			return false;
-		}
-		if (westPov == null) {
-			if (other.westPov != null) {
-				return false;
-			}
-		} else if (!westPov.equals(other.westPov)) {
-			return false;
-		}
-		return true;
 	}
 
 	@Override

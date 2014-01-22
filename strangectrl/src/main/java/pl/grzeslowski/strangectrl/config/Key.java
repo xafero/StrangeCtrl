@@ -1,46 +1,43 @@
 package pl.grzeslowski.strangectrl.config;
 
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.base.Objects;
 
 public class Key {
-    private String key;
+	private String key;
 
-    private Key() {
-    }
+	private Key() {
+		// for XStreamLoader
+	}
 
-    public Key(final String key) {
-        this.key = checkNotNull(key);
-    }
+	public Key(final String key) {
+		this.key = checkNotNull(key);
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (key == null ? 0 : key.hashCode());
-        return result;
-    }
+	public String getKey() {
+		return key;
+	}
 
-    @Override
-    public boolean equals(final Object obj) {
-        return obj instanceof Key && equals((Key) obj);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(key);
+	}
 
-    private boolean equals(final Key obj) {
-        if (obj == null) {
-            return false;
-        }
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof Key) {
+			final Key key = (Key) obj;
 
-        return Objects.equal(key, obj.key);
-    }
+			return equal(this.key, key.key);
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public String toString() {
-        return "Key[" + key + "]";
-    }
-
-    public String getKey() {
-        return key;
-    }
+	@Override
+	public String toString() {
+		return "Key[" + key + "]";
+	}
 }
