@@ -15,13 +15,21 @@ Quickstart
 Just configure it like this (see config.xml), for example:
 
 	<!-- Button A means now left mouse click -->
-	<entry key="Button 0">mouseClick 1</entry>
+	<button value="RB">
+		<key key="LEFT_MOUSE" />
+	</button>
 
 	<!-- Button B will open a new tab -->
-	<entry key="Button 1">keyCombo CONTROL T</entry>
+	<button value="A">
+		<key key="ENTER" />
+	</button>
 	
 	<!-- Button X will close an existing tab -->
-	<entry key="Button 2">keyCombo CONTROL W</entry>
+	<button value="BACK">
+		<key key="CONTROL" />
+		<key key="SHIFT" />
+		<key key="T" />
+	</button>
 	
 and start it. 
 
@@ -30,6 +38,7 @@ or whatever application you want to interact with.
 
 config.xml for browsing internet
 ================================
+
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<button value="A">
