@@ -24,7 +24,7 @@ import com.xafero.superloader.NativeLoader;
 
 public class InputUtils {
 
-    private static final String prefix = "VK_";
+    private static final String PREFIX = "VK_";
     private final Robot robot;
     private final Map<String, Integer> keyMap;
     private final Map<Key, Boolean> pressedKeys = new HashMap<>();
@@ -52,7 +52,7 @@ public class InputUtils {
 
     public InputUtils(final Robot robot) {
         this.robot = robot;
-        keyMap = ConfigUtils.buildKeyMap(prefix);
+        keyMap = ConfigUtils.buildKeyMap(PREFIX);
     }
 
     public Set<Controller> getControllers(final Type... types) {
