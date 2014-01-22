@@ -9,9 +9,12 @@ import java.awt.SystemTray;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -136,14 +139,32 @@ public class App {
 
 	private Configuration loadConfiguration() {
 		try {
-			final InputStream configStream = App.class
-					.getResourceAsStream(RESOURCES_PATH + CFG_FILE);
+			final String parentPath = new File(getClass().getProtectionDomain()
+					.getCodeSource().getLocation().toURI()).getParent();
+
+			final File file = new File(parentPath + CFG_FILE);
+
+			final InputStream configStream;
+			if (file.isFile()) {
+
+				// load from external file
+				configStream = new FileInputStream(file);
+			} else {
+
+				// load from normal file
+				configStream = App.class.getResourceAsStream(RESOURCES_PATH
+						+ CFG_FILE);
+			}
+
 			final String readedFile = readConfigFile(configStream);
 			configStream.close();
 
 			return configLoader.loadXml(readedFile);
+
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
+		} catch (final URISyntaxException e1) {
+			throw new RuntimeException(e1);
 		}
 	}
 
