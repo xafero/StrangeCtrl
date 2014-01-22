@@ -10,6 +10,9 @@ import javax.imageio.ImageIO;
 
 public class ResourceUtils {
 
+	private ResourceUtils() {
+	}
+
 	public static Image loadImage(final String path) {
 		final URL imgUrl = ClassLoader.getSystemResource(path);
 		return Toolkit.getDefaultToolkit().getImage(imgUrl);
