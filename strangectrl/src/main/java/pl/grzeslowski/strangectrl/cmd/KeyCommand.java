@@ -7,8 +7,6 @@ import java.awt.GraphicsDevice;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
-
 import pl.grzeslowski.strangectrl.config.Key;
 
 import com.google.common.base.Objects;
@@ -17,9 +15,6 @@ import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
 
 public class KeyCommand implements ICommand {
-
-	private static final org.slf4j.Logger logger = LoggerFactory
-			.getLogger(KeyCommand.class);
 	private final List<Key> keys;
 	private final InputUtils inputUtils;
 
