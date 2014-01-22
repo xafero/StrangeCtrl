@@ -64,23 +64,21 @@ public class ControllerPoller extends TimerTask {
 	}
 
 	private void runForController() {
-		{
-			callback.doPeriodCommands();
+		callback.doPeriodCommands();
 
-			if (controller.poll()) {
+		if (controller.poll()) {
 
-				final EventQueue queue = controller.getEventQueue();
-				final Event event = new Event();
-				while (queue.getNextEvent(event)) {
-					callback.onNewEvent(event);
-				}
-			} else {
-
-				// controller is no longer available
-				callback.controllerRemoved();
-				controllers.remove(controller);
-				controller = null;
+			final EventQueue queue = controller.getEventQueue();
+			final Event event = new Event();
+			while (queue.getNextEvent(event)) {
+				callback.onNewEvent(event);
 			}
+		} else {
+
+			// controller is no longer available
+			callback.controllerRemoved();
+			controllers.remove(controller);
+			controller = null;
 		}
 	}
 
