@@ -58,8 +58,7 @@ public class App {
 		inputUtils = new InputUtils(robot);
 	}
 
-	public static void main(final String[] args) throws AWTException,
-	IOException {
+	public static void main(final String[] args) {
 		loadSlf4jProperties();
 
 		final SystemTray tray = SystemTray.getSystemTray();
@@ -78,7 +77,11 @@ public class App {
 			}
 		});
 
-		tray.add(DesktopUtils.createTrayIcon(img, tip, menu));
+		try {
+			tray.add(DesktopUtils.createTrayIcon(img, tip, menu));
+		} catch (final AWTException e1) {
+			throw new RuntimeException(e1);
+		}
 
 		// start app
 		new App().start();
