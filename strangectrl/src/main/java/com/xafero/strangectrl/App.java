@@ -100,6 +100,7 @@ public class App {
 			imageStream.close();
 			return loadImage;
 		} catch (final IOException e) {
+			logger.error("Cannot load tray image!", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -119,6 +120,7 @@ public class App {
 	}
 
 	private void start() {
+		logger.info("Starting!");
 
 		// load conf
 		final Configuration configuration = loadConfiguration();
@@ -149,11 +151,13 @@ public class App {
 
 				// load from external file
 				configStream = new FileInputStream(file);
+				logger.info("Loading conf from file " + file.getAbsolutePath());
 			} else {
 
 				// load from normal file
 				configStream = App.class.getResourceAsStream(RESOURCES_PATH
 						+ CFG_FILE);
+				logger.info("Loading conf from jar");
 			}
 
 			final String readedFile = readConfigFile(configStream);
