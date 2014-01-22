@@ -28,16 +28,4 @@ public class EastPov extends PovDirection {
 	public String getIdentifier() {
 		return "EP";
 	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj instanceof EastPov) {
-			final EastPov pov = (EastPov) obj;
-
-			return super.equals(pov);
-		} else {
-			return false;
-		}
-	}
-
 }
