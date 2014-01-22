@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import com.google.common.collect.Sets;
+
 public class ControllerPollerTest {
 
 	@Test
@@ -97,8 +99,7 @@ public class ControllerPollerTest {
 		final int period = 100;
 		final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
 		final ControllerPoller poller = spy(new ControllerPoller(
-				Arrays.asList(controller), callback,
-				controllersRefresher,
+				Arrays.asList(controller), callback, controllersRefresher,
 				period));
 
 		// when
@@ -135,4 +136,41 @@ public class ControllerPollerTest {
 
 	}
 
+	@Test
+	public void add_controller_remove_controller_add_controller()
+			throws Exception {
+
+		// given
+		final Controller controller = mock(Controller.class);
+		when(controller.poll()).thenReturn(false);
+
+		final Controller controller2 = mock(Controller.class);
+		when(controller2.poll()).thenReturn(false);
+
+		final IControllerCallback callback = mock(IControllerCallback.class);
+
+		final int period = 100;
+		final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
+		when(controllersRefresher.getController()).thenReturn(
+				Sets.newHashSet(controller2));
+
+		final ControllerPoller poller = spy(new ControllerPoller(
+				Arrays.asList(controller), callback, controllersRefresher,
+				period));
+
+		// when
+		poller.start();
+
+		// need to sleep to wait for TimerTask execute
+		try {
+			Thread.sleep(period * 3);
+		} catch (final InterruptedException ex) {
+		}
+
+		// then
+		verify(callback, times(2)).controllerRemoved();
+		verify(controllersRefresher, atLeast(1)).getController();
+		verify(controller).poll();
+		verify(controller, atLeast(1)).poll();
+	}
 }
