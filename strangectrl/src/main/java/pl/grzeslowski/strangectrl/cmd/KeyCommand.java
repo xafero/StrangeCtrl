@@ -41,23 +41,6 @@ public class KeyCommand implements ICommand {
 		return false;
 	}
 
-	public boolean hasOnlyArrowKeys() {
-		for (final Key key : keys) {
-			if (!isArrow(key)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private boolean isArrow(final Key key) {
-		final String keyName = key.getKey();
-		return "UP".equalsIgnoreCase(keyName)
-				|| "DOWN".equalsIgnoreCase(keyName)
-				|| "LEFT".equalsIgnoreCase(keyName)
-				|| "RIGHT".equalsIgnoreCase(keyName);
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(keys);
