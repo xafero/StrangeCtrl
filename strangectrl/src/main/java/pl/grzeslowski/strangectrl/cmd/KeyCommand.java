@@ -1,5 +1,6 @@
 package pl.grzeslowski.strangectrl.cmd;
 
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.awt.GraphicsDevice;
@@ -10,85 +11,72 @@ import org.slf4j.LoggerFactory;
 
 import pl.grzeslowski.strangectrl.config.Key;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
 
 public class KeyCommand implements ICommand {
 
-    private static final org.slf4j.Logger logger = LoggerFactory
-            .getLogger(KeyCommand.class);
-    private final List<Key> keys;
-    private final InputUtils inputUtils;
+	private static final org.slf4j.Logger logger = LoggerFactory
+			.getLogger(KeyCommand.class);
+	private final List<Key> keys;
+	private final InputUtils inputUtils;
 
-    public KeyCommand(final Key key, final InputUtils inputUtils) {
-        this(Lists.newArrayList(key), inputUtils);
-    }
+	public KeyCommand(final Key key, final InputUtils inputUtils) {
+		this(Lists.newArrayList(key), inputUtils);
+	}
 
-    public KeyCommand(final List<Key> keys, final InputUtils inputUtils) {
-        this.keys = new ArrayList<>(keys);
-        this.inputUtils = checkNotNull(inputUtils);
-    }
+	public KeyCommand(final List<Key> keys, final InputUtils inputUtils) {
+		this.keys = new ArrayList<>(keys);
+		this.inputUtils = checkNotNull(inputUtils);
+	}
 
-    @Override
-    public void execute(final GraphicsDevice dev, final double value) {
-        if (value >= 0.5f) {
-            inputUtils.pressKey(keys);
-        } else {
-            inputUtils.releaseKey(keys);
-        }
-    }
+	@Override
+	public void execute(final GraphicsDevice dev, final double value) {
+		if (value >= 0.5f) {
+			inputUtils.pressKey(keys);
+		} else {
+			inputUtils.releaseKey(keys);
+		}
+	}
 
-    @Override
-    public boolean isPeriodCommand() {
-        return false;
-    }
+	@Override
+	public boolean isPeriodCommand() {
+		return false;
+	}
 
-    public boolean hasOnlyArrowKeys() {
-        for (final Key key : keys) {
-            if (!isArrow(key)) {
-                return false;
-            }
-        }
-        return true;
-    }
+	public boolean hasOnlyArrowKeys() {
+		for (final Key key : keys) {
+			if (!isArrow(key)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    private boolean isArrow(final Key key) {
-        final String keyName = key.getKey();
-        return "UP".equalsIgnoreCase(keyName)
-                || "DOWN".equalsIgnoreCase(keyName)
-                || "LEFT".equalsIgnoreCase(keyName)
-                || "RIGHT".equalsIgnoreCase(keyName);
-    }
+	private boolean isArrow(final Key key) {
+		final String keyName = key.getKey();
+		return "UP".equalsIgnoreCase(keyName)
+				|| "DOWN".equalsIgnoreCase(keyName)
+				|| "LEFT".equalsIgnoreCase(keyName)
+				|| "RIGHT".equalsIgnoreCase(keyName);
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (keys == null ? 0 : keys.hashCode());
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(keys);
+	}
 
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final KeyCommand other = (KeyCommand) obj;
-        if (keys == null) {
-            if (other.keys != null) {
-                return false;
-            }
-        } else if (!keys.equals(other.keys)) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof KeyCommand) {
+			final KeyCommand keyCommand = (KeyCommand) obj;
+
+			return equal(keys, keyCommand.keys);
+		} else {
+			return false;
+		}
+	}
 
 }
