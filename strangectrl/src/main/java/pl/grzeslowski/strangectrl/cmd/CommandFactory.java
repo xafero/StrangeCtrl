@@ -87,7 +87,7 @@ public class CommandFactory {
 
 		// mouse wheel
 		final MouseWheelCommand mouseWheelCommand = new MouseWheelCommand(
-				inputUtils, MAX_WHEEL_MOVE, 0.8f);
+				inputUtils, MAX_WHEEL_MOVE, 0.99);
 		commands.put("ry", mouseWheelCommand);
 	}
 
