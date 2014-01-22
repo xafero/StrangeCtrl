@@ -41,9 +41,11 @@ import com.xafero.strangectrl.input.SimpleCallback;
 public class App {
 	private static final org.slf4j.Logger logger = LoggerFactory
 			.getLogger(App.class);
-	private static final String LOG4J_PROPERTIES_PATH = "src/main/resources/log4j.properties";
+	private static final String RESOURCES_PATH = "/resources/";
+	private static final String LOG4J_PROPERTIES = "log4j.properties";
+	private static final String TRAY_ICON = "console-controller2.png";
+	private static final String CFG_FILE = "new_config.xml";
 	private static final String EXIT_STR = "Exit";
-	private static final String CFG_FILE = "src/main/resources/new_config.xml";
 	private static final long PERIOD = 10;
 	private final ConfigLoader configLoader = new XStreamConfigLoader();
 	private final InputUtils inputUtils;
@@ -90,7 +92,7 @@ public class App {
 	private static Image loadTrayIconImage() {
 		try {
 			final InputStream imageStream = App.class
-					.getResourceAsStream("/resources/console-controller2.png");
+					.getResourceAsStream(RESOURCES_PATH + TRAY_ICON);
 			final Image loadImage = ResourceUtils.loadImage(imageStream);
 			imageStream.close();
 			return loadImage;
@@ -103,7 +105,7 @@ public class App {
 		try {
 			final Properties props = new Properties();
 			final InputStream configStream = App.class
-					.getResourceAsStream("/resources/log4j.properties");
+					.getResourceAsStream(RESOURCES_PATH + LOG4J_PROPERTIES);
 			props.load(configStream);
 			PropertyConfigurator.configure(props);
 
@@ -135,7 +137,7 @@ public class App {
 	private Configuration loadConfiguration() {
 		try {
 			final InputStream configStream = App.class
-					.getResourceAsStream("/resources/new_config.xml");
+					.getResourceAsStream(RESOURCES_PATH + CFG_FILE);
 			final String readedFile = readConfigFile(configStream);
 			configStream.close();
 
