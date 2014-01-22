@@ -23,20 +23,24 @@ public class DesktopUtils {
 		final GraphicsConfiguration cfg = dev.getDefaultConfiguration();
 		final int newX = pos.x - cfg.getBounds().x;
 		final int newY = pos.y - cfg.getBounds().y;
+
 		return new Point(newX, newY);
 	}
 
-	public static TrayIcon createTrayIcon(final Image img, final String tip, final PopupMenu menu) {
+	public static TrayIcon createTrayIcon(final Image img, final String tip,
+			final PopupMenu menu) {
 		final TrayIcon icon = new TrayIcon(img, tip, menu);
 		icon.setImageAutoSize(true);
+
 		return icon;
 	}
 
-	public static GraphicsDevice getDevice(final int screenNo) throws AWTException {
+	public static GraphicsDevice getDevice(final int screenNo)
+			throws AWTException {
 		final GraphicsEnvironment env = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
-		final GraphicsDevice device = env.getScreenDevices()[screenNo];
-		return device;
+
+		return env.getScreenDevices()[screenNo];
 	}
 
 	public static Robot createRobot(final GraphicsDevice device) {
@@ -47,9 +51,11 @@ public class DesktopUtils {
 		}
 	}
 
-	public static Robot createRobot(final AtomicReference<GraphicsDevice> deviceRef) {
+	public static Robot createRobot(
+			final AtomicReference<GraphicsDevice> deviceRef) {
 		final GraphicsDevice device = getMouseScreen();
 		deviceRef.set(device);
+
 		return createRobot(device);
 	}
 }

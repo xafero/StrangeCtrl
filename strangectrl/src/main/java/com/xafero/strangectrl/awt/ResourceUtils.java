@@ -12,8 +12,7 @@ public class ResourceUtils {
 
 	public static Image loadImage(final String path) {
 		final URL imgUrl = ClassLoader.getSystemResource(path);
-		final Image img = Toolkit.getDefaultToolkit().getImage(imgUrl);
-		return img;
+		return Toolkit.getDefaultToolkit().getImage(imgUrl);
 	}
 
 	public static Image loadImage(final InputStream inputStream)
