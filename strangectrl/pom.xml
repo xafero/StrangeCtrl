@@ -102,7 +102,19 @@
 						${project.build.directory}
 					</outputDirectory>
 				</configuration>
+
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.txt</include>
+					<include>**/*.xml</include>
+					<include>**/*.properties</include>
+					<include>**/*.png</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 </project>

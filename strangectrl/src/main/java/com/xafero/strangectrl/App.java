@@ -9,8 +9,10 @@ import java.awt.SystemTray;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -18,6 +20,7 @@ import net.java.games.input.Controller;
 import net.java.games.input.Controller.Type;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.LoggerFactory;
 
 import pl.grzeslowski.strangectrl.cmd.CommandFactory;
 import pl.grzeslowski.strangectrl.config.ConfigLoader;
@@ -36,7 +39,8 @@ import com.xafero.strangectrl.input.SimpleCallback;
  * The main entry point
  */
 public class App {
-
+	private static final org.slf4j.Logger logger = LoggerFactory
+			.getLogger(App.class);
 	private static final String LOG4J_PROPERTIES_PATH = "src/main/resources/log4j.properties";
 	private static final String EXIT_STR = "Exit";
 	private static final String CFG_FILE = "src/main/resources/new_config.xml";
@@ -54,12 +58,12 @@ public class App {
 		inputUtils = new InputUtils(robot);
 	}
 
-	public static void main(final String[] args) throws IOException,
-	AWTException {
-		PropertyConfigurator.configure(LOG4J_PROPERTIES_PATH);
+	public static void main(final String[] args) throws AWTException,
+	IOException {
+		loadSlf4jProperties();
 
 		final SystemTray tray = SystemTray.getSystemTray();
-		final Image img = ResourceUtils.loadImage("console-controller2.png");
+		final Image img = loadTrayIconImage();
 		final String tip = "Strange Control";
 
 		final PopupMenu menu = new PopupMenu("test2!");
@@ -80,10 +84,36 @@ public class App {
 		new App().start();
 	}
 
+	private static Image loadTrayIconImage() {
+		try {
+			final InputStream imageStream = App.class
+					.getResourceAsStream("/resources/console-controller2.png");
+			final Image loadImage = ResourceUtils.loadImage(imageStream);
+			imageStream.close();
+			return loadImage;
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void loadSlf4jProperties() {
+		try {
+			final Properties props = new Properties();
+			final InputStream configStream = App.class
+					.getResourceAsStream("/resources/log4j.properties");
+			props.load(configStream);
+			PropertyConfigurator.configure(props);
+
+			configStream.close();
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private void start() {
+
 		// load conf
-		final String readedFile = readConfigFile(CFG_FILE);
-		final Configuration configuration = configLoader.loadXml(readedFile);
+		final Configuration configuration = loadConfiguration();
 
 		// get all commands
 		final CommandFactory commandFactory = new CommandFactory(inputUtils,
@@ -99,11 +129,24 @@ public class App {
 		poller.start();
 	}
 
-	private String readConfigFile(final String filePath) {
+	private Configuration loadConfiguration() {
+		try {
+			final InputStream configStream = App.class
+					.getResourceAsStream("/resources/new_config.xml");
+			final String readedFile = readConfigFile(configStream);
+			configStream.close();
+
+			return configLoader.loadXml(readedFile);
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private String readConfigFile(final InputStream configStream) {
 		BufferedReader in = null;
 		String readedFile = "";
 		try {
-			in = new BufferedReader(new FileReader(filePath));
+			in = new BufferedReader(new InputStreamReader(configStream));
 			String str;
 			final StringBuilder builder = new StringBuilder();
 			while ((str = in.readLine()) != null) {
@@ -112,13 +155,13 @@ public class App {
 
 			readedFile = builder.toString();
 		} catch (final IOException e) {
-			throw new RuntimeException(e);
+			logger.error("Error in reading file!", e);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException e) {
-					throw new RuntimeException(e);
+					logger.error("Error in reading file (closing in final)!", e);
 				}
 			}
 		}
