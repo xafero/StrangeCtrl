@@ -26,96 +26,96 @@ import com.xafero.strangectrl.input.InputUtils;
 import com.xafero.strangectrl.input.InputUtils.MouseButton;
 
 public class CommandFactory {
-    private final static double DELTA_FOR_MOUSE_MOVE = 0.2;
-    public static int MAX_MOUSE_MOVE = 5;
-    private static final int MAX_WHEEL_MOVE = 1;
+	private final static double DELTA_FOR_MOUSE_MOVE = 0.2;
+	public final static int MAX_MOUSE_MOVE = 5;
+	private final static int MAX_WHEEL_MOVE = 1;
 
-    private final InputUtils inputUtils;
-    private final Map<String, ICommand> commands = new HashMap<>();
+	private final InputUtils inputUtils;
+	private final Map<String, ICommand> commands = new HashMap<>();
 
-    public CommandFactory(final InputUtils inputUtils,
-            final Configuration configuration) {
-        this.inputUtils = checkNotNull(inputUtils);
-        loadCommands(checkNotNull(configuration));
-        loadAnalogCommands();
-    }
+	public CommandFactory(final InputUtils inputUtils,
+			final Configuration configuration) {
+		this.inputUtils = checkNotNull(inputUtils);
+		loadCommands(checkNotNull(configuration));
+		loadAnalogCommands();
+	}
 
-    private void loadCommands(final Configuration configuration) {
+	private void loadCommands(final Configuration configuration) {
 
-        // buttons
-        final List<Button> buttons = configuration.getButtons();
-        for (final Button button : buttons) {
-            final List<Key> keys = button.getKeys();
-            final ICommand command = createCommand(keys);
+		// buttons
+		final List<Button> buttons = configuration.getButtons();
+		for (final Button button : buttons) {
+			final List<Key> keys = button.getKeys();
+			final ICommand command = createCommand(keys);
 
-            commands.put(button.getValue(), command);
-        }
+			commands.put(button.getValue(), command);
+		}
 
-        // pov
-        final Pov pov = configuration.getPov();
-        if (pov != null) {
-            final NorthPov northPov = pov.getNorthPov();
-            final SouthPov southPov = pov.getSouthPov();
-            final EastPov eastPov = pov.getEastPov();
-            final WestPov westPov = pov.getWestPov();
-            final NorthEastPov northEastPov = pov.getNorthEastPov();
-            final NorthWestPov northWestPov = pov.getNorthWestPov();
-            final SouthEastPov southEastPov = pov.getSouthEastPov();
-            final SouthWestPov southWestPov = pov.getSouthWestPov();
+		// pov
+		final Pov pov = configuration.getPov();
+		if (pov != null) {
+			final NorthPov northPov = pov.getNorthPov();
+			final SouthPov southPov = pov.getSouthPov();
+			final EastPov eastPov = pov.getEastPov();
+			final WestPov westPov = pov.getWestPov();
+			final NorthEastPov northEastPov = pov.getNorthEastPov();
+			final NorthWestPov northWestPov = pov.getNorthWestPov();
+			final SouthEastPov southEastPov = pov.getSouthEastPov();
+			final SouthWestPov southWestPov = pov.getSouthWestPov();
 
-            putPovDirection(northPov);
-            putPovDirection(southPov);
-            putPovDirection(eastPov);
-            putPovDirection(westPov);
-            putPovDirection(northEastPov);
-            putPovDirection(northWestPov);
-            putPovDirection(southEastPov);
-            putPovDirection(southWestPov);
-        }
-    }
+			putPovDirection(northPov);
+			putPovDirection(southPov);
+			putPovDirection(eastPov);
+			putPovDirection(westPov);
+			putPovDirection(northEastPov);
+			putPovDirection(northWestPov);
+			putPovDirection(southEastPov);
+			putPovDirection(southWestPov);
+		}
+	}
 
-    private void loadAnalogCommands() {
+	private void loadAnalogCommands() {
 
-        // moving mouse
-        final DesktopUtils desktopUtils = new DesktopUtils();
-        final MouseMoveCommand mouseMoveXCommand = new MouseMoveXCommand(
-                inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE, desktopUtils);
-        final MouseMoveCommand mouseMoveYCommand = new MouseMoveYCommand(
-                inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE, desktopUtils);
-        commands.put("x", mouseMoveXCommand);
-        commands.put("y", mouseMoveYCommand);
+		// moving mouse
+		final DesktopUtils desktopUtils = new DesktopUtils();
+		final MouseMoveCommand mouseMoveXCommand = new MouseMoveXCommand(
+				inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE, desktopUtils);
+		final MouseMoveCommand mouseMoveYCommand = new MouseMoveYCommand(
+				inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE, desktopUtils);
+		commands.put("x", mouseMoveXCommand);
+		commands.put("y", mouseMoveYCommand);
 
-        // mouse wheel
-        final MouseWheelCommand mouseWheelCommand = new MouseWheelCommand(
-                inputUtils, MAX_WHEEL_MOVE, 0.8f);
-        commands.put("ry", mouseWheelCommand);
-    }
+		// mouse wheel
+		final MouseWheelCommand mouseWheelCommand = new MouseWheelCommand(
+				inputUtils, MAX_WHEEL_MOVE, 0.8f);
+		commands.put("ry", mouseWheelCommand);
+	}
 
-    private ICommand createCommand(final List<Key> keys) {
-        if (keys.size() == 1) {
-            final Key key = keys.get(0);
+	private ICommand createCommand(final List<Key> keys) {
+		if (keys.size() == 1) {
+			final Key key = keys.get(0);
 
-            switch (key.getKey()) {
-            case "LEFT_MOUSE":
-                return new MouseCommand(MouseButton.LEFT, inputUtils);
-            case "RIGHT_MOUSE":
-                return new MouseCommand(MouseButton.RIGHT, inputUtils);
-            case "CENTER_MOUSE":
-                return new MouseCommand(MouseButton.CENTER, inputUtils);
-            }
-        }
+			switch (key.getKey()) {
+			case "LEFT_MOUSE":
+				return new MouseCommand(MouseButton.LEFT, inputUtils);
+			case "RIGHT_MOUSE":
+				return new MouseCommand(MouseButton.RIGHT, inputUtils);
+			case "CENTER_MOUSE":
+				return new MouseCommand(MouseButton.CENTER, inputUtils);
+			}
+		}
 
-        return new KeyCommand(keys, inputUtils);
-    }
+		return new KeyCommand(keys, inputUtils);
+	}
 
-    private void putPovDirection(final PovDirection povDirection) {
-        if (povDirection != null) {
-            commands.put(povDirection.getIdentifier(),
-                    createCommand(povDirection.getKeys()));
-        }
-    }
+	private void putPovDirection(final PovDirection povDirection) {
+		if (povDirection != null) {
+			commands.put(povDirection.getIdentifier(),
+					createCommand(povDirection.getKeys()));
+		}
+	}
 
-    public ICommand getCommand(final String identifier) {
-        return commands.get(identifier);
-    }
+	public ICommand getCommand(final String identifier) {
+		return commands.get(identifier);
+	}
 }
