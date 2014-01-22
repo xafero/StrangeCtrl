@@ -103,8 +103,7 @@ public class CommandFactory {
 			case "CENTER_MOUSE":
 				return new MouseCommand(MouseButton.CENTER, inputUtils);
 			default:
-				throw new IllegalArgumentException("I don't know this state: ("
-						+ key.getKey() + ")!");
+				// go to the last return
 			}
 		}
 
