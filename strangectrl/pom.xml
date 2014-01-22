@@ -4,7 +4,7 @@
 
 	<groupId>com.xafero</groupId>
 	<artifactId>strangectrl</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.1-alpha</version>
 	<packaging>jar</packaging>
 
 	<name>strangectrl</name>
