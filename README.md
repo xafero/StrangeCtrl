@@ -16,7 +16,7 @@ Just run program and plug in your controller. If you need more help look to Wiki
 
 Configuring keys
 ================================
-Look on Wiki - [Configuring XBox buttons](wiki/Configuring-XBox-buttons)
+Look on Wiki - [Configuring XBox buttons](https://github.com/magx2/StrangeCtrl/wiki/Configuring-XBox-buttons)
 
 License
 =======
