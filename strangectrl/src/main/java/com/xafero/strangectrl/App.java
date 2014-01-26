@@ -48,6 +48,7 @@ public class App implements ControllersRefreshListener, ExitListener {
 	private static final String CFG_FILE = "config.xml";
 	private final static String TIP = "Strange Control";
 	private static final long PERIOD = 10;
+
 	private final ConfigLoader configLoader = new XStreamConfigLoader();
 	private final InputUtils inputUtils;
 	private final GraphicsDevice graphicsDevice;
