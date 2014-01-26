@@ -31,7 +31,7 @@ public class ControllersRefresher {
 
 		if (lastCheckTimestamp + timeToWait < timeStamp
 				|| timesTried.incrementAndGet() >= maxTimesTried) {
-			logger.debug("Getting new controllers from InputUtils");
+			logger.trace("Getting new controllers from InputUtils");
 
 			timesTried.set(0);
 			lastCheckTimestamp = timeStamp;
