@@ -26,3 +26,7 @@ See License.md
 CI
 ==
 [![Build Status](https://travis-ci.org/magx2/StrangeCtrl.png?branch=master)](https://travis-ci.org/magx2/StrangeCtrl)
+
+Sonar
+=====
+http://sonar.grzeslowski.pl/dashboard/index/1
