@@ -42,4 +42,8 @@ public class ControllersRefresher {
 		}
 
 	}
+
+	public void refreshNextTime() {
+		lastCheckTimestamp = 0;
+	}
 }

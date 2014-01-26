@@ -11,15 +11,26 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import com.xafero.strangectrl.App;
+
 public class TrayPopupMenu extends PopupMenu {
 
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
 			.getLogger(TrayPopupMenu.class);
 	private static final long serialVersionUID = 687014251795615363L;
 	private static final String HELP_STRING = "https://github.com/magx2/StrangeCtrl/wiki";
+	private final ControllersRefreshListener refreshListener;
+	private final ExitListener exitListener;
 
-	public TrayPopupMenu() throws HeadlessException {
-		super("StrangeController menu");
+	public static TrayPopupMenu newFromApp(final App app) {
+		return new TrayPopupMenu(app, app);
+	}
+
+	public TrayPopupMenu(final ControllersRefreshListener refreshListener,
+			final ExitListener exitListener) throws HeadlessException {
+		super("Strange Control menu");
+		this.refreshListener = refreshListener;
+		this.exitListener = exitListener;
 		initGui();
 	}
 
@@ -75,13 +86,11 @@ public class TrayPopupMenu extends PopupMenu {
 	}
 
 	private void menuExit() {
-
-		// TODO: remove system exit, use App closing
-		System.exit(0);
+		exitListener.exit();
 	}
 
 	private void menuRefresh() {
-		// TODO: fill this :P
+		refreshListener.refreshControllers();
 	}
 
 	private void menuHelp() {

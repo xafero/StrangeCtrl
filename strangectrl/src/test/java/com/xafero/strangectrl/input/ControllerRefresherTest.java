@@ -59,4 +59,23 @@ public class ControllerRefresherTest {
 		// then
 		verify(inputUtils, times(2)).getControllers(Mockito.any(Type[].class));
 	}
+
+	@Test
+	public void refreshNextTime() throws Exception {
+
+		// given
+		final InputUtils inputUtils = mock(InputUtils.class);
+		final int timeInSecs = 999;
+		final ControllersRefresher refresher = new ControllersRefresher(
+				inputUtils, timeInSecs, 1);
+
+		// when
+		refresher.getController();
+		refresher.getController();
+		refresher.refreshNextTime();
+		refresher.getController();
+
+		// then
+		verify(inputUtils, times(2)).getControllers(Mockito.any(Type[].class));
+	}
 }

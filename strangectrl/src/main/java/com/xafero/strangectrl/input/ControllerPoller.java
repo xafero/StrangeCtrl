@@ -14,7 +14,7 @@ import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
 
 public class ControllerPoller extends TimerTask {
-	private final Collection<Controller> controllers;
+	private final Collection<Controller> controllers = new HashSet<>();
 	private final IControllerCallback callback;
 	private final ControllersRefresher controllersRefresher;
 	private Controller controller;
@@ -22,10 +22,8 @@ public class ControllerPoller extends TimerTask {
 	private final long period;
 	private final Timer daemon = new Timer(true);
 
-	public ControllerPoller(final Collection<Controller> controllers,
-			final IControllerCallback callback,
+	public ControllerPoller(final IControllerCallback callback,
 			final ControllersRefresher controllersRefresher, final long period) {
-		this.controllers = new HashSet<>(checkNotNull(controllers));
 		this.callback = checkNotNull(callback);
 		this.controllersRefresher = checkNotNull(controllersRefresher);
 		checkArgument(period > 0);
@@ -34,10 +32,6 @@ public class ControllerPoller extends TimerTask {
 
 	public void start() {
 		checkState(!started, "Cannot start twice!");
-
-		if (!controllers.isEmpty()) {
-			controller = controllers.iterator().next();
-		}
 
 		started = true;
 		daemon.scheduleAtFixedRate(this, 0, period);
@@ -49,17 +43,19 @@ public class ControllerPoller extends TimerTask {
 
 	@Override
 	public void run() {
-		checkState(started, "Did not start!");
+		synchronized (controllers) {
+			checkState(started, "Did not start!");
 
-		if (canRun()) {
-			if (controller == null) {
-				controller = controllers.iterator().next();
+			if (canRun()) {
+				if (controller == null) {
+					controller = controllers.iterator().next();
+				}
+				runForController();
+			} else {
+
+				// need to refresh controllers
+				refreshControllers();
 			}
-			runForController();
-		} else {
-
-			// need to refresh controllers
-			refreshControllers();
 		}
 	}
 
@@ -67,7 +63,6 @@ public class ControllerPoller extends TimerTask {
 		callback.doPeriodCommands();
 
 		if (controller.poll()) {
-
 			final EventQueue queue = controller.getEventQueue();
 			final Event event = new Event();
 			while (queue.getNextEvent(event)) {
@@ -91,5 +86,12 @@ public class ControllerPoller extends TimerTask {
 		daemon.cancel();
 		daemon.purge();
 		started = false;
+	}
+
+	public void refreshPads() {
+		synchronized (controllers) {
+			controllers.clear();
+			controllersRefresher.refreshNextTime();
+		}
 	}
 }

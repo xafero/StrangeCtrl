@@ -3,7 +3,6 @@ package com.xafero.strangectrl;
 import java.awt.AWTException;
 import java.awt.GraphicsDevice;
 import java.awt.Image;
-import java.awt.PopupMenu;
 import java.awt.Robot;
 import java.awt.SystemTray;
 import java.io.BufferedReader;
@@ -14,11 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-
-import net.java.games.input.Controller;
-import net.java.games.input.Controller.Type;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.LoggerFactory;
@@ -28,7 +23,9 @@ import pl.grzeslowski.strangectrl.config.ConfigLoader;
 import pl.grzeslowski.strangectrl.config.Configuration;
 import pl.grzeslowski.strangectrl.config.XStreamConfigLoader;
 
+import com.xafero.strangectrl.awt.ControllersRefreshListener;
 import com.xafero.strangectrl.awt.DesktopUtils;
+import com.xafero.strangectrl.awt.ExitListener;
 import com.xafero.strangectrl.awt.ResourceUtils;
 import com.xafero.strangectrl.awt.TrayPopupMenu;
 import com.xafero.strangectrl.input.ControllerPoller;
@@ -40,7 +37,7 @@ import com.xafero.strangectrl.input.SimpleCallback;
 /**
  * The main entry point
  */
-public class App {
+public class App implements ControllersRefreshListener, ExitListener {
 	private static final long MAX_WAIT_TIME_TO_REFRESH_CONTROLLERS = 10;
 	private static final org.slf4j.Logger logger = LoggerFactory
 			.getLogger(App.class);
@@ -48,11 +45,13 @@ public class App {
 	private static final String LOG4J_PROPERTIES = "log4j.properties";
 	private static final String TRAY_ICON = "console-controller2.png";
 	private static final String CFG_FILE = "config.xml";
+	private final static String TIP = "Strange Control";
 	private static final long PERIOD = 10;
 	private final ConfigLoader configLoader = new XStreamConfigLoader();
 	private final InputUtils inputUtils;
 	private final GraphicsDevice graphicsDevice;
 	private final Robot robot;
+	private ControllerPoller controllerPoller;
 
 	public App() {
 		AtomicReference<GraphicsDevice> devRef;
@@ -65,34 +64,8 @@ public class App {
 	public static void main(final String[] args) {
 		loadSlf4jProperties();
 
-		final SystemTray tray = SystemTray.getSystemTray();
-		final Image img = loadTrayIconImage();
-		final String tip = "Strange Control";
-
-		final PopupMenu menu = new TrayPopupMenu();
-
-		try {
-			tray.add(DesktopUtils.createTrayIcon(img, tip, menu));
-		} catch (final AWTException e1) {
-			logger.error("Cannot create tray!");
-			throw new RuntimeException(e1);
-		}
-
 		// start app
 		new App().start();
-	}
-
-	private static Image loadTrayIconImage() {
-		try {
-			final InputStream imageStream = App.class
-					.getResourceAsStream(RESOURCES_PATH + TRAY_ICON);
-			final Image loadImage = ResourceUtils.loadImage(imageStream);
-			imageStream.close();
-			return loadImage;
-		} catch (final IOException e) {
-			logger.error("Cannot load tray image!", e);
-			throw new RuntimeException(e);
-		}
 	}
 
 	private static void loadSlf4jProperties() {
@@ -113,21 +86,49 @@ public class App {
 	private void start() {
 		logger.info("Starting!");
 
+		// load tray
+		loadTray();
+
 		// load conf
 		final Configuration configuration = loadConfiguration();
 
-		// get all commands
+		startControllerPoller(configuration);
+	}
+
+	private void startControllerPoller(final Configuration configuration) {
 		final CommandFactory commandFactory = new CommandFactory(inputUtils,
 				configuration);
 
-		final Set<Controller> pads = inputUtils.getControllers(Type.GAMEPAD);
 		final IControllerCallback callback = new SimpleCallback(commandFactory,
 				graphicsDevice);
 		final ControllersRefresher controllersRefresher = new ControllersRefresher(
-				inputUtils, MAX_WAIT_TIME_TO_REFRESH_CONTROLLERS, App.PERIOD);
-		final ControllerPoller poller = new ControllerPoller(pads, callback,
-				controllersRefresher, PERIOD);
-		poller.start();
+				inputUtils, MAX_WAIT_TIME_TO_REFRESH_CONTROLLERS, PERIOD);
+		controllerPoller = new ControllerPoller(callback, controllersRefresher,
+				PERIOD);
+		controllerPoller.start();
+	}
+
+	private void loadTray() {
+		try {
+			final SystemTray tray = SystemTray.getSystemTray();
+			tray.add(DesktopUtils.createTrayIcon(loadTrayIconImage(), TIP,
+					TrayPopupMenu.newFromApp(this)));
+		} catch (final AWTException e1) {
+			logger.error("Cannot create tray!");
+		}
+	}
+
+	private Image loadTrayIconImage() {
+		try {
+			final InputStream imageStream = App.class
+					.getResourceAsStream(RESOURCES_PATH + TRAY_ICON);
+			final Image loadImage = ResourceUtils.loadImage(imageStream);
+			imageStream.close();
+			return loadImage;
+		} catch (final IOException e) {
+			logger.error("Cannot load tray image!", e);
+			throw new RuntimeException(e);
+		}
 	}
 
 	private Configuration loadConfiguration() {
@@ -187,5 +188,17 @@ public class App {
 			}
 		}
 		return readedFile;
+	}
+
+	@Override
+	public void exit() {
+
+		// TODO: remove system exit, use App closing
+		System.exit(0);
+	}
+
+	@Override
+	public void refreshControllers() {
+		controllerPoller.refreshPads();
 	}
 }
