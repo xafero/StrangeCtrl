@@ -6,8 +6,6 @@ import java.awt.Image;
 import java.awt.PopupMenu;
 import java.awt.Robot;
 import java.awt.SystemTray;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +30,7 @@ import pl.grzeslowski.strangectrl.config.XStreamConfigLoader;
 
 import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.awt.ResourceUtils;
+import com.xafero.strangectrl.awt.TrayPopupMenu;
 import com.xafero.strangectrl.input.ControllerPoller;
 import com.xafero.strangectrl.input.ControllersRefresher;
 import com.xafero.strangectrl.input.IControllerCallback;
@@ -71,21 +70,12 @@ public class App {
 		final Image img = loadTrayIconImage();
 		final String tip = "Strange Control";
 
-		final PopupMenu menu = new PopupMenu("test2!");
-		menu.add(EXIT_STR);
-		menu.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				if (e.getActionCommand() == EXIT_STR) {
-					System.exit(0);
-				}
-			}
-		});
+		final PopupMenu menu = new TrayPopupMenu();
 
 		try {
 			tray.add(DesktopUtils.createTrayIcon(img, tip, menu));
 		} catch (final AWTException e1) {
+			logger.error("Cannot create tray!");
 			throw new RuntimeException(e1);
 		}
 
