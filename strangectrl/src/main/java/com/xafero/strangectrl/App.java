@@ -44,7 +44,7 @@ import com.xafero.strangectrl.input.SimpleCallback;
 public class App {
 	private static final org.slf4j.Logger logger = LoggerFactory
 			.getLogger(App.class);
-	private static final String RESOURCES_PATH = "/resources/";
+	private static final String RESOURCES_PATH = "/";
 	private static final String LOG4J_PROPERTIES = "log4j.properties";
 	private static final String TRAY_ICON = "console-controller2.png";
 	private static final String CFG_FILE = "config.xml";

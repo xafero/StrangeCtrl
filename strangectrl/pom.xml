@@ -12,6 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<dependencies.path>jars/</dependencies.path>
 	</properties>
 
 	<dependencies>
@@ -86,10 +87,11 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
+							<classpathPrefix>${dependencies.path}</classpathPrefix>
 							<mainClass>com.xafero.strangectrl.App</mainClass>
 						</manifest>
 						<manifestEntries>
-							<Class-Path>superloader-0.2.jar</Class-Path>
+							<Class-Path>${dependencies.path}superloader-0.2.jar</Class-Path>
 						</manifestEntries>
 					</archive>
 				</configuration>
@@ -98,23 +100,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<configuration>
-					<outputDirectory>
-						${project.build.directory}
-					</outputDirectory>
+					<outputDirectory>${project.build.directory}/${dependencies.path}</outputDirectory>
 				</configuration>
-
 			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.txt</include>
-					<include>**/*.xml</include>
-					<include>**/*.properties</include>
-					<include>**/*.png</include>
-				</includes>
-			</resource>
-		</resources>
 	</build>
 </project>
