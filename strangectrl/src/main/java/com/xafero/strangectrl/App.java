@@ -5,6 +5,7 @@ import java.awt.GraphicsDevice;
 import java.awt.Image;
 import java.awt.Robot;
 import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +53,8 @@ public class App implements ControllersRefreshListener, ExitListener {
 	private final GraphicsDevice graphicsDevice;
 	private final Robot robot;
 	private ControllerPoller controllerPoller;
+	private SystemTray tray;
+	private TrayIcon trayIcon;
 
 	public App() {
 		AtomicReference<GraphicsDevice> devRef;
@@ -110,9 +113,10 @@ public class App implements ControllersRefreshListener, ExitListener {
 
 	private void loadTray() {
 		try {
-			final SystemTray tray = SystemTray.getSystemTray();
-			tray.add(DesktopUtils.createTrayIcon(loadTrayIconImage(), TIP,
-					TrayPopupMenu.newFromApp(this)));
+			tray = SystemTray.getSystemTray();
+			trayIcon = DesktopUtils.createTrayIcon(loadTrayIconImage(), TIP,
+					TrayPopupMenu.newFromApp(this));
+			tray.add(trayIcon);
 		} catch (final AWTException e1) {
 			logger.error("Cannot create tray!");
 		}
@@ -192,9 +196,9 @@ public class App implements ControllersRefreshListener, ExitListener {
 
 	@Override
 	public void exit() {
+		tray.remove(trayIcon);
 
-		// TODO: remove system exit, use App closing
-		System.exit(0);
+		controllerPoller.stop();
 	}
 
 	@Override
