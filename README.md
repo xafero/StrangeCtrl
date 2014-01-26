@@ -18,11 +18,6 @@ Configuring keys
 ================================
 Look on Wiki - [Configuring XBox buttons](https://github.com/magx2/StrangeCtrl/wiki/Configuring-XBox-buttons)
 
-License
-=======
-
-See License.md
-
 CI
 ==
 [![Build Status](https://travis-ci.org/magx2/StrangeCtrl.png?branch=master)](https://travis-ci.org/magx2/StrangeCtrl)
