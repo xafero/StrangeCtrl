@@ -1,14 +1,22 @@
 package com.xafero.strangectrl.awt;
 
+import java.awt.Desktop;
 import java.awt.HeadlessException;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class TrayPopupMenu extends PopupMenu {
 
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
+			.getLogger(TrayPopupMenu.class);
 	private static final long serialVersionUID = 687014251795615363L;
+	private static final String HELP_STRING = "https://github.com/magx2/StrangeCtrl/wiki";
 
 	public TrayPopupMenu() throws HeadlessException {
 		super("StrangeController menu");
@@ -17,8 +25,18 @@ public class TrayPopupMenu extends PopupMenu {
 
 	private void initGui() {
 
+		// refresh
+		initHelp();
+
+		// refresh
+		initRefresh();
+
 		// exit
-		final ActionListener menuItemListener = new ActionListener() {
+		initExit();
+	}
+
+	private void initExit() {
+		final ActionListener exitListener = new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -26,12 +44,56 @@ public class TrayPopupMenu extends PopupMenu {
 			}
 		};
 		final MenuItem exitItem = new MenuItem("Exit");
-		exitItem.addActionListener(menuItemListener);
+		exitItem.addActionListener(exitListener);
 		add(exitItem);
 	}
 
-	protected void menuExit() {
+	private void initRefresh() {
+		final ActionListener refreshListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				menuRefresh();
+			}
+		};
+		final MenuItem refreshItem = new MenuItem("Refresh Controllers");
+		refreshItem.addActionListener(refreshListener);
+		add(refreshItem);
+	}
+
+	private void initHelp() {
+		final ActionListener helpListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				menuHelp();
+			}
+		};
+		final MenuItem helpItem = new MenuItem("Help");
+		helpItem.addActionListener(helpListener);
+		add(helpItem);
+	}
+
+	private void menuExit() {
+
+		// TODO: remove system exit, use App closing
 		System.exit(0);
 	}
 
+	private void menuRefresh() {
+		// TODO: fill this :P
+	}
+
+	private void menuHelp() {
+		try {
+			Desktop.getDesktop().browse(new URL(HELP_STRING).toURI());
+		} catch (final MalformedURLException e) {
+			logger.warn("This error should never happen!", e);
+		} catch (final IOException e) {
+			logger.error("Cannot open help link!", e);
+		} catch (final URISyntaxException e) {
+			logger.warn("This error should never happen!", e);
+		}
+
+	}
 }
