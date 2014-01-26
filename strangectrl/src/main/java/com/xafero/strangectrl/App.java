@@ -42,6 +42,7 @@ import com.xafero.strangectrl.input.SimpleCallback;
  * The main entry point
  */
 public class App {
+	private static final long MAX_WAIT_TIME_TO_REFRESH_CONTROLLERS = 10;
 	private static final org.slf4j.Logger logger = LoggerFactory
 			.getLogger(App.class);
 	private static final String RESOURCES_PATH = "/";
@@ -133,7 +134,7 @@ public class App {
 		final IControllerCallback callback = new SimpleCallback(commandFactory,
 				graphicsDevice);
 		final ControllersRefresher controllersRefresher = new ControllersRefresher(
-				inputUtils);
+				inputUtils, MAX_WAIT_TIME_TO_REFRESH_CONTROLLERS, App.PERIOD);
 		final ControllerPoller poller = new ControllerPoller(pads, callback,
 				controllersRefresher, PERIOD);
 		poller.start();

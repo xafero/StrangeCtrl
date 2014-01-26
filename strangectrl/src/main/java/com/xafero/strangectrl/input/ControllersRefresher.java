@@ -12,17 +12,19 @@ import net.java.games.input.Controller.Type;
 public class ControllersRefresher {
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
 			.getLogger(ControllersRefresher.class);
-	private static final long MAX_TIMES_DELAY = 1000;
 	private final InputUtils inputUtils;
 	private final AtomicLong timesTried = new AtomicLong(0);
+	private final long maxTimesTried;
 
-	public ControllersRefresher(final InputUtils inputUtils) {
+	public ControllersRefresher(final InputUtils inputUtils,
+			final long timeInSecs, final long delayInMillis) {
 		this.inputUtils = checkNotNull(inputUtils);
+		maxTimesTried = timeInSecs * 1000 / delayInMillis;
 	}
 
 	public Set<Controller> getController() {
-		if (timesTried.incrementAndGet() >= MAX_TIMES_DELAY) {
-			logger.info("Getting new controllers from InputUtils");
+		if (timesTried.incrementAndGet() >= maxTimesTried) {
+			logger.debug("Getting new controllers from InputUtils");
 
 			timesTried.set(0);
 			return inputUtils.getControllers(Type.GAMEPAD);
