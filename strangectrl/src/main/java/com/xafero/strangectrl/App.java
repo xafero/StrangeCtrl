@@ -116,7 +116,8 @@ public class App {
 
 			configStream.close();
 		} catch (final IOException e) {
-			throw new RuntimeException(e);
+			logger.error("Cannot load path for SL4J! Path = {%s}",
+					RESOURCES_PATH + LOG4J_PROPERTIES);
 		}
 	}
 
