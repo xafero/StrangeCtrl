@@ -1,7 +1,6 @@
 package com.xafero.strangectrl.awt;
 
 import java.awt.Desktop;
-import java.awt.HeadlessException;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
@@ -20,7 +19,7 @@ public class TrayPopupMenu extends PopupMenu {
 	private final ExitListener exitListener;
 
 	public TrayPopupMenu(final ControllersRefreshListener refreshListener,
-			final ExitListener exitListener) throws HeadlessException {
+			final ExitListener exitListener) {
 		super("Strange Control menu");
 		this.refreshListener = refreshListener;
 		this.exitListener = exitListener;
