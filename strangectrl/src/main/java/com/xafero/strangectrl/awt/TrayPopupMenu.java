@@ -18,7 +18,7 @@ public class TrayPopupMenu extends PopupMenu {
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
 			.getLogger(TrayPopupMenu.class);
 	private static final long serialVersionUID = 687014251795615363L;
-	private static final String HELP_STRING = "https://github.com/magx2/StrangeCtrl/wiki";
+	private static final String HELP_URL = "https://github.com/magx2/StrangeCtrl/wiki";
 	private final ControllersRefreshListener refreshListener;
 	private final ExitListener exitListener;
 
@@ -95,7 +95,7 @@ public class TrayPopupMenu extends PopupMenu {
 
 	private void menuHelp() {
 		try {
-			Desktop.getDesktop().browse(new URL(HELP_STRING).toURI());
+			Desktop.getDesktop().browse(new URL(HELP_URL).toURI());
 		} catch (final MalformedURLException e) {
 			logger.warn("This error should never happen!", e);
 		} catch (final IOException e) {
