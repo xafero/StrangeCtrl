@@ -21,7 +21,7 @@ public class Setup {
 		return DEFAULT;
 	}
 
-	public Setup() {
+	private Setup() {
 		// for XStreamConfigLoader
 	}
 
