@@ -17,6 +17,8 @@ import com.google.common.base.Objects;
 import com.xafero.strangectrl.cmd.ICommand;
 
 public class SimpleCallback implements IControllerCallback {
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
+			.getLogger(SimpleCallback.class);
 	private static final String RELEASE_POV = "RELEASE_POV";
 	private final CommandFactory commandFactory;
 	private final GraphicsDevice graphicsDevice;
@@ -183,6 +185,7 @@ public class SimpleCallback implements IControllerCallback {
 			return RELEASE_POV;
 		}
 
+		logger.error("Cannot find this value in POV : " + value);
 		throw new RuntimeException("Cannot find this value in POV : " + value);
 	}
 

@@ -163,8 +163,10 @@ public class App implements ControllersRefreshListener, ExitListener {
 			return configLoader.loadXml(readedFile);
 
 		} catch (final IOException e) {
+			logger.error("Cannot load configuration!", e);
 			throw new RuntimeException(e);
 		} catch (final URISyntaxException e1) {
+			logger.error("Cannot load configuration!", e1);
 			throw new RuntimeException(e1);
 		}
 	}

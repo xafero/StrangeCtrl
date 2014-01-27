@@ -7,6 +7,9 @@ import java.util.Map;
 
 public class ConfigUtils {
 
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
+			.getLogger(ConfigUtils.class);
+
 	private ConfigUtils() {
 	}
 
@@ -21,6 +24,7 @@ public class ConfigUtils {
 			try {
 				keyMap.put(shortName.toLowerCase(), keyField.getInt(null));
 			} catch (final Exception e) {
+				logger.error("Cannot build key map!", e);
 				throw new RuntimeException("buildKeyMap", e);
 			}
 		}
