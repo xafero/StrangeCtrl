@@ -11,20 +11,13 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import com.xafero.strangectrl.App;
-
 public class TrayPopupMenu extends PopupMenu {
-
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
 			.getLogger(TrayPopupMenu.class);
 	private static final long serialVersionUID = 687014251795615363L;
 	private static final String HELP_URL = "https://github.com/magx2/StrangeCtrl/wiki";
 	private final ControllersRefreshListener refreshListener;
 	private final ExitListener exitListener;
-
-	public static TrayPopupMenu newFromApp(final App app) {
-		return new TrayPopupMenu(app, app);
-	}
 
 	public TrayPopupMenu(final ControllersRefreshListener refreshListener,
 			final ExitListener exitListener) throws HeadlessException {
@@ -103,6 +96,5 @@ public class TrayPopupMenu extends PopupMenu {
 		} catch (final URISyntaxException e) {
 			logger.warn("This error should never happen!", e);
 		}
-
 	}
 }

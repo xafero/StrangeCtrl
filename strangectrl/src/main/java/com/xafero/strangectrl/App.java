@@ -116,7 +116,7 @@ public class App implements ControllersRefreshListener, ExitListener {
 		try {
 			tray = SystemTray.getSystemTray();
 			trayIcon = DesktopUtils.createTrayIcon(loadTrayIconImage(), TIP,
-					TrayPopupMenu.newFromApp(this));
+					new TrayPopupMenu(this, this));
 			tray.add(trayIcon);
 		} catch (final AWTException e1) {
 			logger.error("Cannot create tray!");
