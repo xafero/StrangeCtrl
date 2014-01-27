@@ -182,4 +182,69 @@ public class XStreamConfigLoaderTest {
 		// then
 		assertThat(loadXml).isEqualTo(expected);
 	}
+
+	@Test
+	public void load_setup() throws Exception {
+
+		// given
+		final XStreamConfigLoader loader = new XStreamConfigLoader();
+
+		final String xml = "<configuration>" + "<setup>"
+				+ "<maxMouseMove>10</maxMouseMove>"
+				+ "<timeRefresher>100</timeRefresher>"
+				+ "<checkNewControllersDelay>500</checkNewControllersDelay>"
+				+ "<scrollLines>2</scrollLines>" + "</setup>"
+				+ "</configuration>";
+
+		// expected
+		final Setup setup = new Setup(10, 100, 500, 2);
+		final Configuration expected = new Configuration(setup);
+
+		// when
+		final Configuration loadXml = loader.loadXml(xml);
+
+		// then
+		assertThat(loadXml).isEqualTo(expected);
+	}
+
+	@Test
+	public void load_default_setup() throws Exception {
+
+		// given
+		final XStreamConfigLoader loader = new XStreamConfigLoader();
+
+		final String xml = "<configuration></configuration>";
+
+		// expected
+		final Setup setup = Setup.getDefaultSetup();
+		final Configuration expected = new Configuration(setup);
+
+		// when
+		final Configuration loadXml = loader.loadXml(xml);
+
+		// then
+		assertThat(loadXml).isEqualTo(expected);
+	}
+
+	@Test
+	public void load_only_part_setup() throws Exception {
+
+		// given
+		final XStreamConfigLoader loader = new XStreamConfigLoader();
+
+		final String xml = "<configuration>" + "<setup>"
+				+ "<checkNewControllersDelay>500</checkNewControllersDelay>"
+				+ "<scrollLines>2</scrollLines>" + "</setup>"
+				+ "</configuration>";
+
+		// expected
+		final Setup setup = new Setup(15, 10, 500, 2);
+		final Configuration expected = new Configuration(setup);
+
+		// when
+		final Configuration loadXml = loader.loadXml(xml);
+
+		// then
+		assertThat(loadXml).isEqualTo(expected);
+	}
 }
