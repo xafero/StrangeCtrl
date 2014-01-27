@@ -52,14 +52,13 @@ public class App implements ControllersRefreshListener, ExitListener {
 	private final ConfigLoader configLoader = new XStreamConfigLoader();
 	private final InputUtils inputUtils;
 	private final GraphicsDevice graphicsDevice;
-	private final Robot robot;
 	private ControllerPoller controllerPoller;
 	private SystemTray tray;
 	private TrayIcon trayIcon;
 
 	public App() {
 		AtomicReference<GraphicsDevice> devRef;
-		robot = DesktopUtils
+		final Robot robot = DesktopUtils
 				.createRobot(devRef = new AtomicReference<GraphicsDevice>());
 		graphicsDevice = devRef.get();
 		inputUtils = new InputUtils(robot);
