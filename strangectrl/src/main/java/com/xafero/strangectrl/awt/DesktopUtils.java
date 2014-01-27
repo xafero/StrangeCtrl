@@ -14,6 +14,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class DesktopUtils {
 
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
+			.getLogger(DesktopUtils.class);
+
 	public static GraphicsDevice getMouseScreen() {
 		return MouseInfo.getPointerInfo().getDevice();
 	}
@@ -47,6 +50,7 @@ public class DesktopUtils {
 		try {
 			return new Robot(device);
 		} catch (final AWTException e) {
+			logger.error("Cannot create robot!", e);
 			throw new RuntimeException("createRobot", e);
 		}
 	}
