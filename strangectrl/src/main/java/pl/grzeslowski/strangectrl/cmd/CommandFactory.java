@@ -15,6 +15,7 @@ import pl.grzeslowski.strangectrl.config.NorthPov;
 import pl.grzeslowski.strangectrl.config.NorthWestPov;
 import pl.grzeslowski.strangectrl.config.Pov;
 import pl.grzeslowski.strangectrl.config.PovDirection;
+import pl.grzeslowski.strangectrl.config.Setup;
 import pl.grzeslowski.strangectrl.config.SouthEastPov;
 import pl.grzeslowski.strangectrl.config.SouthPov;
 import pl.grzeslowski.strangectrl.config.SouthWestPov;
@@ -27,8 +28,6 @@ import com.xafero.strangectrl.input.InputUtils.MouseButton;
 
 public class CommandFactory {
 	private final static double DELTA_FOR_MOUSE_MOVE = 0.2;
-	public final static int MAX_MOUSE_MOVE = 5;
-	private final static int MAX_WHEEL_MOVE = 1;
 
 	private final InputUtils inputUtils;
 	private final Map<String, ICommand> commands = new HashMap<>();
@@ -37,7 +36,7 @@ public class CommandFactory {
 			final Configuration configuration) {
 		this.inputUtils = checkNotNull(inputUtils);
 		loadCommands(checkNotNull(configuration));
-		loadAnalogCommands();
+		loadAnalogCommands(configuration.getSetup());
 	}
 
 	private void loadCommands(final Configuration configuration) {
@@ -74,20 +73,22 @@ public class CommandFactory {
 		}
 	}
 
-	private void loadAnalogCommands() {
+	private void loadAnalogCommands(final Setup setup) {
 
 		// moving mouse
 		final DesktopUtils desktopUtils = new DesktopUtils();
 		final MouseMoveCommand mouseMoveXCommand = new MouseMoveXCommand(
-				inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE, desktopUtils);
+				inputUtils, setup.getMaxMouseMove(), DELTA_FOR_MOUSE_MOVE,
+				desktopUtils);
 		final MouseMoveCommand mouseMoveYCommand = new MouseMoveYCommand(
-				inputUtils, MAX_MOUSE_MOVE, DELTA_FOR_MOUSE_MOVE, desktopUtils);
+				inputUtils, setup.getMaxMouseMove(), DELTA_FOR_MOUSE_MOVE,
+				desktopUtils);
 		commands.put("x", mouseMoveXCommand);
 		commands.put("y", mouseMoveYCommand);
 
 		// mouse wheel
 		final MouseWheelCommand mouseWheelCommand = new MouseWheelCommand(
-				inputUtils, MAX_WHEEL_MOVE, 0.99);
+				inputUtils, setup.getScrollLines(), 0.99);
 		commands.put("ry", mouseWheelCommand);
 	}
 
