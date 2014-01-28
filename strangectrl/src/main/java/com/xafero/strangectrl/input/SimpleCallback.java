@@ -48,7 +48,11 @@ public class SimpleCallback implements IControllerCallback {
 			double value = event.getValue();
 
 			if ("pov".equalsIgnoreCase(identifier)) {
-				value = value == 0.0 ? 0.0 : 1.0;
+				if (value == 0.0) {
+					value = 0.0;
+				} else {
+					value = 1.0;
+				}
 				lastPovCommand = command;
 			}
 
