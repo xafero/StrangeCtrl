@@ -165,7 +165,9 @@ public class SimpleCallback implements IControllerCallback {
 	}
 
 	private String findPov(final double value) {
-		if (value == 0.25) {
+		if (value == 0.125) {
+			return "NWP";
+		} else if (value == 0.25) {
 			return "NP";
 		} else if (value == 0.375) {
 			return "NEP";
@@ -179,8 +181,6 @@ public class SimpleCallback implements IControllerCallback {
 			return "SWP";
 		} else if (value == 1) {
 			return "WP";
-		} else if (value == 0.125) {
-			return "NWP";
 		} else if (value == 0) {
 			return RELEASE_POV;
 		}
