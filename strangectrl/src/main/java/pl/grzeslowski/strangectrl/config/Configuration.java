@@ -35,12 +35,12 @@ public class Configuration {
 		return pov;
 	}
 
-	public void setPov(final Pov pov) {
-		this.pov = pov;
-	}
-
 	public List<Button> getButtons() {
 		return buttons;
+	}
+
+	public Setup getSetup() {
+		return setup;
 	}
 
 	@Override
