@@ -48,11 +48,7 @@ public class SimpleCallback implements IControllerCallback {
 			double value = event.getValue();
 
 			if ("pov".equalsIgnoreCase(identifier)) {
-				if (value == 0.0) {
-					value = 0.0;
-				} else {
-					value = 1.0;
-				}
+				value = 1.0;
 				lastPovCommand = command;
 			}
 
@@ -70,7 +66,7 @@ public class SimpleCallback implements IControllerCallback {
 			} else {
 				if (value != 0.0) {
 					commandsInExecution
-					.add(new CommandLastValue(value, command));
+							.add(new CommandLastValue(value, command));
 				} else {
 					synchronized (commandsInExecution) {
 						for (final Iterator<CommandLastValue> it = commandsInExecution
