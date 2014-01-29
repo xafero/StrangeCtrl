@@ -35,19 +35,17 @@ public class SimpleCallback implements IControllerCallback {
 	public synchronized void onNewEvent(final Event event) {
 		checkNotNull(event);
 
+		final double value = event.getValue();
 		final Component component = event.getComponent();
 		final String identifier = component.getIdentifier().getName();
-		final double value = event.getValue();
+
 		final ICommand command = commandFactory.getCommand(identifier, value);
-
 		if (command != null) {
-
 			if (!command.isPeriodCommand()) {
 				onNormalCommandEvent(value, command);
 			} else {
 				onPeriodCommandEvent(value, command);
 			}
-
 		}
 
 		povSupport(identifier, command);
@@ -146,7 +144,6 @@ public class SimpleCallback implements IControllerCallback {
 				final CommandLastValue next = it.next();
 
 				if (next.command.equals(command)) {
-					turnOffCommand(command);
 					it.remove();
 					break;
 				}
