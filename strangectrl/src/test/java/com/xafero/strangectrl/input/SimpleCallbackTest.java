@@ -105,7 +105,7 @@ public class SimpleCallbackTest {
 		callback.onNewEvent(event);
 
 		// then
-		verify(command).execute(graphicsDevice, 1.0);
+		verify(command).execute(graphicsDevice, 0.25);
 	}
 
 	@Ignore
@@ -441,10 +441,10 @@ public class SimpleCallbackTest {
 		// given
 		final CommandFactory commandFactory = mock(CommandFactory.class);
 		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
-				.thenReturn(
+		.thenReturn(
 				command);
 		when(commandFactory.getCommand(Mockito.eq("y"), Mockito.anyDouble()))
-				.thenReturn(
+		.thenReturn(
 				commandSecondUse);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);

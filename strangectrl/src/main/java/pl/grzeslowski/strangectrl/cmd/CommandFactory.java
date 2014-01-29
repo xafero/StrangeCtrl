@@ -123,10 +123,29 @@ public class CommandFactory {
 		return new KeyCommand(keys, inputUtils);
 	}
 
+	private ICommand createPovCommand(final List<Key> keys) {
+		if (keys.size() == 1) {
+			final Key key = keys.get(0);
+
+			switch (key.getKey()) {
+			case "LEFT_MOUSE":
+				return new MouseCommand(MouseButton.LEFT, inputUtils);
+			case "RIGHT_MOUSE":
+				return new MouseCommand(MouseButton.RIGHT, inputUtils);
+			case "CENTER_MOUSE":
+				return new MouseCommand(MouseButton.CENTER, inputUtils);
+			default:
+				// go to the last return
+			}
+		}
+
+		return new PovKeyCommand(keys, inputUtils);
+	}
+
 	private void putPovDirection(final PovDirection povDirection) {
 		if (povDirection != null) {
 			commands.put(povDirection.getIdentifier(),
-					createCommand(povDirection.getKeys()));
+					createPovCommand(povDirection.getKeys()));
 		}
 	}
 

@@ -19,7 +19,6 @@ import com.xafero.strangectrl.cmd.ICommand;
 public class SimpleCallback implements IControllerCallback {
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
 			.getLogger(SimpleCallback.class);
-	private static final String RELEASE_POV = "RELEASE_POV";
 	private final CommandFactory commandFactory;
 	private final GraphicsDevice graphicsDevice;
 	private final Set<CommandLastValue> periodExecutionCommands = Collections
@@ -40,12 +39,11 @@ public class SimpleCallback implements IControllerCallback {
 
 		final Component component = event.getComponent();
 		final String identifier = component.getIdentifier().getName();
-		double value = event.getValue();
+		final double value = event.getValue();
 		final ICommand command = commandFactory.getCommand(identifier, value);
 
 		if (command != null) {
 			if ("pov".equalsIgnoreCase(identifier)) {
-				value = 1.0;
 				lastPovCommand = command;
 			}
 
@@ -155,12 +153,5 @@ public class SimpleCallback implements IControllerCallback {
 				return false;
 			}
 		}
-
-		@Override
-		public String toString() {
-			return "CommandLastValue [value=" + value + ", command="
-					+ command.getClass().getSimpleName() + "]";
-		}
-
 	}
 }

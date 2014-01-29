@@ -93,7 +93,7 @@ public class SimpleCallbackPovTest {
 
 		// then
 		final ICommand commandToUse = commandFactory.getCommand("pov", value);
-		verify(commandToUse).execute(graphicsDevice, 1.0);
+		verify(commandToUse).execute(graphicsDevice, value);
 		verify(commandToUse).execute(graphicsDevice, 0.0);
 
 		commands.remove(commandToUse);
