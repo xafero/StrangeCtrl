@@ -3,8 +3,10 @@ package pl.grzeslowski.strangectrl.cmd;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pl.grzeslowski.strangectrl.config.Button;
 import pl.grzeslowski.strangectrl.config.Configuration;
@@ -21,6 +23,7 @@ import pl.grzeslowski.strangectrl.config.SouthPov;
 import pl.grzeslowski.strangectrl.config.SouthWestPov;
 import pl.grzeslowski.strangectrl.config.WestPov;
 
+import com.google.common.collect.Sets;
 import com.xafero.strangectrl.awt.DesktopUtils;
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
@@ -31,12 +34,21 @@ public class CommandFactory {
 
 	private final InputUtils inputUtils;
 	private final Map<String, ICommand> commands = new HashMap<>();
+	private final Set<CommandNameMapper> mappers;
+
+	public CommandFactory(final InputUtils inputUtils,
+			final Configuration configuration,
+			final Set<? extends CommandNameMapper> mappers) {
+		this.inputUtils = checkNotNull(inputUtils);
+		this.mappers = new HashSet<CommandNameMapper>(checkNotNull(mappers));
+
+		loadCommands(checkNotNull(configuration));
+		loadAnalogCommands(configuration.getSetup());
+	}
 
 	public CommandFactory(final InputUtils inputUtils,
 			final Configuration configuration) {
-		this.inputUtils = checkNotNull(inputUtils);
-		loadCommands(checkNotNull(configuration));
-		loadAnalogCommands(configuration.getSetup());
+		this(inputUtils, configuration, Sets.newHashSet(new XboxNameMapper()));
 	}
 
 	private void loadCommands(final Configuration configuration) {
@@ -118,7 +130,29 @@ public class CommandFactory {
 		}
 	}
 
-	public ICommand getCommand(final String identifier) {
-		return commands.get(identifier);
+	public ICommand getCommand(final String identifier, final double value) {
+		final ICommand iCommand = commands.get(identifier);
+		if (iCommand != null) {
+			return iCommand;
+		} else {
+			return getCommandFromMappers(identifier, value);
+		}
+	}
+
+	private ICommand getCommandFromMappers(final String identifier,
+			final double value) {
+		for (final CommandNameMapper mapper : mappers) {
+			if (mapper.canMap(identifier, value)) {
+				final String mappedIdentifier = mapper.map(identifier, value);
+
+				final ICommand command = getCommand(mappedIdentifier, value);
+				if (command != null) {
+					return command;
+				}
+			}
+		}
+
+		// could not map anything
+		return null;
 	}
 }

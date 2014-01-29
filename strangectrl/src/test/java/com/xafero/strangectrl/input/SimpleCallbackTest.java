@@ -13,6 +13,7 @@ import net.java.games.input.Event;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import pl.grzeslowski.strangectrl.cmd.CommandFactory;
 
@@ -26,7 +27,9 @@ public class SimpleCallbackTest {
 		// given
 		final ICommand command = mock(ICommand.class);
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -54,7 +57,9 @@ public class SimpleCallbackTest {
 		when(command.isPeriodCommand()).thenReturn(true);
 
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -80,7 +85,7 @@ public class SimpleCallbackTest {
 		// given
 		final ICommand command = mock(ICommand.class);
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("NP")).thenReturn(command);
+		when(commandFactory.getCommand("pov", 0.25)).thenReturn(command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -114,7 +119,7 @@ public class SimpleCallbackTest {
 		when(command.isPeriodCommand()).thenReturn(true);
 
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("NP")).thenReturn(command);
+		when(commandFactory.getCommand("pov", 0.25)).thenReturn(command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -152,7 +157,9 @@ public class SimpleCallbackTest {
 		when(command.isPeriodCommand()).thenReturn(true);
 
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -182,7 +189,9 @@ public class SimpleCallbackTest {
 		when(command.isPeriodCommand()).thenReturn(true);
 
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -220,7 +229,9 @@ public class SimpleCallbackTest {
 		when(command.isPeriodCommand()).thenReturn(true);
 
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -251,7 +262,9 @@ public class SimpleCallbackTest {
 		// given
 		final ICommand command = mock(ICommand.class);
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -277,7 +290,9 @@ public class SimpleCallbackTest {
 		// given
 		final ICommand command = mock(ICommand.class);
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -304,7 +319,9 @@ public class SimpleCallbackTest {
 		// given
 		final ICommand command = mock(ICommand.class);
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -337,7 +354,9 @@ public class SimpleCallbackTest {
 		when(command.isPeriodCommand()).thenReturn(true);
 
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -369,7 +388,9 @@ public class SimpleCallbackTest {
 		when(command.isPeriodCommand()).thenReturn(false);
 
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -419,8 +440,12 @@ public class SimpleCallbackTest {
 
 		// given
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
-		when(commandFactory.getCommand("y")).thenReturn(commandSecondUse);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+				.thenReturn(
+				command);
+		when(commandFactory.getCommand(Mockito.eq("y"), Mockito.anyDouble()))
+				.thenReturn(
+				commandSecondUse);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,
@@ -473,8 +498,12 @@ public class SimpleCallbackTest {
 
 		// given
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("x")).thenReturn(command);
-		when(commandFactory.getCommand("y")).thenReturn(commandSecondUse);
+		when(commandFactory.getCommand(Mockito.eq("x"), Mockito.anyDouble()))
+		.thenReturn(
+				command);
+		when(commandFactory.getCommand(Mockito.eq("y"), Mockito.anyDouble()))
+		.thenReturn(
+				commandSecondUse);
 
 		final GraphicsDevice graphicsDevice = mock(GraphicsDevice.class);
 		final SimpleCallback callback = new SimpleCallback(commandFactory,

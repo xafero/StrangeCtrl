@@ -52,7 +52,7 @@ public class CommandFactoryTest {
 				configuration);
 
 		// then
-		final ICommand keyCommand = commandFactory.getCommand("A");
+		final ICommand keyCommand = commandFactory.getCommand("A", 0.0);
 
 		assertThat(keyCommand).isEqualTo(expected);
 	}
@@ -81,8 +81,8 @@ public class CommandFactoryTest {
 				configuration);
 
 		// then
-		final ICommand keyCommand1 = commandFactory.getCommand("A");
-		final ICommand keyCommand2 = commandFactory.getCommand("C");
+		final ICommand keyCommand1 = commandFactory.getCommand("A", 0.0);
+		final ICommand keyCommand2 = commandFactory.getCommand("C", 0.0);
 
 		assertThat(keyCommand1).isEqualTo(expected1);
 		assertThat(keyCommand2).isEqualTo(expected2);
@@ -124,13 +124,13 @@ public class CommandFactoryTest {
 
 		// then
 		final ICommand keyCommandN = commandFactory.getCommand(n
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandS = commandFactory.getCommand(s
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandE = commandFactory.getCommand(e
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandW = commandFactory.getCommand(w
-				.getIdentifier());
+.getIdentifier(), 0.0);
 
 		assertThat(keyCommandN).isEqualTo(nExpected);
 		assertThat(keyCommandS).isEqualTo(sExpected);
@@ -193,21 +193,21 @@ public class CommandFactoryTest {
 		// then
 
 		final ICommand keyCommandN = commandFactory.getCommand(n
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandS = commandFactory.getCommand(s
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandE = commandFactory.getCommand(e
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandW = commandFactory.getCommand(w
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandNE = commandFactory.getCommand(ne
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandNW = commandFactory.getCommand(nw
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandSE = commandFactory.getCommand(se
-				.getIdentifier());
+.getIdentifier(), 0.0);
 		final ICommand keyCommandSW = commandFactory.getCommand(sw
-				.getIdentifier());
+.getIdentifier(), 0.0);
 
 		assertThat(keyCommandN).isEqualTo(nExpected);
 		assertThat(keyCommandS).isEqualTo(sExpected);
@@ -238,7 +238,7 @@ public class CommandFactoryTest {
 				configuration);
 
 		// then
-		final ICommand command = commandFactory.getCommand("A");
+		final ICommand command = commandFactory.getCommand("A", 0.0);
 		assertThat(command).isEqualTo(expected);
 	}
 }

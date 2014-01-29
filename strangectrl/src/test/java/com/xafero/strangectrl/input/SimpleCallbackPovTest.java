@@ -59,14 +59,14 @@ public class SimpleCallbackPovTest {
 		final ICommand cWp = mock(ICommand.class);
 
 		final CommandFactory commandFactory = mock(CommandFactory.class);
-		when(commandFactory.getCommand("NWP")).thenReturn(cNwp);
-		when(commandFactory.getCommand("NP")).thenReturn(cNp);
-		when(commandFactory.getCommand("NEP")).thenReturn(cNep);
-		when(commandFactory.getCommand("EP")).thenReturn(cEp);
-		when(commandFactory.getCommand("SEP")).thenReturn(cSep);
-		when(commandFactory.getCommand("SP")).thenReturn(cSp);
-		when(commandFactory.getCommand("SWP")).thenReturn(cSwp);
-		when(commandFactory.getCommand("WP")).thenReturn(cWp);
+		when(commandFactory.getCommand("pov", 0.125)).thenReturn(cNwp);
+		when(commandFactory.getCommand("pov", 0.25)).thenReturn(cNp);
+		when(commandFactory.getCommand("pov", 0.375)).thenReturn(cNep);
+		when(commandFactory.getCommand("pov", 0.5)).thenReturn(cEp);
+		when(commandFactory.getCommand("pov", 0.625)).thenReturn(cSep);
+		when(commandFactory.getCommand("pov", 0.75)).thenReturn(cSp);
+		when(commandFactory.getCommand("pov", 0.875)).thenReturn(cSwp);
+		when(commandFactory.getCommand("pov", 1.0)).thenReturn(cWp);
 
 		final Set<ICommand> commands = Sets.newHashSet(cNwp, cNp, cNep, cEp,
 				cSep, cSp, cSwp, cWp);
@@ -92,7 +92,7 @@ public class SimpleCallbackPovTest {
 		callback.onNewEvent(eventRelease);
 
 		// then
-		final ICommand commandToUse = commandFactory.getCommand(commandName);
+		final ICommand commandToUse = commandFactory.getCommand("pov", value);
 		verify(commandToUse).execute(graphicsDevice, 1.0);
 		verify(commandToUse).execute(graphicsDevice, 0.0);
 

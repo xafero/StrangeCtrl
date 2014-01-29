@@ -40,13 +40,10 @@ public class SimpleCallback implements IControllerCallback {
 
 		final Component component = event.getComponent();
 		final String identifier = component.getIdentifier().getName();
+		double value = event.getValue();
+		final ICommand command = commandFactory.getCommand(identifier, value);
 
-		final String configName = transformIdentifier(identifier,
-				event.getValue());
-		final ICommand command = commandFactory.getCommand(configName);
 		if (command != null) {
-			double value = event.getValue();
-
 			if ("pov".equalsIgnoreCase(identifier)) {
 				value = 1.0;
 				lastPovCommand = command;
@@ -66,7 +63,7 @@ public class SimpleCallback implements IControllerCallback {
 			} else {
 				if (value != 0.0) {
 					commandsInExecution
-							.add(new CommandLastValue(value, command));
+					.add(new CommandLastValue(value, command));
 				} else {
 					synchronized (commandsInExecution) {
 						for (final Iterator<CommandLastValue> it = commandsInExecution
@@ -82,7 +79,7 @@ public class SimpleCallback implements IControllerCallback {
 				}
 			}
 
-		} else if (RELEASE_POV.equalsIgnoreCase(configName)) {
+		} else if ("pov".equalsIgnoreCase(identifier) && value == 0.0) {
 			if (lastPovCommand.isPeriodCommand()) {
 				removeCommand(lastPovCommand);
 			} else {
@@ -132,61 +129,6 @@ public class SimpleCallback implements IControllerCallback {
 				}
 			}
 		}
-	}
-
-	private String transformIdentifier(final String identifier,
-			final float value) {
-		switch (identifier) {
-		case "0":
-			return "A";
-		case "1":
-			return "B";
-		case "2":
-			return "X";
-		case "3":
-			return "Y";
-		case "4":
-			return "LB";
-		case "5":
-			return "RB";
-		case "6":
-			return "BACK";
-		case "7":
-			return "START";
-		case "8":
-			return "LS";
-		case "9":
-			return "RS";
-		case "pov":
-			return findPov(value);
-		default:
-			return identifier;
-		}
-	}
-
-	private String findPov(final double value) {
-		if (value == 0.125) {
-			return "NWP";
-		} else if (value == 0.25) {
-			return "NP";
-		} else if (value == 0.375) {
-			return "NEP";
-		} else if (value == 0.5) {
-			return "EP";
-		} else if (value == 0.625) {
-			return "SEP";
-		} else if (value == 0.75) {
-			return "SP";
-		} else if (value == 0.875) {
-			return "SWP";
-		} else if (value == 1) {
-			return "WP";
-		} else if (value == 0) {
-			return RELEASE_POV;
-		}
-
-		logger.error("Cannot find this value in POV : " + value);
-		throw new RuntimeException("Cannot find this value in POV : " + value);
 	}
 
 	private class CommandLastValue {
