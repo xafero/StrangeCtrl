@@ -17,8 +17,6 @@ import com.google.common.base.Objects;
 import com.xafero.strangectrl.cmd.ICommand;
 
 public class SimpleCallback implements IControllerCallback {
-	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
-			.getLogger(SimpleCallback.class);
 	private final CommandFactory commandFactory;
 	private final GraphicsDevice graphicsDevice;
 	private final Set<CommandLastValue> periodExecutionCommands = Collections
