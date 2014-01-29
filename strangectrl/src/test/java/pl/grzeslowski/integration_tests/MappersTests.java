@@ -28,8 +28,7 @@ public class MappersTests {
 
 		final InputUtils inputUtils = mock(InputUtils.class);
 
-		final CommandFactory factory = new CommandFactory(
-				inputUtils,
+		final CommandFactory factory = new CommandFactory(inputUtils,
 				configuration);
 
 		// when
