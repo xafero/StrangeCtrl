@@ -43,37 +43,27 @@ public class SimpleCallback implements IControllerCallback {
 		final ICommand command = commandFactory.getCommand(identifier, value);
 
 		if (command != null) {
-			if ("pov".equalsIgnoreCase(identifier)) {
-				lastPovCommand = command;
-			}
 
-			if (command.isPeriodCommand()) {
-
-				// execute period command
-				command.executePeriodCommand(graphicsDevice, value);
-
-				// add period command
-				removePeriodCommand(command);
-
-				if (value != 0.0) {
-					periodExecutionCommands.add(new CommandLastValue(value,
-							command));
-				}
+			if (!command.isPeriodCommand()) {
+				onNormalCommandEvent(value, command);
 			} else {
-
-				// execute command
-				command.execute(graphicsDevice, value);
-
-				// add normal command
-				removeCommand(command);
-
-				if (value != 0.0) {
-					commandsInExecution
-					.add(new CommandLastValue(value, command));
-				}
+				onPeriodCommandEvent(value, command);
 			}
 
-		} else if ("pov".equalsIgnoreCase(identifier) && value == 0.0) {
+		}
+
+		povSupport(identifier, command);
+	}
+
+	private void povSupport(final String identifier, final ICommand command) {
+
+		// set last command if pov will be executed
+		if ("pov".equalsIgnoreCase(identifier) && command != null) {
+			lastPovCommand = command;
+		}
+
+		// remove last command in pov is there is releasing
+		if ("pov".equalsIgnoreCase(identifier) && command == null) {
 			if (lastPovCommand.isPeriodCommand()) {
 				removePeriodCommand(lastPovCommand);
 			} else {
@@ -81,6 +71,32 @@ public class SimpleCallback implements IControllerCallback {
 				removeCommand(lastPovCommand);
 			}
 			lastPovCommand = null;
+		}
+	}
+
+	private void onNormalCommandEvent(final double value, final ICommand command) {
+
+		// execute command
+		command.execute(graphicsDevice, value);
+
+		// add normal command
+		removeCommand(command);
+
+		if (value != 0.0) {
+			commandsInExecution.add(new CommandLastValue(value, command));
+		}
+	}
+
+	private void onPeriodCommandEvent(final double value, final ICommand command) {
+
+		// execute period command
+		command.executePeriodCommand(graphicsDevice, value);
+
+		// add period command
+		removePeriodCommand(command);
+
+		if (value != 0.0) {
+			periodExecutionCommands.add(new CommandLastValue(value, command));
 		}
 	}
 

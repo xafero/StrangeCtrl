@@ -7,13 +7,11 @@ import java.util.Map;
 
 public class PovNameMapper implements CommandNameMapper {
 
-	private static final String RELEASE_POV = "RELEASE_POV";
 	private static final String POV = "pov";
 
 	private final Map<Double, String> map = new HashMap<>();
 
 	public PovNameMapper() {
-		map.put(0.0, RELEASE_POV);
 		map.put(0.125, "NWP");
 		map.put(0.25, "NP");
 		map.put(0.375, "NEP");
