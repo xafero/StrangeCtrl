@@ -24,8 +24,14 @@ public class MouseWheelCommand extends AnalogCommand implements ICommand {
 	}
 
 	@Override
+	public void executePeriodCommand(final GraphicsDevice graphicsDevice,
+			final double value) {
+		execute(graphicsDevice, 1.0);
+		execute(graphicsDevice, 0.0);
+	}
+
+	@Override
 	public boolean isPeriodCommand() {
 		return false;
 	}
-
 }

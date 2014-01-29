@@ -11,7 +11,6 @@ import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Event;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -76,7 +75,7 @@ public class SimpleCallbackTest {
 		callback.onNewEvent(event);
 
 		// then
-		verify(command).execute(graphicsDevice, value);
+		verify(command).executePeriodCommand(graphicsDevice, value);
 	}
 
 	@Test
@@ -108,7 +107,6 @@ public class SimpleCallbackTest {
 		verify(command).execute(graphicsDevice, 0.25);
 	}
 
-	@Ignore
 	// see bug #11
 	@Test
 	public void execute_pov_period_command_for_controller_then_release()
@@ -144,8 +142,7 @@ public class SimpleCallbackTest {
 		callback.doPeriodCommands();
 
 		// then
-		verify(command, times(2)).execute(graphicsDevice, 1.0);
-		verify(command, times(2)).execute(graphicsDevice, 0.0);
+		verify(command, times(2)).executePeriodCommand(graphicsDevice, 0.25);
 	}
 
 	@Test
@@ -177,7 +174,7 @@ public class SimpleCallbackTest {
 		callback.doPeriodCommands();
 
 		// then
-		verify(command, times(2)).execute(graphicsDevice, value);
+		verify(command, times(2)).executePeriodCommand(graphicsDevice, value);
 	}
 
 	@Test
@@ -216,8 +213,9 @@ public class SimpleCallbackTest {
 		callback.doPeriodCommands();
 
 		// then
-		verify(command, times(2)).execute(graphicsDevice, value);
-		verify(command, times(3)).execute(graphicsDevice, secondValue);
+		verify(command, times(2)).executePeriodCommand(graphicsDevice, value);
+		verify(command, times(3)).executePeriodCommand(graphicsDevice,
+				secondValue);
 	}
 
 	@Test
@@ -253,7 +251,7 @@ public class SimpleCallbackTest {
 		callback.onNewEvent(eventZero);
 
 		// then
-		verify(command, times(2)).execute(graphicsDevice, value);
+		verify(command, times(2)).executePeriodCommand(graphicsDevice, value);
 	}
 
 	@Test
@@ -375,7 +373,7 @@ public class SimpleCallbackTest {
 		callback.controllerRemoved();
 
 		// then
-		verify(command, times(2)).execute(graphicsDevice, value);
+		verify(command, times(2)).executePeriodCommand(graphicsDevice, value);
 		verify(command).execute(graphicsDevice, 0.0);
 	}
 
@@ -462,11 +460,11 @@ public class SimpleCallbackTest {
 		callback.controllerRemoved();
 
 		// then - first use
-		verify(command, times(2)).execute(graphicsDevice, value);
+		verify(command, times(2)).executePeriodCommand(graphicsDevice, value);
 		verify(command).execute(graphicsDevice, 0.0);
 
 		// then - second use
-		verify(commandSecondUse, times(2)).execute(graphicsDevice,
+		verify(commandSecondUse, times(2)).executePeriodCommand(graphicsDevice,
 				valueSecondUse);
 		verify(commandSecondUse).execute(graphicsDevice, 0.0);
 	}

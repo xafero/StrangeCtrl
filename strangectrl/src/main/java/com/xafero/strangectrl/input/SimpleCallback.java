@@ -47,10 +47,10 @@ public class SimpleCallback implements IControllerCallback {
 				lastPovCommand = command;
 			}
 
-			// execute command
-			command.execute(graphicsDevice, value);
-
 			if (command.isPeriodCommand()) {
+
+				// execute period command
+				command.executePeriodCommand(graphicsDevice, value);
 
 				// add period command
 				removePeriodCommand(command);
@@ -60,6 +60,9 @@ public class SimpleCallback implements IControllerCallback {
 							command));
 				}
 			} else {
+
+				// execute command
+				command.execute(graphicsDevice, value);
 
 				// add normal command
 				removeCommand(command);
@@ -98,7 +101,7 @@ public class SimpleCallback implements IControllerCallback {
 	@Override
 	public synchronized void doPeriodCommands() {
 		for (final CommandLastValue commandLastValue : periodExecutionCommands) {
-			commandLastValue.command.execute(graphicsDevice,
+			commandLastValue.command.executePeriodCommand(graphicsDevice,
 					commandLastValue.value);
 		}
 	}
