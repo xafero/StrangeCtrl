@@ -50,40 +50,48 @@ public class SimpleCallback implements IControllerCallback {
 			// execute command
 			command.execute(graphicsDevice, value);
 
-			// add period command
 			if (command.isPeriodCommand()) {
-				removeCommand(command);
+
+				// add period command
+				removePeriodCommand(command);
 
 				if (value != 0.0) {
 					periodExecutionCommands.add(new CommandLastValue(value,
 							command));
 				}
 			} else {
+
+				// add normal command
+				removeCommand(command);
+
 				if (value != 0.0) {
 					commandsInExecution
 					.add(new CommandLastValue(value, command));
-				} else {
-					synchronized (commandsInExecution) {
-						for (final Iterator<CommandLastValue> it = commandsInExecution
-								.iterator(); it.hasNext();) {
-							final CommandLastValue next = it.next();
-
-							if (equal(command, next.command)) {
-								it.remove();
-								break;
-							}
-						}
-					}
 				}
 			}
 
 		} else if ("pov".equalsIgnoreCase(identifier) && value == 0.0) {
 			if (lastPovCommand.isPeriodCommand()) {
-				removeCommand(lastPovCommand);
+				removePeriodCommand(lastPovCommand);
 			} else {
-				lastPovCommand.execute(graphicsDevice, 0.0);
+				turnOffCommand(lastPovCommand);
+				removeCommand(lastPovCommand);
 			}
 			lastPovCommand = null;
+		}
+	}
+
+	private void removeCommand(final ICommand command) {
+		synchronized (commandsInExecution) {
+			for (final Iterator<CommandLastValue> it = commandsInExecution
+					.iterator(); it.hasNext();) {
+				final CommandLastValue next = it.next();
+
+				if (equal(command, next.command)) {
+					it.remove();
+					break;
+				}
+			}
 		}
 	}
 
@@ -99,7 +107,7 @@ public class SimpleCallback implements IControllerCallback {
 	public void controllerRemoved() {
 		synchronized (periodExecutionCommands) {
 			for (final CommandLastValue command : periodExecutionCommands) {
-				command.command.execute(graphicsDevice, 0.0);
+				turnOffCommand(command.command);
 			}
 
 			periodExecutionCommands.clear();
@@ -107,26 +115,30 @@ public class SimpleCallback implements IControllerCallback {
 
 		synchronized (commandsInExecution) {
 			for (final CommandLastValue command : commandsInExecution) {
-				command.command.execute(graphicsDevice, 0.0);
+				turnOffCommand(command.command);
 			}
 
 			commandsInExecution.clear();
 		}
 	}
 
-	private void removeCommand(final ICommand command) {
+	private void removePeriodCommand(final ICommand command) {
 		synchronized (periodExecutionCommands) {
 			for (final Iterator<CommandLastValue> it = periodExecutionCommands
 					.iterator(); it.hasNext();) {
 				final CommandLastValue next = it.next();
 
 				if (next.command.equals(command)) {
-					command.execute(graphicsDevice, 0.0);
+					turnOffCommand(command);
 					it.remove();
 					break;
 				}
 			}
 		}
+	}
+
+	private void turnOffCommand(final ICommand command) {
+		command.execute(graphicsDevice, 0.0);
 	}
 
 	private class CommandLastValue {

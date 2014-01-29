@@ -48,7 +48,12 @@ public class CommandFactory {
 
 	public CommandFactory(final InputUtils inputUtils,
 			final Configuration configuration) {
-		this(inputUtils, configuration, Sets.newHashSet(new XboxNameMapper()));
+		this(inputUtils, configuration, new XboxNameMapper());
+	}
+
+	public CommandFactory(final InputUtils mock,
+			final Configuration configuration, final CommandNameMapper mapper) {
+		this(mock, configuration, Sets.newHashSet(mapper));
 	}
 
 	private void loadCommands(final Configuration configuration) {
@@ -164,7 +169,7 @@ public class CommandFactory {
 			if (mapper.canMap(identifier, value)) {
 				final String mappedIdentifier = mapper.map(identifier, value);
 
-				final ICommand command = getCommand(mappedIdentifier, value);
+				final ICommand command = commands.get(mappedIdentifier);
 				if (command != null) {
 					return command;
 				}
