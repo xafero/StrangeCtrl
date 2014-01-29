@@ -71,28 +71,39 @@ public class SimpleCallback implements IControllerCallback {
 	}
 
 	private void onNormalCommandEvent(final double value, final ICommand command) {
-
-		// execute command
-		command.execute(graphicsDevice, value);
-
-		// add normal command
-		removeCommand(command);
-
-		if (value != 0.0) {
-			commandsInExecution.add(new CommandLastValue(value, command));
-		}
+		onCommand(value, command, commandsInExecution, true);
 	}
 
 	private void onPeriodCommandEvent(final double value, final ICommand command) {
+		onCommand(value, command, periodExecutionCommands, false);
+	}
 
-		// execute period command
-		command.executePeriodCommand(graphicsDevice, value);
+	private void onCommand(final double value, final ICommand command,
+			final Set<CommandLastValue> set, final boolean normalCommand) {
 
-		// add period command
-		removePeriodCommand(command);
+		// execute command
+		if (normalCommand) {
+			command.execute(graphicsDevice, value);
+		} else {
+			command.executePeriodCommand(graphicsDevice, value);
+		}
 
+		// remove old command
+		synchronized (set) {
+			for (final Iterator<CommandLastValue> it = set.iterator(); it
+					.hasNext();) {
+				final CommandLastValue next = it.next();
+
+				if (equal(command, next.command)) {
+					it.remove();
+					break;
+				}
+			}
+		}
+
+		// add command
 		if (value != 0.0) {
-			periodExecutionCommands.add(new CommandLastValue(value, command));
+			set.add(new CommandLastValue(value, command));
 		}
 	}
 

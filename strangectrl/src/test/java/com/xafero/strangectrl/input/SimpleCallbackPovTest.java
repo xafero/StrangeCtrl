@@ -45,7 +45,7 @@ public class SimpleCallbackPovTest {
 	}
 
 	@Test
-	public void execute_SWP_pov_command_for_controller_then_release()
+	public void push_release_pov()
 			throws Exception {
 
 		// given
