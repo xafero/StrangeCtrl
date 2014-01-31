@@ -9,34 +9,34 @@ import com.xafero.strangectrl.input.InputUtils;
 
 public class SequentialKeyCommand extends KeyCommand {
 
-	private static final long WAIT = 0;
+    private static final long WAIT = 1000;
 
-	public SequentialKeyCommand(final Key key, final InputUtils inputUtils) {
-		super(key, inputUtils);
-	}
+    public SequentialKeyCommand(final Key key, final InputUtils inputUtils) {
+        super(key, inputUtils);
+    }
 
-	public SequentialKeyCommand(final List<Key> keys,
-			final InputUtils inputUtils) {
-		super(keys, inputUtils);
-	}
+    public SequentialKeyCommand(final List<Key> keys,
+            final InputUtils inputUtils) {
+        super(keys, inputUtils);
+    }
 
-	@Override
-	public void execute(final GraphicsDevice graphicsDevice, final double value) {
-		if (value >= 0.5) {
-			for (final Key key : keys) {
-				inputUtils.pressKey(key);
-				sleep();
-				inputUtils.releaseKey(key);
-			}
-		}
-	}
+    @Override
+    public void execute(final GraphicsDevice graphicsDevice, final double value) {
+        if (value >= 0.5) {
+            for (final Key key : keys) {
+                inputUtils.pressKey(key);
+                sleep();
+                inputUtils.releaseKey(key);
+            }
+        }
+    }
 
-	private void sleep() {
-		try {
-			Thread.sleep(WAIT);
-		} catch (final InterruptedException e) {
-			// not need to handle
-		}
-	}
+    private void sleep() {
+        try {
+            Thread.sleep(WAIT);
+        } catch (final InterruptedException e) {
+            // not need to handle
+        }
+    }
 
 }
