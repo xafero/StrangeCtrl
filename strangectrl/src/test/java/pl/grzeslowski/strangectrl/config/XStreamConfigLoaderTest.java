@@ -111,10 +111,10 @@ public class XStreamConfigLoaderTest {
         // @formatter:off
         final String xml = "<configuration>"
                 + "<pov>"
-                + "<pov_button value=\"NP\"><key key=\"Q\" /></pov_button>"
-                + "<pov_button value=\"SP\"><key key=\"W\" /></pov_button>"
-                + "<pov_button value=\"EP\"><key key=\"E\" /></pov_button>"
-                + "<pov_button value=\"WP\"><key key=\"R\" /></pov_button>"
+                + "<button value=\"NP\"><key key=\"Q\" /></button>"
+                + "<button value=\"SP\"><key key=\"W\" /></button>"
+                + "<button value=\"EP\"><key key=\"E\" /></button>"
+                + "<button value=\"WP\"><key key=\"R\" /></button>"
                 + "</pov>"
                 + "</configuration>";
         // @formatter:on
@@ -151,14 +151,14 @@ public class XStreamConfigLoaderTest {
         // @formatter:off
         final String xml = "<configuration>"
                 + "<pov>"
-                + "<pov_button value=\"NP\"><key key=\"Q\" /></pov_button>"
-                + "<pov_button value=\"SP\"><key key=\"W\" /></pov_button>"
-                + "<pov_button value=\"EP\"><key key=\"E\" /></pov_button>"
-                + "<pov_button value=\"WP\"><key key=\"R\" /></pov_button>"
-                + "<pov_button value=\"NEP\"><key key=\"T\" /></pov_button>"
-                + "<pov_button value=\"NWP\"><key key=\"Y\" /></pov_button>"
-                + "<pov_button value=\"SEP\"><key key=\"U\" /></pov_button>"
-                + "<pov_button value=\"SWP\"><key key=\"I\" /></pov_button>"
+                + "<button value=\"NP\"><key key=\"Q\" /></button>"
+                + "<button value=\"SP\"><key key=\"W\" /></button>"
+                + "<button value=\"EP\"><key key=\"E\" /></button>"
+                + "<button value=\"WP\"><key key=\"R\" /></button>"
+                + "<button value=\"NEP\"><key key=\"T\" /></button>"
+                + "<button value=\"NWP\"><key key=\"Y\" /></button>"
+                + "<button value=\"SEP\"><key key=\"U\" /></button>"
+                + "<button value=\"SWP\"><key key=\"I\" /></button>"
                 + "</pov>"
                 + "</configuration>";
         // @formatter:on

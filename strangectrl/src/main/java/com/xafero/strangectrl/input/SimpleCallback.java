@@ -17,178 +17,182 @@ import com.google.common.base.Objects;
 import com.xafero.strangectrl.cmd.ICommand;
 
 public class SimpleCallback implements IControllerCallback {
-	private final CommandFactory commandFactory;
-	private final GraphicsDevice graphicsDevice;
-	private final Set<CommandLastValue> periodExecutionCommands = Collections
-			.synchronizedSet(new HashSet<CommandLastValue>());
-	private final Set<CommandLastValue> commandsInExecution = Collections
-			.synchronizedSet(new HashSet<CommandLastValue>());
-	private ICommand lastPovCommand;
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
+            .getLogger(SimpleCallback.class);
 
-	public SimpleCallback(final CommandFactory commandFactory,
-			final GraphicsDevice graphicsDevice) {
-		this.commandFactory = checkNotNull(commandFactory);
-		this.graphicsDevice = checkNotNull(graphicsDevice);
-	}
+    private final CommandFactory commandFactory;
+    private final GraphicsDevice graphicsDevice;
+    private final Set<CommandLastValue> periodExecutionCommands = Collections
+            .synchronizedSet(new HashSet<CommandLastValue>());
+    private final Set<CommandLastValue> commandsInExecution = Collections
+            .synchronizedSet(new HashSet<CommandLastValue>());
+    private ICommand lastPovCommand;
 
-	@Override
-	public synchronized void onNewEvent(final Event event) {
-		checkNotNull(event);
+    public SimpleCallback(final CommandFactory commandFactory,
+            final GraphicsDevice graphicsDevice) {
+        this.commandFactory = checkNotNull(commandFactory);
+        this.graphicsDevice = checkNotNull(graphicsDevice);
+    }
 
-		final double value = event.getValue();
-		final Component component = event.getComponent();
-		final String identifier = component.getIdentifier().getName();
+    @Override
+    public synchronized void onNewEvent(final Event event) {
+        checkNotNull(event);
 
-		final ICommand command = commandFactory.getCommand(identifier, value);
-		if (command != null) {
-			if (!command.isPeriodCommand()) {
-				onNormalCommandEvent(value, command);
-			} else {
-				onPeriodCommandEvent(value, command);
-			}
-		}
+        final double value = event.getValue();
+        final Component component = event.getComponent();
+        final String identifier = component.getIdentifier().getName();
 
-		povSupport(identifier, command);
-	}
+        final ICommand command = commandFactory.getCommand(identifier, value);
+        if (command != null) {
+            if (!command.isPeriodCommand()) {
+                onNormalCommandEvent(value, command);
+            } else {
+                onPeriodCommandEvent(value, command);
+            }
+        }
 
-	private void povSupport(final String identifier, final ICommand command) {
+        povSupport(identifier, command);
+    }
 
-		// set last command if pov will be executed
-		if ("pov".equalsIgnoreCase(identifier) && command != null) {
-			lastPovCommand = command;
-		}
+    private void povSupport(final String identifier, final ICommand command) {
 
-		// remove last command in pov is there is releasing
-		if ("pov".equalsIgnoreCase(identifier) && command == null) {
-			if (lastPovCommand.isPeriodCommand()) {
-				removePeriodCommand(lastPovCommand);
-			} else {
-				turnOffCommand(lastPovCommand);
-				removeCommand(lastPovCommand);
-			}
-			lastPovCommand = null;
-		}
-	}
+        // set last command if pov will be executed
+        if ("pov".equalsIgnoreCase(identifier) && command != null) {
+            lastPovCommand = command;
+        }
 
-	private void onNormalCommandEvent(final double value, final ICommand command) {
-		onCommand(value, command, commandsInExecution, true);
-	}
+        // remove last command in pov is there is releasing
+        if ("pov".equalsIgnoreCase(identifier) && lastPovCommand != null
+                && command == null) {
+            if (lastPovCommand.isPeriodCommand()) {
+                removePeriodCommand(lastPovCommand);
+            } else {
+                turnOffCommand(lastPovCommand);
+                removeCommand(lastPovCommand);
+            }
+            lastPovCommand = null;
+        }
+    }
 
-	private void onPeriodCommandEvent(final double value, final ICommand command) {
-		onCommand(value, command, periodExecutionCommands, false);
-	}
+    private void onNormalCommandEvent(final double value, final ICommand command) {
+        onCommand(value, command, commandsInExecution, true);
+    }
 
-	private void onCommand(final double value, final ICommand command,
-			final Set<CommandLastValue> set, final boolean normalCommand) {
+    private void onPeriodCommandEvent(final double value, final ICommand command) {
+        onCommand(value, command, periodExecutionCommands, false);
+    }
 
-		// execute command
-		if (normalCommand) {
-			command.execute(graphicsDevice, value);
-		} else {
-			command.executePeriodCommand(graphicsDevice, value);
-		}
+    private void onCommand(final double value, final ICommand command,
+            final Set<CommandLastValue> set, final boolean normalCommand) {
 
-		// remove old command
-		synchronized (set) {
-			for (final Iterator<CommandLastValue> it = set.iterator(); it
-					.hasNext();) {
-				final CommandLastValue next = it.next();
+        // execute command
+        if (normalCommand) {
+            command.execute(graphicsDevice, value);
+        } else {
+            command.executePeriodCommand(graphicsDevice, value);
+        }
 
-				if (equal(command, next.command)) {
-					it.remove();
-					break;
-				}
-			}
-		}
+        // remove old command
+        synchronized (set) {
+            for (final Iterator<CommandLastValue> it = set.iterator(); it
+                    .hasNext();) {
+                final CommandLastValue next = it.next();
 
-		// add command
-		if (value != 0.0) {
-			set.add(new CommandLastValue(value, command));
-		}
-	}
+                if (equal(command, next.command)) {
+                    it.remove();
+                    break;
+                }
+            }
+        }
 
-	private void removeCommand(final ICommand command) {
-		synchronized (commandsInExecution) {
-			for (final Iterator<CommandLastValue> it = commandsInExecution
-					.iterator(); it.hasNext();) {
-				final CommandLastValue next = it.next();
+        // add command
+        if (value != 0.0) {
+            set.add(new CommandLastValue(value, command));
+        }
+    }
 
-				if (equal(command, next.command)) {
-					it.remove();
-					break;
-				}
-			}
-		}
-	}
+    private void removeCommand(final ICommand command) {
+        synchronized (commandsInExecution) {
+            for (final Iterator<CommandLastValue> it = commandsInExecution
+                    .iterator(); it.hasNext();) {
+                final CommandLastValue next = it.next();
 
-	@Override
-	public synchronized void doPeriodCommands() {
-		for (final CommandLastValue commandLastValue : periodExecutionCommands) {
-			commandLastValue.command.executePeriodCommand(graphicsDevice,
-					commandLastValue.value);
-		}
-	}
+                if (equal(command, next.command)) {
+                    it.remove();
+                    break;
+                }
+            }
+        }
+    }
 
-	@Override
-	public void controllerRemoved() {
-		synchronized (periodExecutionCommands) {
-			for (final CommandLastValue command : periodExecutionCommands) {
-				turnOffCommand(command.command);
-			}
+    @Override
+    public synchronized void doPeriodCommands() {
+        for (final CommandLastValue commandLastValue : periodExecutionCommands) {
+            commandLastValue.command.executePeriodCommand(graphicsDevice,
+                    commandLastValue.value);
+        }
+    }
 
-			periodExecutionCommands.clear();
-		}
+    @Override
+    public void controllerRemoved() {
+        synchronized (periodExecutionCommands) {
+            for (final CommandLastValue command : periodExecutionCommands) {
+                turnOffCommand(command.command);
+            }
 
-		synchronized (commandsInExecution) {
-			for (final CommandLastValue command : commandsInExecution) {
-				turnOffCommand(command.command);
-			}
+            periodExecutionCommands.clear();
+        }
 
-			commandsInExecution.clear();
-		}
-	}
+        synchronized (commandsInExecution) {
+            for (final CommandLastValue command : commandsInExecution) {
+                turnOffCommand(command.command);
+            }
 
-	private void removePeriodCommand(final ICommand command) {
-		synchronized (periodExecutionCommands) {
-			for (final Iterator<CommandLastValue> it = periodExecutionCommands
-					.iterator(); it.hasNext();) {
-				final CommandLastValue next = it.next();
+            commandsInExecution.clear();
+        }
+    }
 
-				if (next.command.equals(command)) {
-					it.remove();
-					break;
-				}
-			}
-		}
-	}
+    private void removePeriodCommand(final ICommand command) {
+        synchronized (periodExecutionCommands) {
+            for (final Iterator<CommandLastValue> it = periodExecutionCommands
+                    .iterator(); it.hasNext();) {
+                final CommandLastValue next = it.next();
 
-	private void turnOffCommand(final ICommand command) {
-		command.execute(graphicsDevice, 0.0);
-	}
+                if (next.command.equals(command)) {
+                    it.remove();
+                    break;
+                }
+            }
+        }
+    }
 
-	private class CommandLastValue {
-		private final double value;
-		private final ICommand command;
+    private void turnOffCommand(final ICommand command) {
+        command.execute(graphicsDevice, 0.0);
+    }
 
-		public CommandLastValue(final double value, final ICommand command) {
-			this.value = value;
-			this.command = command;
-		}
+    private class CommandLastValue {
+        private final double value;
+        private final ICommand command;
 
-		@Override
-		public int hashCode() {
-			return Objects.hashCode(value, command);
-		}
+        public CommandLastValue(final double value, final ICommand command) {
+            this.value = value;
+            this.command = command;
+        }
 
-		@Override
-		public boolean equals(final Object obj) {
-			if (obj instanceof CommandLastValue) {
-				final CommandLastValue tmp = (CommandLastValue) obj;
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(value, command);
+        }
 
-				return equal(value, tmp.value) && equal(command, tmp.command);
-			} else {
-				return false;
-			}
-		}
-	}
+        @Override
+        public boolean equals(final Object obj) {
+            if (obj instanceof CommandLastValue) {
+                final CommandLastValue tmp = (CommandLastValue) obj;
+
+                return equal(value, tmp.value) && equal(command, tmp.command);
+            } else {
+                return false;
+            }
+        }
+    }
 }

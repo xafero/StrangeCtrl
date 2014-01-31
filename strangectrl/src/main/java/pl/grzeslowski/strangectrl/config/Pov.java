@@ -14,6 +14,10 @@ public class Pov {
     private Pov() {
     }
 
+    public Pov(final List<Button> povDirections) {
+        this.povDirections.addAll(povDirections);
+    }
+
     private Button getButton(final String identifier) {
         for (final Button pov : povDirections) {
             if (equal(pov.getValue(), identifier)) {

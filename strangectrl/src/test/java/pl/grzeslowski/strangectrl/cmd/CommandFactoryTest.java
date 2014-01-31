@@ -3,6 +3,7 @@ package pl.grzeslowski.strangectrl.cmd;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class CommandFactoryTest {
         final InputUtils inputUtils = mock(InputUtils.class);
 
         // expected
-        final KeyCommand expected = new ComboKeyCommand(key, inputUtils);
+        final KeyCommand expected = new SequentialKeyCommand(key, inputUtils);
 
         // when
         final CommandFactory commandFactory = new CommandFactory(inputUtils,
@@ -64,9 +65,9 @@ public class CommandFactoryTest {
         final InputUtils inputUtils = mock(InputUtils.class);
 
         // expected
-        final KeyCommand expected1 = new ComboKeyCommand(key1, inputUtils);
-        final KeyCommand expected2 = new ComboKeyCommand(Lists.newArrayList(
-                key1, key2), inputUtils);
+        final KeyCommand expected1 = new SequentialKeyCommand(key1, inputUtils);
+        final KeyCommand expected2 = new SequentialKeyCommand(
+                Lists.newArrayList(key1, key2), inputUtils);
 
         // when
         final CommandFactory commandFactory = new CommandFactory(inputUtils,
@@ -224,5 +225,104 @@ public class CommandFactoryTest {
         // then
         final ICommand command = commandFactory.getCommand("A", 0.0);
         assertThat(command).isEqualTo(expected);
+    }
+
+    @Test
+    public void check_default_mappers() throws Exception {
+
+        // given
+        final List<Button> xboxButtons = new ArrayList<>(10);
+        xboxButtons.add(new Button("A", new Key("Q")));
+        xboxButtons.add(new Button("B", new Key("W")));
+        xboxButtons.add(new Button("X", new Key("E")));
+        xboxButtons.add(new Button("Y", new Key("R")));
+        xboxButtons.add(new Button("START", new Key("T")));
+        xboxButtons.add(new Button("BACK", new Key("Y")));
+        xboxButtons.add(new Button("RB", new Key("U")));
+        xboxButtons.add(new Button("LB", new Key("I")));
+        xboxButtons.add(new Button("RS", new Key("O")));
+        xboxButtons.add(new Button("LS", new Key("P")));
+
+        final List<Button> povButtons = new ArrayList<>(8);
+        povButtons.add(new Button("NP", new Key("A")));
+        povButtons.add(new Button("SP", new Key("S")));
+        povButtons.add(new Button("EP", new Key("D")));
+        povButtons.add(new Button("WP", new Key("F")));
+        povButtons.add(new Button("NEP", new Key("G")));
+        povButtons.add(new Button("NWP", new Key("H")));
+        povButtons.add(new Button("SEP", new Key("J")));
+        povButtons.add(new Button("SWP", new Key("K")));
+
+        final Pov pov = new Pov(povButtons);
+
+        final Configuration configuration = new Configuration(xboxButtons, pov);
+        final InputUtils inputUtils = mock(InputUtils.class);
+        final CommandFactory factory = new CommandFactory(inputUtils,
+                configuration);
+
+        // expected
+        // @formatter:off
+        final ICommand eXboxA = new SequentialKeyCommand(new Key("Q"), inputUtils);
+        final ICommand eXboxB = new SequentialKeyCommand(new Key("W"), inputUtils);
+        final ICommand eXboxX = new SequentialKeyCommand(new Key("E"), inputUtils);
+        final ICommand eXboxY = new SequentialKeyCommand(new Key("R"), inputUtils);
+        final ICommand eXboxStart = new SequentialKeyCommand(new Key("T"), inputUtils);
+        final ICommand eXboxBack = new SequentialKeyCommand(new Key("Y"), inputUtils);
+        final ICommand eXboxRb = new SequentialKeyCommand(new Key("U"), inputUtils);
+        final ICommand eXboxLb = new SequentialKeyCommand(new Key("I"), inputUtils);
+        final ICommand eXboxRs = new SequentialKeyCommand(new Key("O"), inputUtils);
+        final ICommand eXboxLs = new SequentialKeyCommand(new Key("P"), inputUtils);
+
+        final ICommand ePovN = new PovKeyCommand(new SequentialKeyCommand(new Key("A"), inputUtils));
+        final ICommand ePovS = new PovKeyCommand(new SequentialKeyCommand(new Key("S"), inputUtils));
+        final ICommand ePovE = new PovKeyCommand(new SequentialKeyCommand(new Key("D"), inputUtils));
+        final ICommand ePovW = new PovKeyCommand(new SequentialKeyCommand(new Key("F"), inputUtils));
+        final ICommand ePovNe = new PovKeyCommand(new SequentialKeyCommand(new Key("G"), inputUtils));
+        final ICommand ePovNw = new PovKeyCommand(new SequentialKeyCommand(new Key("H"), inputUtils));
+        final ICommand ePovSe = new PovKeyCommand(new SequentialKeyCommand(new Key("J"), inputUtils));
+        final ICommand ePovSw = new PovKeyCommand(new SequentialKeyCommand(new Key("K"), inputUtils));
+
+        // when
+        final ICommand xboxA = factory.getCommand("A", 0);
+        final ICommand xboxB = factory.getCommand("B", 0);
+        final ICommand xboxX = factory.getCommand("X", 0);
+        final ICommand xboxY = factory.getCommand("Y", 0);
+        final ICommand xboxStart = factory.getCommand("START", 0);
+        final ICommand xboxBack = factory.getCommand("BACK", 0);
+        final ICommand xboxRb = factory.getCommand("RB", 0);
+        final ICommand xboxLb = factory.getCommand("LB", 0);
+        final ICommand xboxRs = factory.getCommand("RS", 0);
+        final ICommand xboxLs = factory.getCommand("LS", 0);
+
+        final ICommand povN = factory.getCommand("NP", 0);
+        final ICommand povS = factory.getCommand("SP", 0);
+        final ICommand povE = factory.getCommand("EP", 0);
+        final ICommand povW = factory.getCommand("WP", 0);
+        final ICommand povNe = factory.getCommand("NEP", 0);
+        final ICommand povNw = factory.getCommand("NWP", 0);
+        final ICommand povSe = factory.getCommand("SEP", 0);
+        final ICommand povSw = factory.getCommand("SWP", 0);
+        // @formatter:on
+
+        // then
+        assertThat(xboxA).isEqualTo(eXboxA);
+        assertThat(xboxB).isEqualTo(eXboxB);
+        assertThat(xboxX).isEqualTo(eXboxX);
+        assertThat(xboxY).isEqualTo(eXboxY);
+        assertThat(xboxStart).isEqualTo(eXboxStart);
+        assertThat(xboxBack).isEqualTo(eXboxBack);
+        assertThat(xboxRb).isEqualTo(eXboxRb);
+        assertThat(xboxLb).isEqualTo(eXboxLb);
+        assertThat(xboxRs).isEqualTo(eXboxRs);
+        assertThat(xboxLs).isEqualTo(eXboxLs);
+
+        assertThat(povN).isEqualTo(ePovN);
+        assertThat(povS).isEqualTo(ePovS);
+        assertThat(povE).isEqualTo(ePovE);
+        assertThat(povW).isEqualTo(ePovW);
+        assertThat(povNe).isEqualTo(ePovNe);
+        assertThat(povNw).isEqualTo(ePovNw);
+        assertThat(povSe).isEqualTo(ePovSe);
+        assertThat(povSw).isEqualTo(ePovSw);
     }
 }

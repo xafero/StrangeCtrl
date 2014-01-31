@@ -41,12 +41,19 @@ public class CommandFactory {
 
     public CommandFactory(final InputUtils inputUtils,
             final Configuration configuration) {
-        this(inputUtils, configuration, new XboxNameMapper());
+        this(inputUtils, configuration, new XboxNameMapper(),
+                new PovNameMapper());
     }
 
     public CommandFactory(final InputUtils mock,
             final Configuration configuration, final CommandNameMapper mapper) {
         this(mock, configuration, Sets.newHashSet(mapper));
+    }
+
+    public CommandFactory(final InputUtils mock,
+            final Configuration configuration,
+            final CommandNameMapper... mappers) {
+        this(mock, configuration, Sets.newHashSet(mappers));
     }
 
     private void loadCommands(final Configuration configuration) {
@@ -172,10 +179,15 @@ public class CommandFactory {
     private ICommand getCommandFromMappers(final String identifier,
             final double value) {
         for (final CommandNameMapper mapper : mappers) {
+            // logger.debug(String.format("iden = %s | val = %s | can map = %s",
+            // identifier, value,
+            // mapper.canMap(identifier, value)));
             if (mapper.canMap(identifier, value)) {
                 final String mappedIdentifier = mapper.map(identifier, value);
 
                 final ICommand command = commands.get(mappedIdentifier);
+                logger.debug(String.format("iden = %s | command = %s",
+                        mappedIdentifier, command));
                 if (command != null) {
                     return command;
                 }
