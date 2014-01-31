@@ -9,7 +9,7 @@
 	<button value="X">
 		<key key="ESCAPE" />
 	</button>
-	<button value="Y">
+	<button value="Y" pressType="COMBO">
 		<key key="ALT" />
 		<key key="TAB" />
 	</button>
@@ -19,11 +19,11 @@
 	<button value="LB">
 		<key key="RIGHT_MOUSE" />
 	</button>
-	<button value="START">
+	<button value="START" pressType="COMBO">
 		<key key="CONTROL" />
 		<key key="T" />
 	</button>
-	<button value="BACK">
+	<button value="BACK" pressType="COMBO">
 		<key key="CONTROL" />
 		<key key="SHIFT" />
 		<key key="T" />
