@@ -61,9 +61,10 @@ public class InputUtils {
         if (directEnv.isSupported()) {
             rawsCon = directEnv.getControllers();
         } else {
-            rawsCon = ControllerEnvironment.getDefaultEnvironment().getControllers();
+            rawsCon = ControllerEnvironment.getDefaultEnvironment()
+                    .getControllers();
         }
-        
+
         final Set<Controller> controllers = new HashSet<Controller>();
         final List<Type> typeList = Arrays.asList(types);
         for (final Controller ctrl : rawsCon) {

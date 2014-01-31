@@ -24,7 +24,7 @@ public abstract class AnalogCommand {
 
         final boolean can = abs >= lastvalue;
         lastvalue = abs;
-        
+
         return can;
     }
 

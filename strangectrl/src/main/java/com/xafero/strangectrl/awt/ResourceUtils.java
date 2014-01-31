@@ -10,16 +10,16 @@ import javax.imageio.ImageIO;
 
 public class ResourceUtils {
 
-	private ResourceUtils() {
-	}
+    private ResourceUtils() {
+    }
 
-	public static Image loadImage(final String path) {
-		final URL imgUrl = ClassLoader.getSystemResource(path);
-		return Toolkit.getDefaultToolkit().getImage(imgUrl);
-	}
+    public static Image loadImage(final String path) {
+        final URL imgUrl = ClassLoader.getSystemResource(path);
+        return Toolkit.getDefaultToolkit().getImage(imgUrl);
+    }
 
-	public static Image loadImage(final InputStream inputStream)
-			throws IOException {
-		return ImageIO.read(inputStream);
-	}
+    public static Image loadImage(final InputStream inputStream)
+            throws IOException {
+        return ImageIO.read(inputStream);
+    }
 }

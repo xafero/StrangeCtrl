@@ -7,31 +7,31 @@ import com.xafero.strangectrl.input.InputUtils;
 
 public class MouseWheelCommand extends AnalogCommand implements ICommand {
 
-	public MouseWheelCommand(final InputUtils inputUtils, final int maxMove,
-			final double delta) {
-		super(inputUtils, maxMove, delta);
-	}
+    public MouseWheelCommand(final InputUtils inputUtils, final int maxMove,
+            final double delta) {
+        super(inputUtils, maxMove, delta);
+    }
 
-	public MouseWheelCommand(final InputUtils inputUtils, final int maxMove) {
-		super(inputUtils, maxMove);
-	}
+    public MouseWheelCommand(final InputUtils inputUtils, final int maxMove) {
+        super(inputUtils, maxMove);
+    }
 
-	@Override
-	public void execute(final GraphicsDevice graphicsDevice, final double value) {
-		if (getDelta() < Math.abs(value) && canExecute(value)) {
-			getInputUtils().mouseWheel((int) Math.round(value * getMaxMove()));
-		}
-	}
+    @Override
+    public void execute(final GraphicsDevice graphicsDevice, final double value) {
+        if (getDelta() < Math.abs(value) && canExecute(value)) {
+            getInputUtils().mouseWheel((int) Math.round(value * getMaxMove()));
+        }
+    }
 
-	@Override
-	public void executePeriodCommand(final GraphicsDevice graphicsDevice,
-			final double value) {
-		execute(graphicsDevice, 1.0);
-		execute(graphicsDevice, 0.0);
-	}
+    @Override
+    public void executePeriodCommand(final GraphicsDevice graphicsDevice,
+            final double value) {
+        execute(graphicsDevice, 1.0);
+        execute(graphicsDevice, 0.0);
+    }
 
-	@Override
-	public boolean isPeriodCommand() {
-		return false;
-	}
+    @Override
+    public boolean isPeriodCommand() {
+        return false;
+    }
 }

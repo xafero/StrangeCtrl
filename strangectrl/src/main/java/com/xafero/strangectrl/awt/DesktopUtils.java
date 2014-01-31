@@ -14,52 +14,52 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class DesktopUtils {
 
-	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
-			.getLogger(DesktopUtils.class);
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
+            .getLogger(DesktopUtils.class);
 
-	public static GraphicsDevice getMouseScreen() {
-		return MouseInfo.getPointerInfo().getDevice();
-	}
+    public static GraphicsDevice getMouseScreen() {
+        return MouseInfo.getPointerInfo().getDevice();
+    }
 
-	public Point getMousePos(final GraphicsDevice dev) {
-		final Point pos = MouseInfo.getPointerInfo().getLocation();
-		final GraphicsConfiguration cfg = dev.getDefaultConfiguration();
-		final int newX = pos.x - cfg.getBounds().x;
-		final int newY = pos.y - cfg.getBounds().y;
+    public Point getMousePos(final GraphicsDevice dev) {
+        final Point pos = MouseInfo.getPointerInfo().getLocation();
+        final GraphicsConfiguration cfg = dev.getDefaultConfiguration();
+        final int newX = pos.x - cfg.getBounds().x;
+        final int newY = pos.y - cfg.getBounds().y;
 
-		return new Point(newX, newY);
-	}
+        return new Point(newX, newY);
+    }
 
-	public static TrayIcon createTrayIcon(final Image img, final String tip,
-			final PopupMenu menu) {
-		final TrayIcon icon = new TrayIcon(img, tip, menu);
-		icon.setImageAutoSize(true);
+    public static TrayIcon createTrayIcon(final Image img, final String tip,
+            final PopupMenu menu) {
+        final TrayIcon icon = new TrayIcon(img, tip, menu);
+        icon.setImageAutoSize(true);
 
-		return icon;
-	}
+        return icon;
+    }
 
-	public static GraphicsDevice getDevice(final int screenNo)
-			throws AWTException {
-		final GraphicsEnvironment env = GraphicsEnvironment
-				.getLocalGraphicsEnvironment();
+    public static GraphicsDevice getDevice(final int screenNo)
+            throws AWTException {
+        final GraphicsEnvironment env = GraphicsEnvironment
+                .getLocalGraphicsEnvironment();
 
-		return env.getScreenDevices()[screenNo];
-	}
+        return env.getScreenDevices()[screenNo];
+    }
 
-	public static Robot createRobot(final GraphicsDevice device) {
-		try {
-			return new Robot(device);
-		} catch (final AWTException e) {
-			logger.error("Cannot create robot!", e);
-			throw new RuntimeException("createRobot", e);
-		}
-	}
+    public static Robot createRobot(final GraphicsDevice device) {
+        try {
+            return new Robot(device);
+        } catch (final AWTException e) {
+            logger.error("Cannot create robot!", e);
+            throw new RuntimeException("createRobot", e);
+        }
+    }
 
-	public static Robot createRobot(
-			final AtomicReference<GraphicsDevice> deviceRef) {
-		final GraphicsDevice device = getMouseScreen();
-		deviceRef.set(device);
+    public static Robot createRobot(
+            final AtomicReference<GraphicsDevice> deviceRef) {
+        final GraphicsDevice device = getMouseScreen();
+        deviceRef.set(device);
 
-		return createRobot(device);
-	}
+        return createRobot(device);
+    }
 }

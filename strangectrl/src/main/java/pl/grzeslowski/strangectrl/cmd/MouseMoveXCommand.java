@@ -11,8 +11,7 @@ public class MouseMoveXCommand extends MouseMoveCommand {
     }
 
     public MouseMoveXCommand(final InputUtils inputUtils, final int maxMove,
-            final double delta,
-            final DesktopUtils desktopUtils) {
+            final double delta, final DesktopUtils desktopUtils) {
         super(inputUtils, maxMove, delta, desktopUtils);
     }
 

@@ -10,8 +10,8 @@ public class MouseMoveYCommand extends MouseMoveCommand {
         super(inputUtils, maxMove, desktopUtils);
     }
 
-    public MouseMoveYCommand(final InputUtils inputUtils, final int maxMove, final double delta,
-            final DesktopUtils desktopUtils) {
+    public MouseMoveYCommand(final InputUtils inputUtils, final int maxMove,
+            final double delta, final DesktopUtils desktopUtils) {
         super(inputUtils, maxMove, delta, desktopUtils);
     }
 
