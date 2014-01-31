@@ -36,33 +36,40 @@
 		<key key="W" />
 	</button>
 	<pov>
-		<N>
+		<pov_button value="NP">
 			<key key="UP" />
-		</N>
-		<S>
+		</pov_button>
+		
+		<pov_button value="SP">
 			<key key="DOWN" />
-		</S>
-		<E>
+		</pov_button>
+		
+		<pov_button value="EP">
 			<key key="RIGHT" />
-		</E>
-		<W>
+		</pov_button>
+		
+		<pov_button value="WP">
 			<key key="LEFT" />
-		</W>
-		<NE>
+		</pov_button>
+		
+		<pov_button value="NEP">
 			<key key="UP" />
 			<key key="RIGHT" />
-		</NE>
-		<NW>
+		</pov_button>
+		
+		<pov_button value="NWP">
 			<key key="UP" />
 			<key key="LEFT" />
-		</NW>
-		<SE>
+		</pov_button>
+		
+		<pov_button value="SEP">
 			<key key="DOWN" />
 			<key key="RIGHT" />
-		</SE>
-		<SW>
+		</pov_button>
+		
+		<pov_button value="SWP">
 			<key key="DOWN" />
 			<key key="LEFT" />
-		</SW>
+		</pov_button>
 	</pov>
 </configuration>

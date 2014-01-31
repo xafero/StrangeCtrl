@@ -14,12 +14,12 @@ import com.google.common.collect.Lists;
 import com.xafero.strangectrl.cmd.ICommand;
 import com.xafero.strangectrl.input.InputUtils;
 
-public class KeyCommand implements ICommand {
-	private final List<Key> keys;
-	private final InputUtils inputUtils;
+public abstract class KeyCommand implements ICommand {
+	final List<Key> keys;
+	final InputUtils inputUtils;
 
 	public KeyCommand(final Key key, final InputUtils inputUtils) {
-		this(Lists.newArrayList(key), inputUtils);
+		this(Lists.newArrayList(checkNotNull(key)), checkNotNull(inputUtils));
 	}
 
 	public KeyCommand(final List<Key> keys, final InputUtils inputUtils) {
@@ -27,13 +27,9 @@ public class KeyCommand implements ICommand {
 		this.inputUtils = checkNotNull(inputUtils);
 	}
 
-	@Override
-	public void execute(final GraphicsDevice dev, final double value) {
-		if (value >= 0.5f) {
-			inputUtils.pressKey(keys);
-		} else {
-			inputUtils.releaseKey(keys);
-		}
+	public KeyCommand(final KeyCommand keyCommand) {
+		keys = new ArrayList<>(keyCommand.keys);
+		inputUtils = keyCommand.inputUtils;
 	}
 
 	@Override

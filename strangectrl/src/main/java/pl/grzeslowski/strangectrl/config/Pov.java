@@ -2,148 +2,152 @@ package pl.grzeslowski.strangectrl.config;
 
 import static com.google.common.base.Objects.equal;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 
 public class Pov {
-	private NorthPov northPov;
-	private SouthPov southPov;
-	private EastPov eastPov;
-	private WestPov westPov;
-	private NorthEastPov northEastPov;
-	private NorthWestPov northWestPov;
-	private SouthEastPov southEastPov;
-	private SouthWestPov southWestPov;
+    private final List<Button> povDirections = new ArrayList<>();
 
-	private Pov() {
-	}
+    private Pov() {
+    }
 
-	public NorthPov getNorthPov() {
-		return northPov;
-	}
+    private Button getButton(final String identifier) {
+        for (final Button pov : povDirections) {
+            if (equal(pov.getValue(), identifier)) {
+                return pov;
+            }
+        }
 
-	public SouthPov getSouthPov() {
-		return southPov;
-	}
+        return null;
+    }
 
-	public EastPov getEastPov() {
-		return eastPov;
-	}
+    public Button getNorthPov() {
+        return getButton("NP");
+    }
 
-	public WestPov getWestPov() {
-		return westPov;
-	}
+    public Button getSouthPov() {
+        return getButton("SP");
+    }
 
-	public NorthEastPov getNorthEastPov() {
-		return northEastPov;
-	}
+    public Button getEastPov() {
+        return getButton("EP");
+    }
 
-	public NorthWestPov getNorthWestPov() {
-		return northWestPov;
-	}
+    public Button getWestPov() {
+        return getButton("WP");
+    }
 
-	public SouthEastPov getSouthEastPov() {
-		return southEastPov;
-	}
+    public Button getNorthEastPov() {
+        return getButton("NEP");
+    }
 
-	public SouthWestPov getSouthWestPov() {
-		return southWestPov;
-	}
+    public Button getNorthWestPov() {
+        return getButton("NWP");
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(northPov, southPov, eastPov, westPov,
-				northEastPov, northWestPov, southEastPov, southWestPov);
-	}
+    public Button getSouthEastPov() {
+        return getButton("SEP");
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj instanceof Pov) {
-			final Pov pov = (Pov) obj;
+    public Button getSouthWestPov() {
+        return getButton("SWP");
+    }
 
-			return equal(northPov, pov.northPov)
-					&& equal(southPov, pov.southPov)
-					&& equal(eastPov, pov.eastPov)
-					&& equal(westPov, pov.westPov)
-					&& equal(northEastPov, pov.northEastPov)
-					&& equal(northWestPov, pov.northWestPov)
-					&& equal(southEastPov, pov.southEastPov)
-					&& equal(southWestPov, pov.southWestPov);
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(povDirections);
+    }
 
-	@Override
-	public String toString() {
-		return String.format("POV[%s | %s | %s | %s | %s | %s | %s | %s]",
-				northPov, southPov, eastPov, westPov, northEastPov,
-				northWestPov, southEastPov, northEastPov);
-	}
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj instanceof Pov) {
+            final Pov pov = (Pov) obj;
 
-	public static class PovBuilder {
+            return povDirections.containsAll(pov.povDirections)
+                    && pov.povDirections.containsAll(povDirections);
+        } else {
+            return false;
+        }
+    }
 
-		private NorthPov northPov;
-		private SouthPov southPov;
-		private EastPov eastPov;
-		private WestPov westPov;
-		private NorthEastPov northEastPov;
-		private NorthWestPov northWestPov;
-		private SouthEastPov southEastPov;
-		private SouthWestPov southWestPov;
+    @Override
+    public String toString() {
+        return String.format("POV[%s]", Joiner.on(", ").join(povDirections));
+    }
 
-		public Pov build() {
-			final Pov pov = new Pov();
+    public static class PovBuilder {
 
-			pov.northPov = northPov;
-			pov.southPov = southPov;
-			pov.eastPov = eastPov;
-			pov.westPov = westPov;
-			pov.northEastPov = northEastPov;
-			pov.northWestPov = northWestPov;
-			pov.southEastPov = southEastPov;
-			pov.southWestPov = southWestPov;
+        private Button northPov;
+        private Button southPov;
+        private Button eastPov;
+        private Button westPov;
+        private Button northEastPov;
+        private Button northWestPov;
+        private Button southEastPov;
+        private Button southWestPov;
 
-			return pov;
-		}
+        public Pov build() {
+            final Pov pov = new Pov();
 
-		public PovBuilder northPov(final NorthPov northPov) {
-			this.northPov = northPov;
-			return this;
-		}
+            add(pov, northPov);
+            add(pov, southPov);
+            add(pov, eastPov);
+            add(pov, westPov);
+            add(pov, northEastPov);
+            add(pov, northWestPov);
+            add(pov, southEastPov);
+            add(pov, southWestPov);
 
-		public PovBuilder southPov(final SouthPov southPov) {
-			this.southPov = southPov;
-			return this;
-		}
+            return pov;
+        }
 
-		public PovBuilder eastPov(final EastPov eastPov) {
-			this.eastPov = eastPov;
-			return this;
-		}
+        private void add(final Pov pov, final Button Button) {
+            if (Button != null) {
+                pov.povDirections.add(Button);
+            }
+        }
 
-		public PovBuilder westPov(final WestPov westPov) {
-			this.westPov = westPov;
-			return this;
-		}
+        public PovBuilder northPov(final Button northPov) {
+            this.northPov = northPov;
+            return this;
+        }
 
-		public PovBuilder northEastPov(final NorthEastPov northEastPov) {
-			this.northEastPov = northEastPov;
-			return this;
-		}
+        public PovBuilder southPov(final Button southPov) {
+            this.southPov = southPov;
+            return this;
+        }
 
-		public PovBuilder northWestPov(final NorthWestPov northWestPov) {
-			this.northWestPov = northWestPov;
-			return this;
-		}
+        public PovBuilder eastPov(final Button eastPov) {
+            this.eastPov = eastPov;
+            return this;
+        }
 
-		public PovBuilder southEastPov(final SouthEastPov southEastPov) {
-			this.southEastPov = southEastPov;
-			return this;
-		}
+        public PovBuilder westPov(final Button westPov) {
+            this.westPov = westPov;
+            return this;
+        }
 
-		public PovBuilder southWestPov(final SouthWestPov southWestPov) {
-			this.southWestPov = southWestPov;
-			return this;
-		}
-	}
+        public PovBuilder northEastPov(final Button northEastPov) {
+            this.northEastPov = northEastPov;
+            return this;
+        }
+
+        public PovBuilder northWestPov(final Button northWestPov) {
+            this.northWestPov = northWestPov;
+            return this;
+        }
+
+        public PovBuilder southEastPov(final Button southEastPov) {
+            this.southEastPov = southEastPov;
+            return this;
+        }
+
+        public PovBuilder southWestPov(final Button southWestPov) {
+            this.southWestPov = southWestPov;
+            return this;
+        }
+    }
 }

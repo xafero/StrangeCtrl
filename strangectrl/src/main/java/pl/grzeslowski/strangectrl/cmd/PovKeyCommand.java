@@ -1,27 +1,53 @@
 package pl.grzeslowski.strangectrl.cmd;
+
+import static com.google.common.base.Objects.equal;
+
 import java.awt.GraphicsDevice;
-import java.util.List;
+import java.util.Objects;
 
-import pl.grzeslowski.strangectrl.config.Key;
+import com.xafero.strangectrl.cmd.ICommand;
 
-import com.xafero.strangectrl.input.InputUtils;
+public class PovKeyCommand implements ICommand {
+    private final ICommand iCommand;
 
-public class PovKeyCommand extends KeyCommand {
+    public PovKeyCommand(final ICommand iCommand) {
+        this.iCommand = iCommand;
+    }
 
-	public PovKeyCommand(final Key key, final InputUtils inputUtils) {
-		super(key, inputUtils);
-	}
+    @Override
+    public void execute(final GraphicsDevice dev, final double value) {
+        if (value != 0) {
+            iCommand.execute(dev, 1.0);
+        } else {
+            iCommand.execute(dev, 0.0);
+        }
+    }
 
-	public PovKeyCommand(final List<Key> keys, final InputUtils inputUtils) {
-		super(keys, inputUtils);
-	}
+    @Override
+    public void executePeriodCommand(final GraphicsDevice graphicsDevice,
+            final double value) {
+        iCommand.execute(graphicsDevice, 1.0);
+        iCommand.execute(graphicsDevice, 0.0);
+    }
 
-	@Override
-	public void execute(final GraphicsDevice dev, final double value) {
-		if (value != 0) {
-			super.execute(dev, 1.0);
-		} else {
-			super.execute(dev, 0.0);
-		}
-	}
+    @Override
+    public boolean isPeriodCommand() {
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(iCommand);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj instanceof PovKeyCommand) {
+            final PovKeyCommand pov = (PovKeyCommand) obj;
+
+            return equal(iCommand, pov.iCommand);
+        } else {
+            return false;
+        }
+    }
 }
