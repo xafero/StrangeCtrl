@@ -9,7 +9,7 @@ import com.xafero.strangectrl.input.InputUtils;
 
 public class SequentialKeyCommand extends KeyCommand {
 
-    private static final long WAIT = 1000;
+    private static final long WAIT = 20;
 
     public SequentialKeyCommand(final Key key, final InputUtils inputUtils) {
         super(key, inputUtils);
