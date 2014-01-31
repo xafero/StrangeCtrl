@@ -62,7 +62,8 @@ public class Button {
             final Button button = (Button) obj;
 
             return Objects.equal(value, button.value)
-                    && Objects.equal(keys, button.keys);
+                    && Objects.equal(keys, button.keys)
+                    && pressType.equalsIgnoreCase(button.pressType);
         } else {
             return false;
         }

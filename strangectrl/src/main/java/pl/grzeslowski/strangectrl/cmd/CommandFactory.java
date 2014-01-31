@@ -1,6 +1,5 @@
 package pl.grzeslowski.strangectrl.cmd;
 
-import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.HashMap;
@@ -105,7 +104,7 @@ public class CommandFactory {
     private ICommand createCommand(final Button button) {
         final List<Key> keys = button.getKeys();
 
-        if (equal(Button.COMBO_TYPE, button.getPressType())) {
+        if (Button.COMBO_TYPE.equalsIgnoreCase(button.getPressType())) {
             final MouseCommand mouseCommand = getMouseCommand(keys);
 
             if (mouseCommand == null) {
@@ -113,7 +112,8 @@ public class CommandFactory {
             } else {
                 return mouseCommand;
             }
-        } else if (equal(Button.SEQUENTIAL_TYPE, button.getPressType())) {
+        } else if (Button.SEQUENTIAL_TYPE.equalsIgnoreCase(button
+                .getPressType())) {
             final MouseCommand mouseCommand = getMouseCommand(keys);
 
             if (mouseCommand == null) {
