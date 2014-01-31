@@ -179,15 +179,10 @@ public class CommandFactory {
     private ICommand getCommandFromMappers(final String identifier,
             final double value) {
         for (final CommandNameMapper mapper : mappers) {
-            // logger.debug(String.format("iden = %s | val = %s | can map = %s",
-            // identifier, value,
-            // mapper.canMap(identifier, value)));
             if (mapper.canMap(identifier, value)) {
                 final String mappedIdentifier = mapper.map(identifier, value);
 
                 final ICommand command = commands.get(mappedIdentifier);
-                logger.debug(String.format("iden = %s | command = %s",
-                        mappedIdentifier, command));
                 if (command != null) {
                     return command;
                 }

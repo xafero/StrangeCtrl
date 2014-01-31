@@ -22,13 +22,8 @@ public class PovNameMapper implements CommandNameMapper {
         map.put(1.0, "WP");
     }
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
-            .getLogger(PovNameMapper.class);
     @Override
     public boolean canMap(final String identifier, final double value) {
-        logger.debug(String.format("i = %s | val = %s | povE = %b | mapC = %b",
-                identifier, value, equal(POV, identifier),
-                map.containsKey(value)));
         return equal(POV, identifier) && map.containsKey(value);
     }
 
