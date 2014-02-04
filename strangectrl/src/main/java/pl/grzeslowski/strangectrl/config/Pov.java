@@ -108,9 +108,9 @@ public class Pov {
             return pov;
         }
 
-        private void add(final Pov pov, final Button Button) {
-            if (Button != null) {
-                pov.povDirections.add(Button);
+        private void add(final Pov pov, final Button button) {
+            if (button != null) {
+                pov.povDirections.add(button);
             }
         }
 
