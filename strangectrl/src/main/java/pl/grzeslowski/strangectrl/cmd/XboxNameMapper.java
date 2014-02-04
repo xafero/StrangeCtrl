@@ -1,45 +1,38 @@
 package pl.grzeslowski.strangectrl.cmd;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
 
-// TODO: it can be refactored as PovNameMapper - one abstract class!
-public class XboxNameMapper implements CommandNameMapper {
-    private static final Pattern VALID_IDENTIFIER = Pattern.compile("\\d");
+public class XboxNameMapper extends MapNameMapper {
+    public XboxNameMapper() {
+        super(createMap());
+    }
+
+    private static Map<String, String> createMap() {
+        final Map<String, String> map = new HashMap<>();
+
+        map.put("0", "A");
+        map.put("1", "B");
+        map.put("2", "X");
+        map.put("3", "Y");
+        map.put("4", "LB");
+        map.put("5", "RB");
+        map.put("6", "BACK");
+        map.put("7", "START");
+        map.put("8", "LS");
+        map.put("9", "RS");
+
+        return map;
+    }
 
     @Override
     public boolean canMap(final String identifier, final double value) {
-        final Matcher matcher = VALID_IDENTIFIER.matcher(identifier);
-
-        return matcher.matches();
+        return super.canMap(identifier);
     }
 
     @Override
     public String map(final String identifier, final double value) {
-        switch (identifier) {
-        case "0":
-            return "A";
-        case "1":
-            return "B";
-        case "2":
-            return "X";
-        case "3":
-            return "Y";
-        case "4":
-            return "LB";
-        case "5":
-            return "RB";
-        case "6":
-            return "BACK";
-        case "7":
-            return "START";
-        case "8":
-            return "LS";
-        case "9":
-            return "RS";
-        default:
-            throw new RuntimeException("Cannot map this {" + identifier + "}!");
-        }
+        return super.map(identifier);
     }
 
 }
