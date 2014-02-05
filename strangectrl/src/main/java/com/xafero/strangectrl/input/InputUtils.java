@@ -83,7 +83,7 @@ public class InputUtils {
                 robot.keyPress(getCode(key));
                 pressedKeys.put(key, Boolean.TRUE);
 
-                logger.trace(String.format("Pressed key {%s}", key));
+                logger.debug(String.format("Pressed key {%s}", key));
             }
         }
     }
@@ -101,7 +101,7 @@ public class InputUtils {
             robot.keyRelease(getCode(key));
             pressedKeys.put(key, Boolean.FALSE);
 
-            logger.trace(String.format("Released key {%s}", key));
+            logger.debug(String.format("Released key {%s}", key));
         }
     }
 
@@ -119,7 +119,7 @@ public class InputUtils {
             robot.keyRelease(getCode(key));
         }
 
-        logger.trace(String.format("Pressed combo key {%s}", Joiner.on(",")
+        logger.debug(String.format("Pressed combo key {%s}", Joiner.on(",")
                 .join(keys)));
     }
 
@@ -130,7 +130,7 @@ public class InputUtils {
     public void moveMouse(final Point point) {
         robot.mouseMove(point.x, point.y);
 
-        logger.trace(String.format("Moved mouse [%s, %s]", point.x, point.y));
+        logger.debug(String.format("Moved mouse [%s, %s]", point.x, point.y));
     }
 
     public void mousePress(final MouseButton button) {
@@ -139,7 +139,7 @@ public class InputUtils {
             robot.mousePress(button.buttonMask);
             pressedMouseButtons.put(button, Boolean.TRUE);
 
-            logger.trace(String.format("Pressed mouse button {%s}", button));
+            logger.debug(String.format("Pressed mouse button {%s}", button));
         }
     }
 
@@ -157,10 +157,10 @@ public class InputUtils {
 
     public void mouseRelease(final MouseButton button) {
         robot.mouseRelease(button.buttonMask);// TODO check if releasing is only
-                                              // once!!!
+        // once!!!
         pressedMouseButtons.put(button, Boolean.FALSE);
 
-        logger.trace(String.format("Released mouse button {%s}", button));
+        logger.debug(String.format("Released mouse button {%s}", button));
     }
 
     public void mouseReleaseLeft() {
@@ -178,6 +178,6 @@ public class InputUtils {
     public void mouseWheel(final int value) {
         robot.mouseWheel(value);
 
-        logger.trace(String.format("Moved mouse wheel {%s}", value));
+        logger.debug(String.format("Moved mouse wheel {%s}", value));
     }
 }

@@ -7,7 +7,7 @@ import com.xafero.strangectrl.input.InputUtils;
 
 public class MouseWheelCommand extends AnalogCommand implements ICommand {
 
-    private boolean pressed;
+    private volatile boolean pressed;
 
     public MouseWheelCommand(final InputUtils inputUtils, final int maxMove,
             final double delta) {
@@ -19,11 +19,14 @@ public class MouseWheelCommand extends AnalogCommand implements ICommand {
     }
 
     @Override
-    public void execute(final GraphicsDevice graphicsDevice, final double value) {
+    public synchronized void execute(final GraphicsDevice graphicsDevice,
+            final double value) {
         if (getDelta() < Math.abs(value) && canExecute(value) && !pressed) {
-            getInputUtils().mouseWheel((int) Math.round(value * getMaxMove()));
             pressed = true;
-        } else {
+            getInputUtils().mouseWheel((int) Math.signum(value) * getMaxMove());
+        }
+
+        if (getDelta() >= Math.abs(value)) {
             pressed = false;
         }
     }
