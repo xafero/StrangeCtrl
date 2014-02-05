@@ -19,11 +19,13 @@ import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.DirectAndRawInputEnvironmentPlugin;
 import pl.grzeslowski.strangectrl.config.Key;
 
+import com.google.common.base.Joiner;
 import com.xafero.strangectrl.cmd.ConfigUtils;
 import com.xafero.superloader.NativeLoader;
 
 public class InputUtils {
-
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
+            .getLogger(InputUtils.class);
     private static final String PREFIX = "VK_";
     private final Robot robot;
     private final Map<String, Integer> keyMap;
@@ -79,8 +81,9 @@ public class InputUtils {
         for (final Key key : keys) {
             if (!pressedKeys.containsKey(key) || !pressedKeys.get(key)) {
                 robot.keyPress(getCode(key));
-
                 pressedKeys.put(key, Boolean.TRUE);
+
+                logger.trace(String.format("Pressed key {%s}", key));
             }
         }
     }
@@ -96,8 +99,9 @@ public class InputUtils {
     public void releaseKey(final List<Key> keys) {
         for (final Key key : keys) {
             robot.keyRelease(getCode(key));
-
             pressedKeys.put(key, Boolean.FALSE);
+
+            logger.trace(String.format("Released key {%s}", key));
         }
     }
 
@@ -114,6 +118,9 @@ public class InputUtils {
         for (final Key key : keyCodes) {
             robot.keyRelease(getCode(key));
         }
+
+        logger.trace(String.format("Pressed combo key {%s}", Joiner.on(",")
+                .join(keys)));
     }
 
     public void pressKeyCombo(final Key... keys) {
@@ -122,14 +129,17 @@ public class InputUtils {
 
     public void moveMouse(final Point point) {
         robot.mouseMove(point.x, point.y);
+
+        logger.trace(String.format("Moved mouse [%s, %s]", point.x, point.y));
     }
 
     public void mousePress(final MouseButton button) {
         if (!pressedMouseButtons.containsKey(button)
                 || !pressedMouseButtons.get(button)) {
             robot.mousePress(button.buttonMask);
-
             pressedMouseButtons.put(button, Boolean.TRUE);
+
+            logger.trace(String.format("Pressed mouse button {%s}", button));
         }
     }
 
@@ -146,9 +156,11 @@ public class InputUtils {
     }
 
     public void mouseRelease(final MouseButton button) {
-        robot.mouseRelease(button.buttonMask);
-
+        robot.mouseRelease(button.buttonMask);// TODO check if releasing is only
+                                              // once!!!
         pressedMouseButtons.put(button, Boolean.FALSE);
+
+        logger.trace(String.format("Released mouse button {%s}", button));
     }
 
     public void mouseReleaseLeft() {
@@ -165,5 +177,7 @@ public class InputUtils {
 
     public void mouseWheel(final int value) {
         robot.mouseWheel(value);
+
+        logger.trace(String.format("Moved mouse wheel {%s}", value));
     }
 }
