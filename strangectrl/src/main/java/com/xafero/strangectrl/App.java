@@ -34,6 +34,7 @@ import com.xafero.strangectrl.input.ControllersRefresher;
 import com.xafero.strangectrl.input.IControllerCallback;
 import com.xafero.strangectrl.input.InputUtils;
 import com.xafero.strangectrl.input.SimpleCallback;
+import com.xafero.strangectrl.input.TimeRunner;
 
 /**
  * The main entry point
@@ -55,6 +56,7 @@ public class App implements ControllersRefreshListener, ExitListener {
     private ControllerPoller controllerPoller;
     private SystemTray tray;
     private TrayIcon trayIcon;
+    private TimeRunner timeRunner;
 
     public App() {
         AtomicReference<GraphicsDevice> devRef;
@@ -106,9 +108,11 @@ public class App implements ControllersRefreshListener, ExitListener {
                 graphicsDevice);
         final ControllersRefresher controllersRefresher = new ControllersRefresher(
                 inputUtils, MAX_WAIT_TIME_TO_REFRESH_CONTROLLERS, PERIOD);
-        controllerPoller = new ControllerPoller(callback, controllersRefresher,
-                PERIOD);
-        controllerPoller.start();
+        controllerPoller = new ControllerPoller(callback, controllersRefresher);
+
+        timeRunner = new TimeRunner(PERIOD, controllerPoller);
+
+        timeRunner.start();
     }
 
     private void loadTray() {
@@ -200,7 +204,7 @@ public class App implements ControllersRefreshListener, ExitListener {
     public void exit() {
         tray.remove(trayIcon);
 
-        controllerPoller.stop();
+        timeRunner.stop();
     }
 
     @Override

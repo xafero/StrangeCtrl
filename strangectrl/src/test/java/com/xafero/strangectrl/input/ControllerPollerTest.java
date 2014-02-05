@@ -22,217 +22,171 @@ import com.google.common.collect.Sets;
 
 public class ControllerPollerTest {
 
-	@Test
-	public void controller_is_no_longer_valid() throws Exception {
+    @Test
+    public void controller_is_no_longer_valid() throws Exception {
 
-		// given
-		final Controller controller = mock(Controller.class);
-		when(controller.poll()).thenReturn(false);
+        // given
+        final Controller controller = mock(Controller.class);
+        when(controller.poll()).thenReturn(false);
 
-		final IControllerCallback callback = mock(IControllerCallback.class);
+        final IControllerCallback callback = mock(IControllerCallback.class);
 
-		final AtomicInteger times = new AtomicInteger();
-		final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
-		when(controllersRefresher.getController()).then(new Answer<Set<?>>() {
+        final AtomicInteger times = new AtomicInteger();
+        final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
+        when(controllersRefresher.getController()).then(new Answer<Set<?>>() {
 
-			@Override
-			public Set<?> answer(final InvocationOnMock invocation)
-					throws Throwable {
-				if (times.getAndIncrement() == 0) {
-					return Sets.newHashSet(controller);
-				} else {
-					return new HashSet<>();
-				}
-			}
-		});
+            @Override
+            public Set<?> answer(final InvocationOnMock invocation)
+                    throws Throwable {
+                if (times.getAndIncrement() == 0) {
+                    return Sets.newHashSet(controller);
+                } else {
+                    return new HashSet<>();
+                }
+            }
+        });
 
-		final int period = 100;
-		final ControllerPoller poller = spy(new ControllerPoller(callback,
-				controllersRefresher, period));
+        final ControllerPoller poller = spy(new ControllerPoller(callback,
+                controllersRefresher));
 
-		// when
-		poller.start();
+        // when
+        poller.run();
+        poller.run();
 
-		// need to sleep to wait for TimerTask execute
-		try {
-			Thread.sleep(period * 3);
-		} catch (final InterruptedException ex) {
-		}
+        // then
+        verify(callback).controllerRemoved();
+    }
 
-		// then
-		verify(callback).controllerRemoved();
-	}
+    @Test
+    public void controller_valid_one_time() throws Exception {
 
-	@Test
-	public void controller_valid_one_time() throws Exception {
+        // given
+        final Controller controller = mock(Controller.class);
+        when(controller.poll()).thenAnswer(new Answer<Boolean>() {
 
-		// given
-		final Controller controller = mock(Controller.class);
-		when(controller.poll()).thenAnswer(new Answer<Boolean>() {
+            private boolean first = true;
 
-			private boolean first = true;
+            @Override
+            public Boolean answer(final InvocationOnMock invocation)
+                    throws Throwable {
+                final Boolean isPoll = first;
+                first = !first;
+                return isPoll;
+            }
+        });
+        when(controller.getEventQueue()).thenReturn(new EventQueue(0));
 
-			@Override
-			public Boolean answer(final InvocationOnMock invocation)
-					throws Throwable {
-				final Boolean isPoll = first;
-				first = !first;
-				return isPoll;
-			}
-		});
-		when(controller.getEventQueue()).thenReturn(new EventQueue(0));
+        final AtomicInteger times = new AtomicInteger();
+        final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
+        when(controllersRefresher.getController()).then(new Answer<Set<?>>() {
 
-		final AtomicInteger times = new AtomicInteger();
-		final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
-		when(controllersRefresher.getController()).then(new Answer<Set<?>>() {
+            @Override
+            public Set<?> answer(final InvocationOnMock invocation)
+                    throws Throwable {
+                if (times.getAndIncrement() == 0) {
+                    return Sets.newHashSet(controller);
+                } else {
+                    return new HashSet<>();
+                }
+            }
+        });
 
-			@Override
-			public Set<?> answer(final InvocationOnMock invocation)
-					throws Throwable {
-				if (times.getAndIncrement() == 0) {
-					return Sets.newHashSet(controller);
-				} else {
-					return new HashSet<>();
-				}
-			}
-		});
+        final IControllerCallback callback = mock(IControllerCallback.class);
 
-		final IControllerCallback callback = mock(IControllerCallback.class);
+        final ControllerPoller poller = spy(new ControllerPoller(callback,
+                controllersRefresher));
 
-		final long period = 100;
-		final ControllerPoller poller = spy(new ControllerPoller(callback,
-				controllersRefresher, period));
+        // when
+        poller.run();
+        poller.run();
+        poller.run();
 
-		// when
-		poller.start();
+        // then
+        verify(controller, times(2)).poll();
+        verify(controller).getEventQueue();
+    }
 
-		// need to sleep to wait for TimerTask execute
-		try {
-			Thread.sleep(period * 7);
-		} catch (final InterruptedException ex) {
-		}
+    @Test
+    public void refresh_controllers_when_queue_is_empty() throws Exception {
 
-		// then
-		verify(controller, times(2)).poll();
-		verify(controller).getEventQueue();
-	}
+        // given
+        final Controller controller = mock(Controller.class);
+        when(controller.poll()).thenReturn(false);
 
-	@Test
-	public void refresh_controllers_when_queue_is_empty() throws Exception {
+        final IControllerCallback callback = mock(IControllerCallback.class);
 
-		// given
-		final Controller controller = mock(Controller.class);
-		when(controller.poll()).thenReturn(false);
+        final AtomicInteger times = new AtomicInteger();
+        final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
+        when(controllersRefresher.getController()).then(new Answer<Set<?>>() {
 
-		final IControllerCallback callback = mock(IControllerCallback.class);
+            @Override
+            public Set<?> answer(final InvocationOnMock invocation)
+                    throws Throwable {
+                if (times.getAndIncrement() == 0) {
+                    return Sets.newHashSet(controller);
+                } else {
+                    return new HashSet<>();
+                }
+            }
+        });
 
-		final int period = 100;
+        final ControllerPoller poller = spy(new ControllerPoller(callback,
+                controllersRefresher));
 
-		final AtomicInteger times = new AtomicInteger();
-		final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
-		when(controllersRefresher.getController()).then(new Answer<Set<?>>() {
+        // when
+        poller.run();
+        poller.run();
 
-			@Override
-			public Set<?> answer(final InvocationOnMock invocation)
-					throws Throwable {
-				if (times.getAndIncrement() == 0) {
-					return Sets.newHashSet(controller);
-				} else {
-					return new HashSet<>();
-				}
-			}
-		});
+        // then
+        verify(callback).controllerRemoved();
+        verify(controllersRefresher, times(1)).getController();
+    }
 
-		final ControllerPoller poller = spy(new ControllerPoller(callback,
-				controllersRefresher, period));
+    @Test
+    public void add_controller_remove_controller_add_controller()
+            throws Exception {
 
-		// when
-		poller.start();
+        // given
+        final Controller controller = mock(Controller.class);
+        when(controller.poll()).thenReturn(false);
 
-		// need to sleep to wait for TimerTask execute
-		try {
-			Thread.sleep(period * 3);
-		} catch (final InterruptedException ex) {
-		}
+        final Controller controller2 = mock(Controller.class);
+        when(controller2.poll()).thenReturn(false);
 
-		// then
-		verify(callback).controllerRemoved();
-		verify(controllersRefresher, atLeast(1)).getController();
-	}
+        final IControllerCallback callback = mock(IControllerCallback.class);
 
-	@Test(expected = IllegalStateException.class)
-	public void cannot_start_twice() throws Exception {
+        final AtomicInteger times = new AtomicInteger();
+        final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
+        when(controllersRefresher.getController()).then(new Answer<Set<?>>() {
 
-		// given
-		final Controller controller = mock(Controller.class);
-		when(controller.poll()).thenReturn(false);
+            @Override
+            public Set<?> answer(final InvocationOnMock invocation)
+                    throws Throwable {
+                if (times.get() == 0) {
+                    times.incrementAndGet();
+                    return Sets.newHashSet(controller);
+                } else if (times.get() == 1) {
+                    times.incrementAndGet();
+                    return Sets.newHashSet(controller2);
+                } else {
+                    return new HashSet<>();
+                }
+            }
+        });
 
-		final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
-		when(controllersRefresher.getController()).thenReturn(
-				Sets.newHashSet(controller));
+        final ControllerPoller poller = spy(new ControllerPoller(callback,
+                controllersRefresher));
 
-		final IControllerCallback callback = mock(IControllerCallback.class);
+        // when
+        poller.run();
+        poller.run();
+        poller.run();
+        poller.run();
 
-		final int period = 100;
-		final ControllerPoller poller = spy(new ControllerPoller(callback,
-				controllersRefresher, period));
-
-		// when
-		poller.start();
-		poller.start();
-
-	}
-
-	@Test
-	public void add_controller_remove_controller_add_controller()
-			throws Exception {
-
-		// given
-		final Controller controller = mock(Controller.class);
-		when(controller.poll()).thenReturn(false);
-
-		final Controller controller2 = mock(Controller.class);
-		when(controller2.poll()).thenReturn(false);
-
-		final IControllerCallback callback = mock(IControllerCallback.class);
-
-		final int period = 100;
-
-		final AtomicInteger times = new AtomicInteger();
-		final ControllersRefresher controllersRefresher = mock(ControllersRefresher.class);
-		when(controllersRefresher.getController()).then(new Answer<Set<?>>() {
-
-			@Override
-			public Set<?> answer(final InvocationOnMock invocation)
-					throws Throwable {
-				if (times.get() == 0) {
-					times.incrementAndGet();
-					return Sets.newHashSet(controller);
-				} else if (times.get() == 1) {
-					times.incrementAndGet();
-					return Sets.newHashSet(controller2);
-				} else {
-					return new HashSet<>();
-				}
-			}
-		});
-
-		final ControllerPoller poller = spy(new ControllerPoller(callback,
-				controllersRefresher, period));
-
-		// when
-		poller.start();
-
-		// need to sleep to wait for TimerTask execute
-		try {
-			Thread.sleep(period * 7);
-		} catch (final InterruptedException ex) {
-		}
-
-		// then
-		verify(callback, times(2)).controllerRemoved();
-		verify(controllersRefresher, atLeast(1)).getController();
-		verify(controller).poll();
-		verify(controller, atLeast(1)).poll();
-	}
+        // then
+        verify(callback, times(2)).controllerRemoved();
+        verify(controllersRefresher, atLeast(1)).getController();
+        verify(controller).poll();
+        verify(controller, times(1)).poll();
+    }
 }
