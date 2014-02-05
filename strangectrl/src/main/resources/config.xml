@@ -31,7 +31,7 @@
 	<button value="RS">
 		<key key="CENTER_MOUSE" />
 	</button>
-	<button value="LS">
+	<button value="LS" pressType="COMBO">
 		<key key="CONTROL" />
 		<key key="W" />
 	</button>

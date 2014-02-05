@@ -26,6 +26,7 @@ public class XStreamConfigLoader implements ConfigLoader {
 
         // attributes
         xstream.useAttributeFor(Button.class, "value");
+        xstream.useAttributeFor(Button.class, "pressType");
         xstream.useAttributeFor(Key.class, "key");
     }
 

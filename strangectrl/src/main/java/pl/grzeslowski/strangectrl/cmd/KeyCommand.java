@@ -51,7 +51,7 @@ public abstract class KeyCommand implements ICommand {
 
     @Override
     public boolean equals(final Object obj) {
-        if (equal(getClass(), obj.getClass())) {
+        if (obj != null && equal(getClass(), obj.getClass())) {
             final KeyCommand keyCommand = (KeyCommand) obj;
 
             return equal(keys, keyCommand.keys);

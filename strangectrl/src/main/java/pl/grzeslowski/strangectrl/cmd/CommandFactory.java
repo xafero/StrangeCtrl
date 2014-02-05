@@ -26,7 +26,10 @@ import com.xafero.strangectrl.input.InputUtils.MouseButton;
 public class CommandFactory {
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
             .getLogger(CommandFactory.class);
-    private final static double DELTA_FOR_MOUSE_MOVE = 0.2;
+
+    // TODO: move it to setup!!!
+    public final static double DELTA_FOR_MOUSE_MOVE = 0.2;
+    public static final double DELTA_FOR_SCROLL = 0.99;
 
     private final InputUtils inputUtils;
     private final Map<String, ICommand> commands = new HashMap<>();
@@ -107,7 +110,7 @@ public class CommandFactory {
 
         // mouse wheel
         final MouseWheelCommand mouseWheelCommand = new MouseWheelCommand(
-                inputUtils, setup.getScrollLines(), 0.99);
+                inputUtils, setup.getScrollLines(), DELTA_FOR_SCROLL);
         commands.put("ry", mouseWheelCommand);
     }
 

@@ -55,6 +55,32 @@ public class XStreamConfigLoaderTest {
     }
 
     @Test
+    public void configuration_with_combo_button_with_key() throws Exception {
+
+        // given
+        final XStreamConfigLoader loader = new XStreamConfigLoader();
+
+        // @formatter:off
+        final String xml = "<configuration>"
+                + "<button value=\"A\"  pressType=\"COMBO\">"
+                + "  <key key=\"Q\" />"
+                + "</button>"
+                + "</configuration>";
+        // @formatter:on
+
+        // expected
+        final Key key = new Key("Q");
+        final Button button = new Button("A", Button.COMBO_TYPE, key);
+        final Configuration expected = new Configuration(button);
+
+        // when
+        final Configuration loadXml = loader.loadXml(xml);
+
+        // then
+        assertThat(loadXml).isEqualTo(expected);
+    }
+
+    @Test
     public void configuration_with_button_with_2_keys() throws Exception {
 
         // given

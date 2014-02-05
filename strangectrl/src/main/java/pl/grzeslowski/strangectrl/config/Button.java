@@ -31,6 +31,14 @@ public class Button {
         }
     }
 
+    public Button(final String value, final String pressType, final Key... keys) {
+        this(value, pressType, Arrays.asList(keys));
+    }
+
+    public Button(final String value, final String pressType, final Key key) {
+        this(value, pressType, Arrays.asList(key));
+    }
+
     public Button(final String value, final Key... keys) {
         this(value, Arrays.asList(keys));
     }
@@ -71,8 +79,8 @@ public class Button {
 
     @Override
     public String toString() {
-        return "Button [value=" + value + ", keys=" + Joiner.on(",").join(keys)
-                + "]";
+        return "Button [value=" + value + ", pressType=" + pressType
+                + ", keys=" + Joiner.on(",").join(keys) + "]";
     }
 
 }

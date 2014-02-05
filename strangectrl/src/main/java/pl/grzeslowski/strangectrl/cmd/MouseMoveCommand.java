@@ -56,5 +56,4 @@ public abstract class MouseMoveCommand extends AnalogCommand implements
     private Point mousePosition(final GraphicsDevice graphicsDevice) {
         return desktopUtils.getMousePos(graphicsDevice);
     }
-
 }

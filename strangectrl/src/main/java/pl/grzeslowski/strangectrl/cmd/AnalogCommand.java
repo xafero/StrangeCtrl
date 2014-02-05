@@ -1,5 +1,7 @@
 package pl.grzeslowski.strangectrl.cmd;
 
+import java.util.Objects;
+
 import com.xafero.strangectrl.input.InputUtils;
 
 public abstract class AnalogCommand {
@@ -38,5 +40,28 @@ public abstract class AnalogCommand {
 
     protected double getDelta() {
         return delta;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(maxMove, delta);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj != null && this.getClass().equals(obj.getClass())) {
+            final AnalogCommand analogCommand = (AnalogCommand) obj;
+
+            return maxMove == analogCommand.maxMove
+                    && delta == analogCommand.delta;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s[maxMove = %s, delta = %s]", getClass()
+                .getSimpleName(), maxMove, delta);
     }
 }

@@ -3,6 +3,7 @@ package pl.grzeslowski.strangectrl.cmd;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -226,5 +227,52 @@ public class CommandFactoryTest {
         assertThat(command).isEqualTo(expected);
     }
 
+    @Test
+    public void get_commands_one_button_combo() throws Exception {
+
+        // given
+        final Key key = new Key("Q");
+        final Button button = new Button("X", Button.COMBO_TYPE, key);
+        final Configuration configuration = new Configuration(button);
+        final InputUtils inputUtils = mock(InputUtils.class);
+
+        final CommandFactory commandFactory = new CommandFactory(inputUtils,
+                configuration);
+
+        // expected
+        final KeyCommand expected = new ComboKeyCommand(key, inputUtils);
+
+        // when
+        final ICommand keyCommand = commandFactory.getCommand("X", 0.0);
+
+        // then
+        assertThat(keyCommand).isEqualTo(expected);
+    }
+
+    @Test
+    public void get_commands_three_button_combo() throws Exception {
+
+        // given
+        final Key key1 = new Key("Q");
+        final Key key2 = new Key("W");
+        final Key key3 = new Key("E");
+        final Button button = new Button("Y", Button.COMBO_TYPE, key1, key2,
+                key3);
+        final Configuration configuration = new Configuration(button);
+        final InputUtils inputUtils = mock(InputUtils.class);
+
+        final CommandFactory commandFactory = new CommandFactory(inputUtils,
+                configuration);
+
+        // expected
+        final KeyCommand expected = new ComboKeyCommand(Arrays.asList(key1,
+                key2, key3), inputUtils);
+
+        // when
+        final ICommand keyCommand = commandFactory.getCommand("Y", 0.0);
+
+        // then
+        assertThat(keyCommand).isEqualTo(expected);
+    }
 
 }
