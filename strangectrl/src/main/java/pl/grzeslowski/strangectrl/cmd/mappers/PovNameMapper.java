@@ -1,4 +1,4 @@
-package pl.grzeslowski.strangectrl.cmd;
+package pl.grzeslowski.strangectrl.cmd.mappers;
 
 import static com.google.common.base.Objects.equal;
 

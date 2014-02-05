@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pl.grzeslowski.strangectrl.cmd.mappers.CommandNameMapper;
+import pl.grzeslowski.strangectrl.cmd.mappers.PovNameMapper;
+import pl.grzeslowski.strangectrl.cmd.mappers.XboxNameMapper;
 import pl.grzeslowski.strangectrl.config.Button;
 import pl.grzeslowski.strangectrl.config.Configuration;
 import pl.grzeslowski.strangectrl.config.Key;

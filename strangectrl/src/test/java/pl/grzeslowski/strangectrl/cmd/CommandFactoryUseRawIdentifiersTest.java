@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import pl.grzeslowski.strangectrl.cmd.mappers.CommandNameMapper;
 import pl.grzeslowski.strangectrl.config.Button;
 import pl.grzeslowski.strangectrl.config.Configuration;
 import pl.grzeslowski.strangectrl.config.Key;
