@@ -90,6 +90,9 @@ public class App implements ControllersRefreshListener, ExitListener {
         // load conf
         final Configuration configuration = loadConfiguration();
 
+        logger.info(String.format("Got %s buttons.", configuration.getButtons()
+                .size()));
+
         startControllerPoller(configuration);
     }
 

@@ -7,8 +7,6 @@ import static com.google.common.base.Preconditions.checkState;
 import java.util.TimerTask;
 
 public class TimeRunner {
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
-            .getLogger(TimeRunner.class);
     private final long period;
     private final TimerTask timerTask;
     private volatile boolean run = false;
@@ -33,9 +31,6 @@ public class TimeRunner {
 
             // waiting
             final long timeToSleep = period - timeGap;
-            logger.debug(String.format(
-                    "period = %s | timeGap = %s | time to sleep = %s", period,
-                    timeGap, timeToSleep));
             if (timeToSleep >= 0) {
                 try {
                     Thread.sleep(timeToSleep);

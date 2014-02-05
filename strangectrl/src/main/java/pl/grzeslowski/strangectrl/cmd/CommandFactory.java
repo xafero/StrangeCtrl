@@ -29,7 +29,7 @@ public class CommandFactory {
 
     // TODO: move it to setup!!!
     public final static double DELTA_FOR_MOUSE_MOVE = 0.2;
-    public static final double DELTA_FOR_SCROLL = 0.99;
+    public static final double DELTA_FOR_SCROLL = 0.4;
 
     private final InputUtils inputUtils;
     private final Map<String, ICommand> commands = new HashMap<>();
