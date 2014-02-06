@@ -5,7 +5,7 @@ import static com.google.common.base.Objects.equal;
 import com.google.common.base.Objects;
 
 public class Setup {
-    private static final int MAX_MOUSE_MOVE = 15;
+    private static final int MAX_MOUSE_MOVE = 10;
     private static final int TIME_REFRESHER = 10;
     private static final int CHECK_NEW_CONTROLLERS_DELAY = 10;
     private static final int SCROLL_LINES = 1;
@@ -69,4 +69,13 @@ public class Setup {
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Setup [maxMouseMove=" + maxMouseMove + ", timeRefresher="
+                + timeRefresher + ", checkNewControllersDelay="
+                + checkNewControllersDelay + ", scrollLines=" + scrollLines
+                + "]";
+    }
+
 }

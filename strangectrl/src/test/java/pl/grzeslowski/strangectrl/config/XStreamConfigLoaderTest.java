@@ -277,7 +277,9 @@ public class XStreamConfigLoaderTest {
                 + "</configuration>";
 
         // expected
-        final Setup setup = new Setup(15, 10, 500, 2);
+        final Setup defaultSetup = Setup.getDefaultSetup();
+        final Setup setup = new Setup(defaultSetup.getMaxMouseMove(),
+                defaultSetup.getTimeRefresher(), 500, 2);
         final Configuration expected = new Configuration(setup);
 
         // when
