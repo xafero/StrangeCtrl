@@ -156,11 +156,13 @@ public class InputUtils {
     }
 
     public void mouseRelease(final MouseButton button) {
-        robot.mouseRelease(button.buttonMask);// TODO check if releasing is only
-        // once!!!
-        pressedMouseButtons.put(button, Boolean.FALSE);
+        if (pressedMouseButtons.containsKey(button)
+                && pressedMouseButtons.get(button)) {
+            robot.mouseRelease(button.buttonMask);
+            pressedMouseButtons.put(button, Boolean.FALSE);
 
-        logger.debug(String.format("Released mouse button {%s}", button));
+            logger.debug(String.format("Released mouse button {%s}", button));
+        }
     }
 
     public void mouseReleaseLeft() {

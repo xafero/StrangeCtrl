@@ -1,6 +1,7 @@
 package com.xafero.strangectrl.cmd;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -174,6 +175,7 @@ public class InputUtilsTest {
         final InputUtils inputUtils = new InputUtils(robot);
 
         // when
+        inputUtils.mousePressLeft();
         inputUtils.mouseReleaseLeft();
 
         // then
@@ -188,11 +190,12 @@ public class InputUtilsTest {
         final InputUtils inputUtils = new InputUtils(robot);
 
         // when
+        inputUtils.mousePressRight();
         inputUtils.mouseReleaseRight();
 
         // then
         verify(robot)
-                .mouseRelease(InputUtils.MouseButton.RIGHT.getButtonMask());
+        .mouseRelease(InputUtils.MouseButton.RIGHT.getButtonMask());
     }
 
     @Test
@@ -203,10 +206,59 @@ public class InputUtilsTest {
         final InputUtils inputUtils = new InputUtils(robot);
 
         // when
+        inputUtils.mousePressCenter();
         inputUtils.mouseReleaseCenter();
 
         // then
         verify(robot).mouseRelease(
+                InputUtils.MouseButton.CENTER.getButtonMask());
+    }
+
+    @Test
+    public void mouse_release_left_without_pushing_mouse_button()
+            throws Exception {
+
+        // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+
+        // when
+        inputUtils.mouseReleaseLeft();
+
+        // then
+        verify(robot, never()).mouseRelease(
+                InputUtils.MouseButton.LEFT.getButtonMask());
+    }
+
+    @Test
+    public void mouse_release_right_without_pushing_mouse_button()
+            throws Exception {
+
+        // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+
+        // when
+        inputUtils.mouseReleaseRight();
+
+        // then
+        verify(robot, never()).mouseRelease(
+                InputUtils.MouseButton.RIGHT.getButtonMask());
+    }
+
+    @Test
+    public void mouse_release_center_without_pushing_mouse_button()
+            throws Exception {
+
+        // given
+        final Robot robot = mock(Robot.class);
+        final InputUtils inputUtils = new InputUtils(robot);
+
+        // when
+        inputUtils.mouseReleaseCenter();
+
+        // then
+        verify(robot, never()).mouseRelease(
                 InputUtils.MouseButton.CENTER.getButtonMask());
     }
 
@@ -243,11 +295,11 @@ public class InputUtilsTest {
         verify(robot, times(2)).keyPress(KeyEvent.VK_Q);
         verify(robot, times(1)).keyRelease(KeyEvent.VK_Q);
     }
-    
+
     @Test
     public void do_not_push_two_times_mouse() throws Exception {
 
-     // given
+        // given
         final Robot robot = mock(Robot.class);
         final InputUtils inputUtils = new InputUtils(robot);
 
@@ -257,11 +309,11 @@ public class InputUtilsTest {
 
         // then
         verify(robot, times(1)).mousePress(MouseButton.LEFT.getButtonMask());
-    }   
+    }
     @Test
     public void press_mouse_after_releasing() throws Exception {
 
-     // given
+        // given
         final Robot robot = mock(Robot.class);
         final InputUtils inputUtils = new InputUtils(robot);
 
