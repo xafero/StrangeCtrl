@@ -33,6 +33,7 @@ public class InputUtils {
     private final Map<MouseButton, Boolean> pressedMouseButtons = new HashMap<>();
 
     static {
+        logger.info("NativeLoader starts \"setup native\"");
         NativeLoader.setupNative("jinput-platform-", "-natives-");
     }
 

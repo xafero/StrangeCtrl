@@ -60,6 +60,7 @@ public class App implements ControllersRefreshListener, ExitListener {
     }
 
     public static void main(final String[] args) {
+        logger.info("Loading SLF4J properties");
         loadSlf4jProperties();
 
         // start app
