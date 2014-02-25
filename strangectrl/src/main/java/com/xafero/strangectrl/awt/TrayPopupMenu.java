@@ -52,16 +52,17 @@ public class TrayPopupMenu extends PopupMenu {
     }
 
     private void initRefresh() {
-        final ActionListener refreshListener = new ActionListener() {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                menuRefresh();
-            }
-        };
-        final MenuItem refreshItem = new MenuItem("Refresh Controllers");
-        refreshItem.addActionListener(refreshListener);
-        add(refreshItem);
+        // TODO: later
+        // final ActionListener refreshListener = new ActionListener() {
+        //
+        // @Override
+        // public void actionPerformed(final ActionEvent e) {
+        // menuRefresh();
+        // }
+        // };
+        // final MenuItem refreshItem = new MenuItem("Refresh Controllers");
+        // refreshItem.addActionListener(refreshListener);
+        // add(refreshItem);
     }
 
     private void initHelp() {
