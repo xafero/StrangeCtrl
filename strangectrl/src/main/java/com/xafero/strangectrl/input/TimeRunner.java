@@ -42,7 +42,7 @@ public class TimeRunner {
     }
 
     public void stop() {
-        checkState(!run);
+        checkState(run);
 
         run = false;
     }
